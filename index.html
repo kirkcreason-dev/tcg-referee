@@ -64,9 +64,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
 .mu .bub{background:#12122a;color:#e8d88a;border:1px solid rgba(232,216,138,0.2);border-bottom-right-radius:3px;}
 .ma .bub{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:3px;}
 .mt{font-size:10px;color:#505068;}
+.ruling-badge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(64,200,128,0.12);color:#40c880;border:1px solid rgba(64,200,128,0.3);margin-bottom:6px;display:inline-block;}
 .ir{display:flex;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);}
 .ir textarea{flex:1;padding:7px 9px;font-size:12px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;resize:none;height:36px;font-family:inherit;}
 .isb{width:36px;height:36px;border:1px solid rgba(232,216,138,0.3);border-radius:8px;background:#12122a;color:#e8d88a;cursor:pointer;font-size:14px;flex-shrink:0;}
+.isb:disabled{opacity:0.4;}
 .ctag{padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(255,255,255,0.06);color:#9090a8;margin:2px;}
 .cx{font-size:12px;color:#e8e4f0;line-height:1.6;background:rgba(0,0,0,0.2);border-radius:8px;padding:10px;margin-top:8px;}
 .cn{font-size:15px;font-weight:700;color:#e8d88a;margin-bottom:6px;}
@@ -97,7 +99,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
 <div class="setup" id="setupScreen">
   <div class="sh">
     <h1>TCG Referee</h1>
-    <p>Select your game to get started. You can switch games any time from the top bar.</p>
+    <p>Select your game to get started. Switch games anytime from the top bar.</p>
   </div>
   <div class="sb2">
     <div class="gc" id="gc-ygo" onclick="pickGame('ygo',this)">
@@ -271,7 +273,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
   <span class="jt" onclick="jg('op',this)">One Piece</span>
 </div>
 <div class="msgs" id="jm">
-  <div class="msg ma"><div class="bub">Ask any TCG ruling question. I use official rules to give accurate answers.</div></div>
+  <div class="msg ma"><div class="bub">Ask any TCG ruling question. I check official card rulings first, then use AI for anything not in the database.</div></div>
 </div>
 <div class="ir">
   <textarea id="ji" placeholder="Ask a rules question..." onkeydown="ojk(event)" oninput="rsz(this)"></textarea>
@@ -281,14 +283,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
 </div>
 
 <script>
-// State
-var lp=[0,8000,8000], W=[0,0,0], turn=1, gNum=1, sLP=8000, dQ=1;
-var tT=2400, tL=2400, tI=null, tR=false;
-var jGame="all", cGame="ygo", cCache={}, curRG="ygo";
+var lp=[0,8000,8000],W=[0,0,0],turn=1,gNum=1,sLP=8000,dQ=1;
+var tT=2400,tL=2400,tI=null,tR=false;
+var jGame="all",cGame="ygo",cCache={},curRG="ygo";
 var RULES={ygo:[],pkm:[],mtg:[],dig:[],gundam:[],op:[]};
 var SYNS={};
+var CARD_RULINGS={ygo:[],pkm:[],mtg:[]};
 
-// Game configs
 var GCFG={
   ygo:{name:"Yu-Gi-Oh!",lp:8000,rk:"ygo",jk:"ygo"},
   pkm:{name:"Pokemon",lp:0,rk:"pkm",jk:"pkm"},
@@ -302,7 +303,7 @@ var GCFG={
 var selGame=null;
 function pickGame(g,el){
   document.querySelectorAll(".gc").forEach(function(c){c.classList.remove("sel");});
-  el.classList.add("sel"); selGame=g;
+  el.classList.add("sel");selGame=g;
   var btn=document.getElementById("setupBtn");
   btn.disabled=false;
   btn.textContent="Start with "+GCFG[g].name;
@@ -315,34 +316,27 @@ function finishSetup(){
   applyGame(selGame);
 }
 function changeGame(){
-  if(confirm("Change game?")){
+  if(confirm("Change game? Your current LP and match data will be reset.")){
     localStorage.removeItem("tcgGame");
     location.reload();
   }
 }
 function applyGame(g){
   var cfg=GCFG[g];
-  sLP=cfg.lp; lp[1]=cfg.lp; lp[2]=cfg.lp;
+  sLP=cfg.lp;lp[1]=cfg.lp;lp[2]=cfg.lp;
   document.getElementById("ab").textContent=cfg.name+" \u2699";
-  turn=1; ul(); addL("lpL",cfg.name+" started");
-  // sync pills
-  var lpills=document.querySelectorAll("#pan-lp .pill");
-  var lnames=["Yu-Gi-Oh!","Pokemon","MTG","Digimon","Gundam","One Piece"];
+  turn=1;ul();addL("lpL",cfg.name+" started");
   var gmap={ygo:"Yu-Gi-Oh!",pkm:"Pokemon",mtg:"MTG",dig:"Digimon",gundam:"Gundam",op:"One Piece"};
-  lpills.forEach(function(p){p.classList.toggle("on",p.textContent===gmap[g]);});
-  // sync rules
+  document.querySelectorAll("#pan-lp .pill").forEach(function(p){p.classList.toggle("on",p.textContent===gmap[g]);});
   curRG=cfg.rk;
-  var rpills=document.querySelectorAll("#rg .pill");
   var rkeys=["ygo","pkm","mtg","dig","gundam","op"];
-  rpills.forEach(function(p,i){p.classList.toggle("on",rkeys[i]===cfg.rk);});
-  // sync judge
+  document.querySelectorAll("#rg .pill").forEach(function(p,i){p.classList.toggle("on",rkeys[i]===cfg.rk);});
   jGame=cfg.jk;
   document.querySelectorAll(".jt").forEach(function(t){
-    t.classList.toggle("on",t.textContent.toLowerCase()===cfg.jk||(t.textContent==="YGO"&&cfg.jk==="ygo"));
+    var match=t.textContent.toLowerCase()===cfg.jk||(t.textContent==="YGO"&&cfg.jk==="ygo");
+    t.classList.toggle("on",match);
   });
 }
-
-// Check saved game
 (function(){
   var saved=localStorage.getItem("tcgGame");
   if(saved&&GCFG[saved]){
@@ -436,16 +430,16 @@ function srg(g,el){
 function rr(){
   var q=(document.getElementById("rs")?document.getElementById("rs").value:"").toLowerCase().trim();
   var list=document.getElementById("rl");list.innerHTML="";
+  var rct=document.getElementById("rct");
+  if(!RULES[curRG]||!RULES[curRG].length){
+    rct.textContent="Loading rules...";
+    list.innerHTML="<div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'>Rules are loading, please wait a moment then tap Rules again</div>";
+    return;
+  }
   var all=(RULES[curRG]||[]).filter(function(r){
     return !q||r.t.toLowerCase().indexOf(q)>=0||r.s.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;
   });
-  var ct=document.getElementById("rct");
-  if(!RULES[curRG]||!RULES[curRG].length){
-    ct.textContent="Loading rules...";
-    list.innerHTML="<div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'>Rules loading, please wait a moment</div>";
-    return;
-  }
-  ct.textContent=all.length+" rule"+(all.length!==1?"s":"");
+  rct.textContent=all.length+" rule"+(all.length!==1?"s":"");
   if(!all.length){list.innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>No rules found</div>";return;}
   all.forEach(function(r){
     var d=document.createElement("div");d.className="ri";
@@ -479,12 +473,9 @@ function fygo(q,k){
     if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found. Check spelling.</div>";return;}
     var c=d.data[0];
     var tags=[c.type||""];
-    if(c.attribute)tags.push(c.attribute);
-    if(c.race)tags.push(c.race);
-    if(c.level)tags.push("Level "+c.level);
-    if(c.atk!==undefined)tags.push("ATK: "+c.atk);
-    if(c.def!==undefined)tags.push("DEF: "+c.def);
-    if(c.linkval)tags.push("Link-"+c.linkval);
+    if(c.attribute)tags.push(c.attribute);if(c.race)tags.push(c.race);
+    if(c.level)tags.push("Level "+c.level);if(c.atk!==undefined)tags.push("ATK: "+c.atk);if(c.def!==undefined)tags.push("DEF: "+c.def);
+    if(c.linkval)tags.push("Link-"+c.linkval);if(c.rank)tags.push("Rank "+c.rank);
     var card={name:c.name,tags:tags,text:c.desc||"No text."};
     cCache[k]=card;showCard(card);
   }).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed. Check internet.</div>";});
@@ -496,8 +487,7 @@ function fpkm(q,k){
     if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}
     var c=d.data[0];
     var tags=[c.supertype||""];
-    if(c.hp)tags.push("HP: "+c.hp);
-    if(c.types)tags.push(c.types.join("/"));
+    if(c.hp)tags.push("HP: "+c.hp);if(c.types)tags.push(c.types.join("/"));
     if(c.set&&c.set.name)tags.push(c.set.name);
     var text="";
     if(c.abilities)c.abilities.forEach(function(a){text+="[Ability] "+a.name+": "+a.text+"\n\n";});
@@ -512,10 +502,8 @@ function fmtg(q,k){
   .then(function(c){
     if(c.object==="error"){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}
     var tags=[];
-    if(c.type_line)tags.push(c.type_line);
-    if(c.mana_cost)tags.push(c.mana_cost);
-    if(c.power)tags.push("P/T: "+c.power+"/"+c.toughness);
-    if(c.loyalty)tags.push("Loyalty: "+c.loyalty);
+    if(c.type_line)tags.push(c.type_line);if(c.mana_cost)tags.push(c.mana_cost);
+    if(c.power)tags.push("P/T: "+c.power+"/"+c.toughness);if(c.loyalty)tags.push("Loyalty: "+c.loyalty);
     var text=c.oracle_text||"";
     if(c.card_faces)text=c.card_faces.map(function(f){return f.name+"\n"+f.oracle_text;}).join("\n---\n");
     var card={name:c.name,tags:tags,text:text||"No text."};
@@ -537,25 +525,32 @@ function rmatch(){W[1]=0;W[2]=0;gNum=1;document.getElementById("w1").textContent
 function jg(g,el){jGame=g;document.querySelectorAll(".jt").forEach(function(t){t.classList.remove("on");});el.classList.add("on");}
 function rsz(ta){ta.style.height="36px";ta.style.height=Math.min(ta.scrollHeight,76)+"px";}
 function ojk(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sj();}}
-function jmsg(role,text){
+function jmsg(role,text,badge){
   var msgs=document.getElementById("jm");
   var div=document.createElement("div");
   div.className="msg "+(role==="user"?"mu":"ma");
   var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-  div.innerHTML="<div class='bub'>"+text+"</div><span class='mt'>"+t+"</span>";
+  var badgeHtml=badge?"<span class='ruling-badge'>"+badge+"</span><br>":"";
+  div.innerHTML=badgeHtml+"<div class='bub'>"+text+"</div><span class='mt'>"+t+"</span>";
   msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
 }
+
 function sj(){
   var inp=document.getElementById("ji");
   var q=inp.value.trim();if(!q)return;
   inp.value="";inp.style.height="36px";
-  jmsg("user",q);
+  jmsg("user",q,"");
   document.getElementById("isb").disabled=true;
-  var msgs=document.getElementById("jm");
-  var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";
-  tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
-  msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
-  // Find relevant rules for context
+
+  // STEP 1: Check card-specific rulings database first
+  var cardRuling=findCardRuling(q,jGame);
+  if(cardRuling){
+    jmsg("ai",cardRuling.a,"Official Ruling");
+    document.getElementById("isb").disabled=false;
+    return;
+  }
+
+  // STEP 2: Build context from rules database
   var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1};
   var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2&&!stop[w];});
   var exp={};
@@ -579,10 +574,18 @@ function sj(){
     });
   });
   res.sort(function(a,b){return b.s-a.s;});
-  var context=res.slice(0,8).map(function(x){return "RULE: "+x.r.t+"\nSUMMARY: "+x.r.s+"\nDETAIL: "+x.r.e;}).join("\n\n");
-  var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam Card Game, and One Piece Card Game",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam Card Game",op:"One Piece Card Game"};
-  var sys="You are an expert "+gl[jGame]+" judge. Answer the ruling question directly and definitively. State exactly what happens. Reference rule names when relevant. Be concise and precise. Plain text only, no markdown.";
-  if(context)sys+="\n\nOFFICIAL RULES FOR REFERENCE:\n"+context;
+  var context=res.slice(0,8).map(function(x){return "RULE - "+x.r.t+":\n"+x.r.e;}).join("\n\n");
+
+  // Show thinking indicator
+  var msgs=document.getElementById("jm");
+  var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";
+  tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
+  msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
+
+  var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam, and One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
+  var sys="You are an expert "+gl[jGame]+" TCG judge with complete knowledge of all official rules, card interactions, and tournament rulings.\n\nINSTRUCTIONS:\n- Answer the question directly with a definitive ruling\n- Explain the exact reason step by step\n- Reference specific mechanics by name\n- Never guess or say maybe - give the correct ruling\n- Keep answer under 120 words\n- Plain text only";
+  if(context)sys+="\n\nOFFICIAL RULES REFERENCE:\n"+context;
+
   fetch("https://tcg-judge.kirkcreason.workers.dev",{
     method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({system:sys,question:q})
@@ -590,10 +593,10 @@ function sj(){
   .then(function(d){
     var t=document.getElementById("tp");if(t)t.remove();
     var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
-    jmsg("ai",ans);
+    jmsg("ai",ans,"AI Judge");
   }).catch(function(){
     var t=document.getElementById("tp");if(t)t.remove();
-    jmsg("ai","Connection error. Check internet and try again.");
+    jmsg("ai","Connection error. Check internet and try again.","");
   }).finally(function(){document.getElementById("isb").disabled=false;});
 }
 
@@ -609,11 +612,12 @@ function addL(id,msg){
 
 ut();
 
-// Load rules.js after page renders
+// Load rules.js after page renders - with cache busting
 window.addEventListener("load",function(){
   var s=document.createElement("script");
-  s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v="+Date.now();
+  s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v=2";
   s.onload=function(){if(typeof rr==="function")rr();};
+  s.onerror=function(){console.log("Rules failed to load");};
   document.body.appendChild(s);
 });
 </script>

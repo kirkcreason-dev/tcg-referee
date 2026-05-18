@@ -293,3 +293,222 @@ var SYNS={
   trash:"trash zone deleted digimon graveyard discard",
   suspend:"suspend unsuspend attack rest digimon"
 };
+var CARD_RULINGS = {
+ygo: [
+  {
+    cards: ["droll", "lock bird", "dark law", "masked hero"],
+    q: "Can Droll and Lock Bird be activated while Masked HERO Dark Law is on the field?",
+    a: "No. Droll and Lock Bird cannot be activated while Masked HERO Dark Law is face-up on the field. Droll requires discarding itself to the GY as an activation cost. Dark Law replaces all cards that would be sent to the GY with banishing instead. Since Droll cannot be sent to the GY, the activation cost cannot be paid, so Droll and Lock Bird cannot be activated at all."
+  },
+  {
+    cards: ["ash blossom", "monster reborn"],
+    q: "Can Ash Blossom negate Monster Reborn?",
+    a: "No. Ash Blossom and Joyous Spring negates effects that: 1) Add from Deck to hand, 2) Special Summon from Deck, or 3) Send from Deck to GY. Monster Reborn special summons from the GY not the Deck, so Ash Blossom cannot negate it."
+  },
+  {
+    cards: ["ash blossom", "pot of desires"],
+    q: "Can Ash Blossom negate Pot of Desires?",
+    a: "Yes. Pot of Desires banishes 10 cards from Deck face-down then draws 2 cards from the Deck. Drawing from the Deck is one of Ash Blossom effects categories, so Ash Blossom can negate Pot of Desires."
+  },
+  {
+    cards: ["ash blossom", "called by the grave"],
+    q: "Can Ash Blossom negate Called by the Grave?",
+    a: "No. Called by the Grave banishes from the GY, not the Deck. Ash Blossom only negates effects that interact with the Deck. Called by the Grave does not add from Deck, summon from Deck, or send from Deck to GY."
+  },
+  {
+    cards: ["ash blossom", "foolish burial"],
+    q: "Can Ash Blossom negate Foolish Burial?",
+    a: "Yes. Foolish Burial sends 1 monster from the Deck to the GY. Sending from Deck to GY is one of Ash Blossom negation categories."
+  },
+  {
+    cards: ["mst", "mystical space typhoon", "monster reborn", "normal spell"],
+    q: "If I chain MST to destroy Monster Reborn does it stop the summon?",
+    a: "No. Chaining MST to destroy Monster Reborn does NOT stop it. Monster Reborn is a Normal Spell. Normal Spells do not need to remain on the field to resolve their effect. MST only destroys the card - it does not negate the effect. Monster Reborn will still resolve and the monster will be summoned. To stop Monster Reborn you need a Counter Trap like Solemn Judgment or Solemn Strike."
+  },
+  {
+    cards: ["effect veiler", "damage step"],
+    q: "Can Effect Veiler be activated in the Damage Step?",
+    a: "No. Effect Veiler is a Speed 1 effect that can only be activated in the Main Phase during an open game state. It cannot be activated in the Damage Step, Battle Step, or in response to other effects activating."
+  },
+  {
+    cards: ["effect veiler", "quick effect"],
+    q: "Can Effect Veiler negate a Quick Effect?",
+    a: "No. Effect Veiler can only be activated during the opponent Main Phase. It cannot be activated in response to a Quick Effect activation during the Battle Phase or outside the Main Phase. Effect Veiler is a Speed 1 Spell Effect that can only be used in an open game state during the Main Phase."
+  },
+  {
+    cards: ["infinite impermanence", "hand"],
+    q: "Can Infinite Impermanence be activated from hand with no cards on my field?",
+    a: "Yes. When you control no cards and activate Infinite Impermanence from hand, it also negates all Spell and Trap effects in the same column as where it was placed for the rest of the turn. This column negation is in addition to negating the targeted monster effect."
+  },
+  {
+    cards: ["nibiru", "primal being", "fifth summon"],
+    q: "When can Nibiru the Primal Being be activated?",
+    a: "Nibiru can be activated after the opponent Special Summons their 5th or more monster in a single turn during the Main Phase. You tribute all monsters on the field and Special Summon Nibiru from hand. The count resets each turn. Nibiru cannot be activated in the Damage Step."
+  },
+  {
+    cards: ["called by the grave", "ash blossom", "hand trap"],
+    q: "Can Called by the Grave negate Ash Blossom in hand?",
+    a: "Yes. Called by the Grave banishes a monster from the opponent GY and until end of turn negates the effects of all monsters with that name the opponent controls and prevents their effects from activating. If Ash Blossom is in the GY you can banish it to stop the opponent from activating any Ash Blossom from hand for the rest of the turn."
+  },
+  {
+    cards: ["dark law", "any card", "graveyard", "cost"],
+    q: "Can you activate cards that require sending to the GY as a cost while Dark Law is on the field?",
+    a: "No. Masked HERO Dark Law replaces all sends to the GY with banishing. Any card that requires sending to the GY as an activation cost cannot be activated because the cost cannot be paid properly. Examples: Droll and Lock Bird, Ghost Ogre and Snow Rabbit, and any hand trap that discards to GY."
+  },
+  {
+    cards: ["ghost ogre", "field spell", "continuous"],
+    q: "Can Ghost Ogre and Snow Rabbit destroy a Continuous Spell?",
+    a: "Yes. Ghost Ogre can destroy any monster on the field or Spell/Trap card when its effect activates. Continuous Spells that activate effects can be targeted. However Ghost Ogre can only be used when an effect activates - it cannot destroy a Continuous Spell that simply has a passive always-on effect with no activation."
+  },
+  {
+    cards: ["maxx c", "special summon"],
+    q: "How does Maxx C work?",
+    a: "During either player turn, discard Maxx C. For the rest of this turn, each time the opponent Special Summons a monster draw 1 card. Maxx C effect stays active until end of turn. Each individual Special Summon triggers 1 draw. If opponent Special Summons 5 monsters you draw 5 cards."
+  },
+  {
+    cards: ["skill drain", "face-up", "field effect"],
+    q: "Does Skill Drain negate effects that activate in the GY?",
+    a: "No. Skill Drain only negates the effects of face-up monsters on the field. Effects that activate in the GY, hand, or while banished are NOT negated by Skill Drain. Only effects that are active while the monster is face-up on the field are negated."
+  },
+  {
+    cards: ["solemn judgment", "special summon", "negate"],
+    q: "Can Solemn Judgment negate a Special Summon from the Extra Deck?",
+    a: "Yes. Solemn Judgment is a Counter Trap that can negate the activation of any monster summon including Special Summons from Extra Deck, Normal Summons, and Ritual Summons. Pay half your LP. The summoned monster is sent to the GY and is treated as if it was never summoned."
+  },
+  {
+    cards: ["book of moon", "damage step"],
+    q: "Can Book of Moon be activated in the Damage Step?",
+    a: "No. Book of Moon is a Quick-Play Spell that is Speed 2. However it does not modify ATK or DEF values directly, so it cannot be activated during the Damage Step. It can only be activated during the Main Phase or Battle Phase outside of the Damage Step."
+  },
+  {
+    cards: ["mirror force", "damage step"],
+    q: "Can Mirror Force be activated in the Damage Step?",
+    a: "No. Mirror Force is a Normal Trap that destroys attacking monsters. It cannot be activated in the Damage Step. Mirror Force is activated at the start of the Damage Step before damage calculation is not possible - it must be activated in the Battle Step after the attack is declared."
+  },
+  {
+    cards: ["torrential tribute", "damage step"],
+    q: "Can Torrential Tribute be activated in the Damage Step?",
+    a: "No. Torrential Tribute cannot be activated in the Damage Step. It can only be activated when a monster is summoned during the Main Phase or from other summon windows outside the Damage Step."
+  },
+  {
+    cards: ["forbidden droplet", "negate", "effect"],
+    q: "How does Forbidden Droplet work?",
+    a: "Send any number of cards from hand or field to GY. Target that many effect monsters opponent controls. Until end of turn those monsters ATK is halved and their effects are negated. Forbidden Droplet cannot be responded to by the targeted monsters or monsters with the same original type as sent cards. This includes Quick Effects."
+  },
+  {
+    cards: ["lightning storm", "set cards"],
+    q: "Can Lightning Storm be activated if I control face-up cards?",
+    a: "No. Lightning Storm can only be activated if you control no face-up cards. Even one face-up card on your field prevents its activation. Set cards do not count as face-up so they do not prevent Lightning Storm activation."
+  },
+  {
+    cards: ["compulsory evacuation device", "xyz", "material"],
+    q: "Can Compulsory Evacuation Device return an Xyz Monster to the Extra Deck?",
+    a: "Yes. Compulsory Evacuation Device returns a monster on the field to the hand. If the target is an Xyz Monster it returns to the Extra Deck face-up instead of the hand since Xyz Monsters go to the Extra Deck. All Xyz Materials are sent to the GY when the Xyz Monster leaves the field."
+  },
+  {
+    cards: ["dimensional barrier", "fusion", "synchro", "xyz", "ritual", "pendulum"],
+    q: "How does Dimensional Barrier work?",
+    a: "During either player turn declare one type: Ritual, Fusion, Synchro, Xyz, or Pendulum. Until end of turn neither player can Special Summon monsters of that type, and if any monster of that type is on the field its effects are negated. This prevents Extra Deck summons of the declared type completely."
+  },
+  {
+    cards: ["harpie feather duster", "set", "face-down"],
+    q: "Does Harpie Feather Duster destroy set Spell and Trap cards?",
+    a: "Yes. Harpie Feather Duster destroys all Spell and Trap cards the opponent controls including both face-up and face-down Set cards. The opponent cannot chain the Set cards that are being destroyed since they are being destroyed simultaneously."
+  },
+  {
+    cards: ["chain", "link", "respond", "quick effect"],
+    q: "Can I activate a Quick Effect in response to my own card?",
+    a: "Yes. After you activate a card or effect both players have the opportunity to respond. You can chain your own Quick Effects or your opponent can respond. Once both players pass priority consecutively the chain resolves."
+  },
+  {
+    cards: ["segoc", "same time", "simultaneous", "trigger"],
+    q: "Multiple effects triggered at the same time - how do you resolve?",
+    a: "SEGOC: Simultaneous Effects Go On Chain. When multiple trigger effects activate at the same time from the same event, Turn Player places their effects on the chain first in any order they choose, then Non-Turn Player places theirs. The chain then resolves Last In First Out. Mandatory effects must be placed before optional ones."
+  },
+  {
+    cards: ["xyz", "material", "target", "effect"],
+    q: "Can card effects target Xyz Materials?",
+    a: "No. Xyz Materials are not on the field - they are attached to the Xyz Monster. Most card effects cannot target or affect Xyz Materials directly. When the Xyz Monster leaves the field all remaining materials are sent to the GY. Detaching a material as a cost sends it to the GY."
+  },
+  {
+    cards: ["pendulum", "destroyed", "extra deck", "graveyard"],
+    q: "Where do Pendulum Monsters go when destroyed on the field?",
+    a: "When a Pendulum Monster is destroyed while face-up on the field it goes face-up to the Extra Deck instead of the GY. This is a game mechanic not an effect so it cannot be chained to or negated by most effects. If the Pendulum Monster is sent to the GY by a non-destruction effect it goes to the actual GY."
+  }
+],
+pkm: [
+  {
+    cards: ["bench", "weakness", "spread damage"],
+    q: "Does Weakness apply to Bench damage?",
+    a: "No. Bench damage never receives Weakness or Resistance modifications. When an attack deals damage to Benched Pokemon that damage is always the stated amount regardless of type matchup. This applies to all spread damage effects and snipe attacks."
+  },
+  {
+    cards: ["rare candy", "stage 2", "basic"],
+    q: "Can I use Rare Candy to evolve a Basic Pokemon I just played?",
+    a: "No. Rare Candy allows evolving a Basic directly to its Stage 2 but the Basic must have been on the Bench before your current turn. A Basic placed on the Bench this turn cannot be evolved with Rare Candy until your next turn."
+  },
+  {
+    cards: ["retreat", "special condition", "status"],
+    q: "Does retreating cure Special Conditions?",
+    a: "Yes. When a Pokemon retreats by paying its Retreat Cost all Special Conditions on that Pokemon are immediately cured. This includes Poison, Burn, Paralysis, Sleep, and Confusion. The newly Active Pokemon coming from Bench is unaffected."
+  },
+  {
+    cards: ["vstar", "gx", "once per game"],
+    q: "Can I use multiple VSTAR Powers in one game if I have multiple VSTAR Pokemon?",
+    a: "No. Each player may only use one VSTAR Power per game total regardless of how many VSTAR Pokemon they have in play. When you use a VSTAR Power flip your VSTAR Marker face-down. Once flipped no more VSTAR Powers can be used by that player."
+  },
+  {
+    cards: ["paralyzed", "asleep", "confused", "status"],
+    q: "What is the strongest Special Condition?",
+    a: "Paralysis is the strongest. Paralyzed Pokemon cannot attack or retreat for the entire controller turn. It is automatically cured at end of the Paralyzed Pokemon controller next turn. Sleep requires a coin flip to cure. Confusion forces a coin flip when attacking. Poison does 10 damage between turns."
+  }
+],
+mtg: [
+  {
+    cards: ["deathtouch", "trample", "damage assignment"],
+    q: "How does Deathtouch interact with Trample?",
+    a: "With both Deathtouch and Trample, only 1 point of damage needs to be assigned to each blocker since any damage from a Deathtouch source is lethal. The remaining damage tramples through to the defending player. Example: 5/5 Deathtouch Trample attacking into a 4/4 blocker assigns 1 to blocker and 4 tramples through."
+  },
+  {
+    cards: ["hexproof", "aura", "equip", "enchant"],
+    q: "Can I attach an Aura or Equipment to my own Hexproof creature?",
+    a: "Yes. Hexproof only prevents opponents from targeting the permanent. You can still target your own Hexproof creatures with your own Auras, Equipment, and spells. Your opponent cannot target it with removal or their own Auras."
+  },
+  {
+    cards: ["indestructible", "exile", "sacrifice", "toughness"],
+    q: "How do you kill an Indestructible creature?",
+    a: "Indestructible prevents destruction from damage and destroy effects. Ways to remove it: Exile it, Sacrifice it, return it to hand or library, reduce toughness to 0 or less via minus effects (0 toughness is a state-based action not destruction), or Phase it out."
+  },
+  {
+    cards: ["cascade", "free cast", "stack"],
+    q: "Does the Cascade spell resolve before or after the cascaded spell?",
+    a: "The cascaded spell resolves FIRST. When Cascade triggers you exile cards until finding a castable spell and cast it for free. That spell goes on the stack above the Cascade spell. The cascaded spell resolves first, then the original Cascade spell resolves."
+  },
+  {
+    cards: ["commander", "tax", "cost", "command zone"],
+    q: "Does the Commander Tax apply when cast from hand or graveyard?",
+    a: "No. The Commander Tax only increases when casting from the Command Zone. Casting your Commander from hand or graveyard does not increase the tax and does not count as a cast from the Command Zone for tax purposes. The tax accumulates separately only for Command Zone casts."
+  }
+]
+};
+
+// Card ruling search function
+function findCardRuling(question, game) {
+  var q = question.toLowerCase();
+  var games = game === "all" ? Object.keys(CARD_RULINGS) : [game];
+  var best = null;
+  var bestScore = 0;
+  games.forEach(function(g) {
+    (CARD_RULINGS[g] || []).forEach(function(ruling) {
+      var score = 0;
+      ruling.cards.forEach(function(card) {
+        if (q.indexOf(card.toLowerCase()) >= 0) score += 20;
+      });
+      // Bonus for matching multiple cards
+      var matched = ruling.cards.filter(function(c) { return q.indexOf(c.toLowerCase()) >= 0; }).length;
+      if (matched >= 2) score += 30;
+      if (score > bestScore) { bestScore = score; best = ruling; }
+    });
+  });
+  return bestScore >= 20 ? best : null;
+}
