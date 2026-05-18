@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>TCG Referee</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:-apple-system,sans-serif;font-size:14px;background:#0d0d12;color:#e8e4f0;height:100vh;overflow:hidden;}
-.app{display:flex;flex-direction:column;height:100vh;}
-.top{background:#12122a;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,216,138,0.2);}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;background:#0d0d12;color:#e8e4f0;height:100vh;overflow:hidden;}
+.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;}
+.top{background:#12122a;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,216,138,0.2);flex-shrink:0;}
 .logo{color:#e8d88a;font-size:14px;font-weight:700;}
-.badge{color:#e8d88a;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(232,216,138,0.3);}
-.tabs{display:flex;background:#0d0d18;border-bottom:1px solid rgba(255,255,255,0.08);}
+.badge{color:#e8d88a;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(232,216,138,0.3);cursor:pointer;}
+.tabs{display:flex;background:#0d0d18;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
 .tab{flex:1;padding:9px 2px 7px;text-align:center;font-size:9px;color:#505068;cursor:pointer;border-bottom:2px solid transparent;}
 .tab.on{color:#e8d88a;border-bottom-color:#e8d88a;}
 .panel{display:none;flex:1;overflow-y:auto;padding:14px;}
@@ -18,7 +19,7 @@ body{font-family:-apple-system,sans-serif;font-size:14px;background:#0d0d12;colo
 .sec{font-size:10px;color:#606070;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
 .card{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;margin-bottom:10px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.btn{padding:10px 8px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:8px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center;}
+.btn{padding:10px 8px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:8px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;}
 .btn.r{color:#e05050;border-color:rgba(224,80,80,0.4);}
 .btn.g{color:#40c880;border-color:rgba(64,200,128,0.4);background:rgba(64,200,128,0.06);}
 .btn.y{background:#12122a;border-color:rgba(232,216,138,0.4);color:#e8d88a;}
@@ -47,11 +48,11 @@ body{font-family:-apple-system,sans-serif;font-size:14px;background:#0d0d12;colo
 .pip{width:40px;height:40px;background:#1a1a24;border:1px solid rgba(255,255,255,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;}
 .pip.hi{background:rgba(64,200,128,0.12);border-color:rgba(64,200,128,0.4);color:#40c880;}
 .ri{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px 11px;margin-bottom:7px;cursor:pointer;}
-.ri.op .rt{color:#e8d88a;}
-.rt{font-size:13px;font-weight:500;margin-bottom:2px;}
-.rs{font-size:11px;color:#9090a8;line-height:1.5;}
-.re{font-size:11px;color:#9090a8;line-height:1.55;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,0.06);display:none;}
-.ri.op .re{display:block;}
+.ri.op .rtt{color:#e8d88a;}
+.rtt{font-size:13px;font-weight:500;margin-bottom:2px;}
+.rss{font-size:11px;color:#9090a8;line-height:1.5;}
+.ree{font-size:11px;color:#9090a8;line-height:1.55;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,0.06);display:none;}
+.ri.op .ree{display:block;}
 .wn{font-size:34px;font-weight:700;margin:5px 0 8px;}
 .jt{padding:5px 11px;font-size:11px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block;}
 .jt.on{background:#12122a;border-color:#e8d88a;color:#e8d88a;}
@@ -65,39 +66,122 @@ body{font-family:-apple-system,sans-serif;font-size:14px;background:#0d0d12;colo
 .mt{font-size:10px;color:#505068;}
 .ir{display:flex;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);}
 .ir textarea{flex:1;padding:7px 9px;font-size:12px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;resize:none;height:36px;font-family:inherit;}
-.sb{width:36px;height:36px;border:1px solid rgba(232,216,138,0.3);border-radius:8px;background:#12122a;color:#e8d88a;cursor:pointer;font-size:14px;flex-shrink:0;}
+.isb{width:36px;height:36px;border:1px solid rgba(232,216,138,0.3);border-radius:8px;background:#12122a;color:#e8d88a;cursor:pointer;font-size:14px;flex-shrink:0;}
+.ctag{padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(255,255,255,0.06);color:#9090a8;margin:2px;}
+.cx{font-size:12px;color:#e8e4f0;line-height:1.6;background:rgba(0,0,0,0.2);border-radius:8px;padding:10px;margin-top:8px;}
 .cn{font-size:15px;font-weight:700;color:#e8d88a;margin-bottom:6px;}
-.cs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
-.ct{padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(255,255,255,0.06);color:#9090a8;}
-.cx{font-size:12px;color:#e8e4f0;line-height:1.6;background:rgba(0,0,0,0.2);border-radius:8px;padding:10px;}
+/* SETUP */
+.setup{position:fixed;top:0;left:0;right:0;bottom:0;background:#0d0d12;z-index:999;display:flex;flex-direction:column;max-width:480px;margin:0 auto;}
+.sh{background:#12122a;padding:24px 16px 16px;border-bottom:1px solid rgba(232,216,138,0.2);}
+.sh h1{color:#e8d88a;font-size:22px;font-weight:700;margin-bottom:6px;}
+.sh p{color:#9090a8;font-size:12px;line-height:1.5;}
+.sb2{flex:1;overflow-y:auto;padding:16px;}
+.gc{background:#1a1a24;border:2px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;}
+.gc.sel{border-color:#e8d88a;background:#12122a;}
+.gi{font-size:32px;flex-shrink:0;}
+.ginfo{flex:1;}
+.gname{font-size:15px;font-weight:600;color:#e8e4f0;margin-bottom:2px;}
+.gdesc{font-size:11px;color:#9090a8;}
+.gck{width:24px;height:24px;border:2px solid rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:transparent;}
+.gc.sel .gck{background:#e8d88a;border-color:#e8d88a;color:#0d0d12;}
+.sf{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.08);}
+.sf button{width:100%;padding:15px;font-size:15px;font-weight:700;border:none;border-radius:12px;background:#e8d88a;color:#0d0d12;cursor:pointer;}
+.sf button:disabled{opacity:0.35;cursor:not-allowed;}
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
 </style>
 </head>
 <body>
-<div class="app">
-<div class="top"><span class="logo">TCG Referee</span><span class="badge" id="ab">Yu-Gi-Oh!</span></div>
-<div class="tabs">
-<div class="tab on" onclick="sw('lp',this)">LP</div>
-<div class="tab" onclick="sw('timer',this)">Timer</div>
-<div class="tab" onclick="sw('dice',this)">Dice</div>
-<div class="tab" onclick="sw('rules',this)">Rules</div>
-<div class="tab" onclick="sw('cards',this)">Cards</div>
-<div class="tab" onclick="sw('match',this)">Match</div>
-<div class="tab" onclick="sw('judge',this)">Judge</div>
+
+<!-- SETUP SCREEN -->
+<div class="setup" id="setupScreen">
+  <div class="sh">
+    <h1>TCG Referee</h1>
+    <p>Select your game to get started. You can switch games any time from the top bar.</p>
+  </div>
+  <div class="sb2">
+    <div class="gc" id="gc-ygo" onclick="pickGame('ygo',this)">
+      <div class="gi">&#127183;</div>
+      <div class="ginfo"><div class="gname">Yu-Gi-Oh!</div><div class="gdesc">8000 LP &bull; Chain resolution &bull; Full rulebook</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="gc-pkm" onclick="pickGame('pkm',this)">
+      <div class="gi">&#9889;</div>
+      <div class="ginfo"><div class="gname">Pokemon TCG</div><div class="gdesc">Prize cards &bull; Status conditions &bull; All formats</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="gc-mtg" onclick="pickGame('mtg',this)">
+      <div class="gi">&#129497;</div>
+      <div class="ginfo"><div class="gname">Magic: The Gathering</div><div class="gdesc">20 life &bull; Stack &bull; Commander &bull; All keywords</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="gc-dig" onclick="pickGame('dig',this)">
+      <div class="gi">&#129422;</div>
+      <div class="ginfo"><div class="gname">Digimon TCG</div><div class="gdesc">Memory gauge &bull; Security checks &bull; Digivolving</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="gc-gundam" onclick="pickGame('gundam',this)">
+      <div class="gi">&#129302;</div>
+      <div class="ginfo"><div class="gname">Gundam Card Game</div><div class="gdesc">Base HP &bull; Penetrating damage &bull; Flagship</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="gc-op" onclick="pickGame('op',this)">
+      <div class="gi">&#9760;</div>
+      <div class="ginfo"><div class="gname">One Piece Card Game</div><div class="gdesc">Life cards &bull; DON!! system &bull; Leader attacks</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+  </div>
+  <div class="sf">
+    <button id="setupBtn" onclick="finishSetup()" disabled>Select a game to continue</button>
+  </div>
 </div>
+
+<!-- MAIN APP -->
+<div class="app" id="mainApp" style="display:none">
+<div class="top">
+  <span class="logo">TCG Referee</span>
+  <span class="badge" id="ab" onclick="changeGame()">Yu-Gi-Oh! &#9881;</span>
+</div>
+<div class="tabs">
+  <div class="tab on" onclick="sw('lp',this)">LP</div>
+  <div class="tab" onclick="sw('timer',this)">Timer</div>
+  <div class="tab" onclick="sw('dice',this)">Dice</div>
+  <div class="tab" onclick="sw('rules',this)">Rules</div>
+  <div class="tab" onclick="sw('cards',this)">Cards</div>
+  <div class="tab" onclick="sw('match',this)">Match</div>
+  <div class="tab" onclick="sw('judge',this)">Judge</div>
+</div>
+
+<!-- LP -->
 <div class="panel on" id="pan-lp">
 <div class="sec">Game</div>
-<div style="margin-bottom:12px"><span class="pill on" onclick="sg('Yu-Gi-Oh!',8000,this)">Yu-Gi-Oh!</span><span class="pill" onclick="sg('Pokemon',0,this)">Pokemon</span><span class="pill" onclick="sg('MTG',20,this)">MTG</span><span class="pill" onclick="sg('Digimon',4000,this)">Digimon</span><span class="pill" onclick="sg('Gundam',10,this)">Gundam</span><span class="pill" onclick="sg('One Piece',5,this)">One Piece</span></div>
-<div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;margin-bottom:10px"><div><div class="sec" style="margin:0 0 2px">Turn</div><div style="font-size:20px;font-weight:700" id="tn">1</div></div><div style="display:flex;gap:6px"><button class="btn" onclick="ct(-1)">-</button><button class="btn" onclick="ct(1)">Next</button></div></div>
-<div class="lpg">
-<div class="pc"><div class="pn">Player 1</div><div class="plp" id="l1">8000</div><div class="lb4"><button class="lb m" onclick="al(1,-500)">-500</button><button class="lb m" onclick="al(1,-1000)">-1k</button><button class="lb p" onclick="al(1,500)">+500</button><button class="lb p" onclick="al(1,1000)">+1k</button></div></div>
-<div class="pc"><div class="pn">Player 2</div><div class="plp" id="l2">8000</div><div class="lb4"><button class="lb m" onclick="al(2,-500)">-500</button><button class="lb m" onclick="al(2,-1000)">-1k</button><button class="lb p" onclick="al(2,500)">+500</button><button class="lb p" onclick="al(2,1000)">+1k</button></div></div>
+<div style="margin-bottom:12px">
+  <span class="pill on" onclick="sg('Yu-Gi-Oh!',8000,this)">Yu-Gi-Oh!</span>
+  <span class="pill" onclick="sg('Pokemon',0,this)">Pokemon</span>
+  <span class="pill" onclick="sg('MTG',20,this)">MTG</span>
+  <span class="pill" onclick="sg('Digimon',4000,this)">Digimon</span>
+  <span class="pill" onclick="sg('Gundam',10,this)">Gundam</span>
+  <span class="pill" onclick="sg('One Piece',5,this)">One Piece</span>
 </div>
-<div style="display:flex;gap:6px;margin-bottom:8px"><input class="inp" type="number" id="ca" placeholder="Custom" style="margin:0;flex:1"><button class="btn" onclick="ac(1,-1)">P1-</button><button class="btn" onclick="ac(2,-1)">P2-</button><button class="btn" onclick="ac(1,1)">P1+</button></div>
-<div class="g2"><button class="btn r" onclick="rl()">Reset</button><button class="btn" onclick="hv()">Halve</button></div>
+<div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;margin-bottom:10px">
+  <div><div class="sec" style="margin:0 0 2px">Turn</div><div style="font-size:20px;font-weight:700" id="tn">1</div></div>
+  <div style="display:flex;gap:6px"><button class="btn" onclick="ct(-1)">-</button><button class="btn" onclick="ct(1)">Next</button></div>
+</div>
+<div class="lpg">
+  <div class="pc"><div class="pn">Player 1</div><div class="plp" id="l1">8000</div><div class="lb4"><button class="lb m" onclick="al(1,-500)">-500</button><button class="lb m" onclick="al(1,-1000)">-1k</button><button class="lb p" onclick="al(1,500)">+500</button><button class="lb p" onclick="al(1,1000)">+1k</button></div></div>
+  <div class="pc"><div class="pn">Player 2</div><div class="plp" id="l2">8000</div><div class="lb4"><button class="lb m" onclick="al(2,-500)">-500</button><button class="lb m" onclick="al(2,-1000)">-1k</button><button class="lb p" onclick="al(2,500)">+500</button><button class="lb p" onclick="al(2,1000)">+1k</button></div></div>
+</div>
+<div style="display:flex;gap:6px;margin-bottom:8px">
+  <input class="inp" type="number" id="ca" placeholder="Custom amount" style="margin:0;flex:1">
+  <button class="btn" onclick="ac(1,-1)">P1-</button>
+  <button class="btn" onclick="ac(2,-1)">P2-</button>
+  <button class="btn" onclick="ac(1,1)">P1+</button>
+</div>
+<div class="g2"><button class="btn r" onclick="rl()">Reset</button><button class="btn" onclick="hv()">Halve Both</button></div>
 <div class="log" id="lpL"><div class="ll"><b>Game started</b><span></span></div></div>
 </div>
+
+<!-- TIMER -->
 <div class="panel" id="pan-timer">
 <div class="tdisp"><div class="tdig" id="td">40:00</div><div class="tlbl" id="tl">Round Timer</div><div class="tbb"><div class="tb" id="tb" style="width:100%"></div></div></div>
 <div class="sec">Presets</div>
@@ -107,195 +191,381 @@ body{font-family:-apple-system,sans-serif;font-size:14px;background:#0d0d12;colo
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px"><button class="btn y" onclick="stT()">Start</button><button class="btn r" onclick="paT()">Pause</button><button class="btn" onclick="reT()">Reset</button></div>
 <div class="g2"><button class="btn" onclick="aT(3)">+3 min</button><button class="btn" onclick="aT(5)">+5 min</button></div>
 </div>
+
+<!-- DICE -->
 <div class="panel" id="pan-dice">
 <div class="sec">Coin Flip</div>
-<div class="rc"><div id="ci" style="font-size:32px;font-weight:700;color:#e8d88a">COIN</div><div id="ct_" style="font-size:13px;color:#9090a8">Tap to flip</div></div>
+<div class="rc"><div id="ci" style="font-size:28px;font-weight:700;color:#e8d88a">COIN</div><div id="ct_" style="font-size:13px;color:#9090a8">Tap to flip</div></div>
 <button class="btn y" onclick="fc()" style="width:100%;margin-bottom:14px">Flip Coin</button>
 <div class="sec">Dice Roll</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:#9090a8;flex:1">Number of dice</span><button class="btn" onclick="cq(-1)" style="width:30px;padding:6px">-</button><span style="font-size:15px;font-weight:700;min-width:20px;text-align:center" id="dq">1</span><button class="btn" onclick="cq(1)" style="width:30px;padding:6px">+</button></div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+  <span style="font-size:12px;color:#9090a8;flex:1">Number of dice</span>
+  <button class="btn" onclick="cq(-1)" style="width:32px;padding:6px">-</button>
+  <span style="font-size:15px;font-weight:700;min-width:20px;text-align:center" id="dq">1</span>
+  <button class="btn" onclick="cq(1)" style="width:32px;padding:6px">+</button>
+</div>
 <div class="pips" id="pb"><span style="font-size:12px;color:#505068">Choose a die below</span></div>
-<div id="tr_" style="display:none;justify-content:space-between;padding:6px 0;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:8px"><span style="font-size:12px;color:#9090a8">Total</span><span style="font-size:17px;font-weight:700" id="tv"></span></div>
+<div id="tr_" style="display:none;justify-content:space-between;padding:6px 0;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:8px">
+  <span style="font-size:12px;color:#9090a8">Total</span><span style="font-size:17px;font-weight:700" id="tv"></span>
+</div>
 <div class="g2"><button class="btn" onclick="rd(4)">D4</button><button class="btn" onclick="rd(6)">D6</button><button class="btn" onclick="rd(8)">D8</button><button class="btn" onclick="rd(20)">D20</button></div>
 <div class="log" id="dL" style="margin-top:10px"><div class="ll"><b>No rolls yet</b><span></span></div></div>
 </div>
+
+<!-- RULES -->
 <div class="panel" id="pan-rules">
 <div class="sec">Game</div>
-<div style="margin-bottom:10px" id="rg"><span class="pill on" onclick="srg('ygo',this)">Yu-Gi-Oh!</span><span class="pill" onclick="srg('pkm',this)">Pokemon</span><span class="pill" onclick="srg('mtg',this)">MTG</span><span class="pill" onclick="srg('dig',this)">Digimon</span><span class="pill" onclick="srg('gundam',this)">Gundam</span><span class="pill" onclick="srg('op',this)">One Piece</span></div>
+<div style="margin-bottom:10px" id="rg">
+  <span class="pill on" onclick="srg('ygo',this)">Yu-Gi-Oh!</span>
+  <span class="pill" onclick="srg('pkm',this)">Pokemon</span>
+  <span class="pill" onclick="srg('mtg',this)">MTG</span>
+  <span class="pill" onclick="srg('dig',this)">Digimon</span>
+  <span class="pill" onclick="srg('gundam',this)">Gundam</span>
+  <span class="pill" onclick="srg('op',this)">One Piece</span>
+</div>
 <input class="inp" id="rs" type="text" placeholder="Search rules..." oninput="rr()">
-<div style="font-size:10px;color:#505068;margin-bottom:8px" id="rct"></div>
+<div style="font-size:10px;color:#505068;margin-bottom:8px" id="rct">Loading rules...</div>
 <div id="rl"></div>
 </div>
+
+<!-- CARDS -->
 <div class="panel" id="pan-cards">
 <div class="sec">Card Lookup</div>
-<div style="margin-bottom:10px"><span class="pill on" onclick="scg('ygo',this)">Yu-Gi-Oh!</span><span class="pill" onclick="scg('pkm',this)">Pokemon</span><span class="pill" onclick="scg('mtg',this)">MTG</span></div>
-<div style="display:flex;gap:6px;margin-bottom:10px"><input class="inp" id="cs" type="text" placeholder="Card name..." style="margin:0;flex:1" onkeydown="if(event.key==='Enter')sc()"><button class="btn" onclick="sc()">Search</button></div>
+<div style="margin-bottom:10px">
+  <span class="pill on" onclick="scg('ygo',this)">Yu-Gi-Oh!</span>
+  <span class="pill" onclick="scg('pkm',this)">Pokemon</span>
+  <span class="pill" onclick="scg('mtg',this)">MTG</span>
+</div>
+<div style="display:flex;gap:6px;margin-bottom:10px">
+  <input class="inp" id="cs" type="text" placeholder="Card name..." style="margin:0;flex:1" onkeydown="if(event.key==='Enter')scard()">
+  <button class="btn" onclick="scard()">Search</button>
+</div>
 <div id="cr"><div style="color:#505068;font-size:12px;padding:16px;text-align:center">Type a card name and press Search</div></div>
 </div>
+
+<!-- MATCH -->
 <div class="panel" id="pan-match">
 <div class="sec">Match Record</div>
-<div class="g2" style="margin-bottom:10px"><div class="card" style="text-align:center"><div class="pn">Player 1</div><div class="wn" id="w1">0</div><button class="btn g" onclick="aw(1)" style="width:100%">+ Win</button></div><div class="card" style="text-align:center"><div class="pn">Player 2</div><div class="wn" id="w2">0</div><button class="btn g" onclick="aw(2)" style="width:100%">+ Win</button></div></div>
-<div class="card" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div><div class="sec" style="margin:0 0 2px">Game #</div><div style="font-size:20px;font-weight:700" id="gn">1</div></div><button class="btn" onclick="ng()">Next Game</button></div>
-<button class="btn r" style="width:100%;margin-bottom:10px" onclick="rm()">Reset Match</button>
+<div class="g2" style="margin-bottom:10px">
+  <div class="card" style="text-align:center"><div class="pn">Player 1</div><div class="wn" id="w1">0</div><button class="btn g" onclick="aw(1)" style="width:100%">+ Win</button></div>
+  <div class="card" style="text-align:center"><div class="pn">Player 2</div><div class="wn" id="w2">0</div><button class="btn g" onclick="aw(2)" style="width:100%">+ Win</button></div>
+</div>
+<div class="card" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+  <div><div class="sec" style="margin:0 0 2px">Game #</div><div style="font-size:20px;font-weight:700" id="gn">1</div></div>
+  <button class="btn" onclick="ng()">Next Game</button>
+</div>
+<button class="btn r" style="width:100%;margin-bottom:10px" onclick="rmatch()">Reset Match</button>
 <div class="log" id="mL"><div class="ll"><b>Match started</b><span></span></div></div>
 </div>
+
+<!-- JUDGE -->
 <div class="panel" id="pan-judge">
 <div class="sec">Game Focus</div>
-<div style="margin-bottom:10px"><span class="jt on" onclick="jg('all',this)">All</span><span class="jt" onclick="jg('ygo',this)">YGO</span><span class="jt" onclick="jg('pkm',this)">Pokemon</span><span class="jt" onclick="jg('mtg',this)">MTG</span><span class="jt" onclick="jg('dig',this)">Digimon</span><span class="jt" onclick="jg('gundam',this)">Gundam</span><span class="jt" onclick="jg('op',this)">One Piece</span></div>
-<div class="msgs" id="jm"><div class="msg ma"><div class="bub">Ask any rules question. I search the official rulebook - no internet needed.</div></div></div>
-<div class="ir"><textarea id="ji" placeholder="Ask a rules question..." onkeydown="ojk(event)" oninput="rsz(this)"></textarea><button class="sb" id="sb" onclick="sj()">&#10148;</button></div>
+<div style="margin-bottom:10px">
+  <span class="jt on" onclick="jg('all',this)">All</span>
+  <span class="jt" onclick="jg('ygo',this)">YGO</span>
+  <span class="jt" onclick="jg('pkm',this)">Pokemon</span>
+  <span class="jt" onclick="jg('mtg',this)">MTG</span>
+  <span class="jt" onclick="jg('dig',this)">Digimon</span>
+  <span class="jt" onclick="jg('gundam',this)">Gundam</span>
+  <span class="jt" onclick="jg('op',this)">One Piece</span>
+</div>
+<div class="msgs" id="jm">
+  <div class="msg ma"><div class="bub">Ask any TCG ruling question. I use official rules to give accurate answers.</div></div>
+</div>
+<div class="ir">
+  <textarea id="ji" placeholder="Ask a rules question..." onkeydown="ojk(event)" oninput="rsz(this)"></textarea>
+  <button class="isb" id="isb" onclick="sj()">&#10148;</button>
 </div>
 </div>
+</div>
+
 <script>
-var lp=[0,8000,8000],W=[0,0,0],turn=1,gNum=1,sLP=8000,dQ=1;
-var tT=2400,tL=2400,tI=null,tR=false;
-var jGame="all",cGame="ygo",cCache={},aRG="ygo";
+// State
+var lp=[0,8000,8000], W=[0,0,0], turn=1, gNum=1, sLP=8000, dQ=1;
+var tT=2400, tL=2400, tI=null, tR=false;
+var jGame="all", cGame="ygo", cCache={}, curRG="ygo";
 var RULES={ygo:[],pkm:[],mtg:[],dig:[],gundam:[],op:[]};
 var SYNS={};
 
+// Game configs
+var GCFG={
+  ygo:{name:"Yu-Gi-Oh!",lp:8000,rk:"ygo",jk:"ygo"},
+  pkm:{name:"Pokemon",lp:0,rk:"pkm",jk:"pkm"},
+  mtg:{name:"MTG",lp:20,rk:"mtg",jk:"mtg"},
+  dig:{name:"Digimon",lp:4000,rk:"dig",jk:"dig"},
+  gundam:{name:"Gundam",lp:10,rk:"gundam",jk:"gundam"},
+  op:{name:"One Piece",lp:5,rk:"op",jk:"op"}
+};
+
+// SETUP
+var selGame=null;
+function pickGame(g,el){
+  document.querySelectorAll(".gc").forEach(function(c){c.classList.remove("sel");});
+  el.classList.add("sel"); selGame=g;
+  var btn=document.getElementById("setupBtn");
+  btn.disabled=false;
+  btn.textContent="Start with "+GCFG[g].name;
+}
+function finishSetup(){
+  if(!selGame)return;
+  localStorage.setItem("tcgGame",selGame);
+  document.getElementById("setupScreen").style.display="none";
+  document.getElementById("mainApp").style.display="flex";
+  applyGame(selGame);
+}
+function changeGame(){
+  if(confirm("Change game?")){
+    localStorage.removeItem("tcgGame");
+    location.reload();
+  }
+}
+function applyGame(g){
+  var cfg=GCFG[g];
+  sLP=cfg.lp; lp[1]=cfg.lp; lp[2]=cfg.lp;
+  document.getElementById("ab").textContent=cfg.name+" \u2699";
+  turn=1; ul(); addL("lpL",cfg.name+" started");
+  // sync pills
+  var lpills=document.querySelectorAll("#pan-lp .pill");
+  var lnames=["Yu-Gi-Oh!","Pokemon","MTG","Digimon","Gundam","One Piece"];
+  var gmap={ygo:"Yu-Gi-Oh!",pkm:"Pokemon",mtg:"MTG",dig:"Digimon",gundam:"Gundam",op:"One Piece"};
+  lpills.forEach(function(p){p.classList.toggle("on",p.textContent===gmap[g]);});
+  // sync rules
+  curRG=cfg.rk;
+  var rpills=document.querySelectorAll("#rg .pill");
+  var rkeys=["ygo","pkm","mtg","dig","gundam","op"];
+  rpills.forEach(function(p,i){p.classList.toggle("on",rkeys[i]===cfg.rk);});
+  // sync judge
+  jGame=cfg.jk;
+  document.querySelectorAll(".jt").forEach(function(t){
+    t.classList.toggle("on",t.textContent.toLowerCase()===cfg.jk||(t.textContent==="YGO"&&cfg.jk==="ygo"));
+  });
+}
+
+// Check saved game
+(function(){
+  var saved=localStorage.getItem("tcgGame");
+  if(saved&&GCFG[saved]){
+    document.getElementById("setupScreen").style.display="none";
+    document.getElementById("mainApp").style.display="flex";
+    applyGame(saved);
+  }
+})();
+
+// NAV
 function sw(id,el){
   document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("on");});
   document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("on");});
   el.classList.add("on");
   document.getElementById("pan-"+id).classList.add("on");
-  if(id==="rules") rr();
+  if(id==="rules")rr();
 }
+
+// LP
 function sg(n,s,el){
   document.querySelectorAll("#pan-lp .pill").forEach(function(p){p.classList.remove("on");});
   el.classList.add("on");
   if(s===0&&n==="Pokemon"){sLP=0;lp[1]=0;lp[2]=0;}
   else if(s===0){var v=parseInt(prompt("Starting LP?","20")||"20");sLP=isNaN(v)?20:v;lp[1]=sLP;lp[2]=sLP;}
   else{sLP=s;lp[1]=s;lp[2]=s;}
-  document.getElementById("ab").textContent=n;turn=1;ul();addL("lpL",n+" started");
+  document.getElementById("ab").textContent=n+" \u2699";
+  turn=1;ul();addL("lpL",n+" started");
 }
-function ul(){for(var i=1;i<=2;i++){var e=document.getElementById("l"+i);e.textContent=lp[i].toLocaleString();var p=sLP>0?lp[i]/sLP:1;e.style.color=p<=0.15?"#e05050":p<=0.35?"#e8a050":"#e8e4f0";}document.getElementById("tn").textContent=turn;}
+function ul(){
+  for(var i=1;i<=2;i++){
+    var e=document.getElementById("l"+i);
+    e.textContent=lp[i].toLocaleString();
+    var p=sLP>0?lp[i]/sLP:1;
+    e.style.color=p<=0.15?"#e05050":p<=0.35?"#e8a050":"#e8e4f0";
+  }
+  document.getElementById("tn").textContent=turn;
+}
 function al(p,a){lp[p]=Math.max(0,lp[p]+a);ul();addL("lpL","P"+p+": "+(a>0?"+":"")+a+" = "+lp[p]);}
 function ac(p,s){var v=parseInt(document.getElementById("ca").value)||0;if(v)al(p,s*v);}
 function hv(){lp[1]=Math.floor(lp[1]/2);lp[2]=Math.floor(lp[2]/2);ul();addL("lpL","Halved");}
 function rl(){lp[1]=sLP;lp[2]=sLP;turn=1;ul();addL("lpL","Reset");}
 function ct(d){turn=Math.max(1,turn+d);document.getElementById("tn").textContent=turn;}
+
+// TIMER
 function ft(s){var m=Math.floor(s/60),sc=s%60;return(m<10?"0":"")+m+":"+(sc<10?"0":"")+sc;}
-function ut(){var d=document.getElementById("td"),b=document.getElementById("tb");var p=tT>0?Math.round(tL/tT*100):0;d.textContent=ft(tL);d.className="tdig"+(tL<=0?" d":tL<=60?" u":"");b.style.width=p+"%";b.style.background=tL<=0?"#e05050":tL<=60?"#e8a050":"#e8d88a";document.getElementById("tl").textContent=tL<=0?"Time is up!":tR?"Running":"Round Timer";}
+function ut(){
+  var d=document.getElementById("td"),b=document.getElementById("tb");
+  var p=tT>0?Math.round(tL/tT*100):0;
+  d.textContent=ft(tL);
+  d.className="tdig"+(tL<=0?" d":tL<=60?" u":"");
+  b.style.width=p+"%";
+  b.style.background=tL<=0?"#e05050":tL<=60?"#e8a050":"#e8d88a";
+  document.getElementById("tl").textContent=tL<=0?"Time is up!":tR?"Running":"Round Timer";
+}
 function spr(m){paT();tT=m*60;tL=m*60;ut();}
 function act(){var v=parseInt(document.getElementById("cm").value);if(v&&v>0){paT();tT=v*60;tL=v*60;ut();}}
 function stT(){if(tR||tL<=0)return;tR=true;tI=setInterval(function(){if(tL>0){tL--;ut();}else{clearInterval(tI);tR=false;}},1000);}
 function paT(){clearInterval(tI);tR=false;ut();}
 function reT(){paT();tL=tT;ut();}
 function aT(m){tL=Math.min(tL+m*60,9999);tT=Math.max(tT,tL);ut();}
-function fc(){var h=Math.random()<0.5;var ic=document.getElementById("ci"),tx=document.getElementById("ct_");ic.textContent=h?"HEADS":"TAILS";ic.style.color=h?"#40c880":"#5090e0";tx.textContent=h?"Heads":"Tails";tx.style.color=h?"#40c880":"#5090e0";addL("dL","Coin: "+(h?"Heads":"Tails"));}
+
+// DICE
+function fc(){
+  var h=Math.random()<0.5;
+  var ic=document.getElementById("ci"),tx=document.getElementById("ct_");
+  ic.textContent=h?"HEADS":"TAILS";ic.style.color=h?"#40c880":"#5090e0";
+  tx.textContent=h?"Heads":"Tails";tx.style.color=h?"#40c880":"#5090e0";
+  addL("dL","Coin: "+(h?"Heads":"Tails"));
+}
 function cq(d){dQ=Math.max(1,Math.min(6,dQ+d));document.getElementById("dq").textContent=dQ;}
-function rd(sides){var rolls=[],total=0;for(var i=0;i<dQ;i++){var r=Math.floor(Math.random()*sides)+1;rolls.push(r);total+=r;}var box=document.getElementById("pb");box.innerHTML="";rolls.forEach(function(r){var e=document.createElement("div");e.className="pip"+(r===sides?" hi":"");e.textContent=r;box.appendChild(e);});var tr=document.getElementById("tr_");if(dQ>1){tr.style.display="flex";document.getElementById("tv").textContent=total;}else tr.style.display="none";addL("dL","D"+sides+": "+(dQ>1?"["+rolls.join(",")+"] = "+total:rolls[0]));}
-function srg(g,el){document.querySelectorAll("#rg .pill").forEach(function(p){p.classList.remove("on");});el.classList.add("on");aRG=g;rr();}
-function rr(){var q=(document.getElementById("rs")?document.getElementById("rs").value:"").toLowerCase().trim();var list=document.getElementById("rl");list.innerHTML="";var all=(RULES[aRG]||[]).filter(function(r){return !q||r.t.toLowerCase().indexOf(q)>=0||r.s.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;});document.getElementById("rct").textContent=all.length+" rule"+(all.length!==1?"s":"");if(!all.length){list.innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>No rules found</div>";return;}all.forEach(function(r){var d=document.createElement("div");d.className="ri";d.innerHTML="<div class='rt'>"+r.t+"</div><div class='rs'>"+r.s+"</div><div class='re'>"+r.e+"</div>";d.onclick=function(){d.classList.toggle("op");};list.appendChild(d);});}
-function scg(g,el){cGame=g;document.querySelectorAll("#pan-cards .pill").forEach(function(p){p.classList.remove("on");});el.classList.add("on");document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Type a card name and press Search</div>";document.getElementById("cs").value="";}
-function sc(){var q=document.getElementById("cs").value.trim();if(!q)return;var key=cGame+":"+q.toLowerCase();if(cCache[key]){rcrd(cCache[key]);return;}document.getElementById("cr").innerHTML="<div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'>Searching...</div>";if(cGame==="ygo")fygo(q,key);else if(cGame==="pkm")fpkm(q,key);else if(cGame==="mtg")fmtg(q,key);}
-function fygo(q,k){fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(d){if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}var c=d.data[0];var tags=[c.type||""];if(c.attribute)tags.push(c.attribute);if(c.race)tags.push(c.race);if(c.level)tags.push("Lv "+c.level);if(c.atk!==undefined)tags.push("ATK:"+c.atk);if(c.def!==undefined)tags.push("DEF:"+c.def);var card={name:c.name,tags:tags,text:c.desc||"No text."};cCache[k]=card;rcrd(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
-function fpkm(q,k){fetch("https://api.pokemontcg.io/v2/cards?q=name:"+encodeURIComponent(q)+"&pageSize=1").then(function(r){return r.json();}).then(function(d){if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}var c=d.data[0];var tags=[c.supertype||""];if(c.hp)tags.push("HP:"+c.hp);if(c.types)tags.push(c.types.join("/"));var text="";if(c.abilities)c.abilities.forEach(function(a){text+="[Ability] "+a.name+": "+a.text+"\n\n";});if(c.attacks)c.attacks.forEach(function(a){text+=a.name+(a.damage?" - "+a.damage:"")+"\n"+(a.text||"")+"\n\n";});var card={name:c.name,tags:tags,text:text.trim()||"No text."};cCache[k]=card;rcrd(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
-function fmtg(q,k){fetch("https://api.scryfall.com/cards/named?fuzzy="+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(c){if(c.object==="error"){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}var tags=[];if(c.type_line)tags.push(c.type_line);if(c.mana_cost)tags.push(c.mana_cost);if(c.power)tags.push("P/T:"+c.power+"/"+c.toughness);var text=c.oracle_text||"";if(c.card_faces)text=c.card_faces.map(function(f){return f.name+"\n"+f.oracle_text;}).join("\n---\n");var card={name:c.name,tags:tags,text:text||"No text."};cCache[k]=card;rcrd(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
-function rcrd(card){var th=card.tags.filter(function(t){return t;}).map(function(t){return "<span class='ct'>"+t+"</span>";}).join("");var tx=card.text.replace(/\n/g,"<br>");document.getElementById("cr").innerHTML="<div class='card' style='border-color:rgba(232,216,138,0.2)'><div class='cn'>"+card.name+"</div><div class='cs'>"+th+"</div><div class='cx'>"+tx+"</div></div>";}
-function aw(p){W[p]++;document.getElementById("w"+p).textContent=W[p];addL("mL","P"+p+" wins game "+gNum);}
-function ng(){gNum++;document.getElementById("gn").textContent=gNum;lp[1]=sLP;lp[2]=sLP;turn=1;ul();addL("mL","Game "+gNum+" started");}
-function rm(){W[1]=0;W[2]=0;gNum=1;document.getElementById("w1").textContent=0;document.getElementById("w2").textContent=0;document.getElementById("gn").textContent=1;addL("mL","Match reset");}
-function jg(g,el){jGame=g;document.querySelectorAll(".jt").forEach(function(t){t.classList.remove("on");});el.classList.add("on");}
-function rsz(ta){ta.style.height="36px";ta.style.height=Math.min(ta.scrollHeight,76)+"px";}
-function ojk(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sj();}}
-function jmsg(role,text){var msgs=document.getElementById("jm");var div=document.createElement("div");div.className="msg "+(role==="user"?"mu":"ma");var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});div.innerHTML="<div class='bub'>"+text+"</div><span class='mt'>"+t+"</span>";msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
-
-/* YGO card name detection keywords */
-var YGO_CARD_HINTS=["effect","veiler","ash","blossom","nibiru","solemn","judgment","strike","warning","mst","mystical","space","typhoon","monster","reborn","dark","hole","raigeki","pot","greed","desires","extravagance","called","grave","infinite","impermanence","ghost","ogre","maxx","called","forbidden","droplet","lightning","storm","harpie","feather","duster","book","moon","mirror","force","torrential","tribute","bottomless","trap","compulsory","evacuation","device","dimensional","barrier","skill","drain","macro","cosmos","banisher","light","dimensional","fissure","chain","disappearance","dragon","cyber","sieger","luna","liger","accesscode","talker","apollousa","borrelsword","condemned","witch","eldlich","golden","lord","tri","brigade","virtual","world","numeron","exodia","forbidden","one","leftarm","rightarm","leftleg","rightleg","destiny","board","final","countdown","last","turn"];
-
-function isLikelyCardQuestion(q) {
-  var lower = q.toLowerCase();
-  var cardWords = 0;
-  YGO_CARD_HINTS.forEach(function(h){ if(lower.indexOf(h)>=0) cardWords++; });
-  /* If 2+ card-specific words and no general mechanic words, likely a card question */
-  var mechanic = lower.indexOf("chain")>=0||lower.indexOf("damage step")>=0||lower.indexOf("spell speed")>=0||lower.indexOf("segoc")>=0||lower.indexOf("timing")>=0||lower.indexOf("resolution")>=0;
-  return cardWords >= 2 && !mechanic;
+function rd(sides){
+  var rolls=[],total=0;
+  for(var i=0;i<dQ;i++){var r=Math.floor(Math.random()*sides)+1;rolls.push(r);total+=r;}
+  var box=document.getElementById("pb");box.innerHTML="";
+  rolls.forEach(function(r){
+    var e=document.createElement("div");
+    e.className="pip"+(r===sides?" hi":"");
+    e.textContent=r;box.appendChild(e);
+  });
+  var tr=document.getElementById("tr_");
+  if(dQ>1){tr.style.display="flex";document.getElementById("tv").textContent=total;}
+  else tr.style.display="none";
+  addL("dL","D"+sides+": "+(dQ>1?"["+rolls.join(",")+"] = "+total:rolls[0]));
 }
 
-function fetchCardForJudge(cardName, question) {
-  jmsg("ai","Looking up card: <b>"+cardName+"</b>...");
-  fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(cardName))
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(!d.data||!d.data.length){
-      jmsg("ai","Card not found. Check spelling or use the Cards tab to look up the card first, then ask the Judge about the mechanic.");
-      return;
-    }
-    var c=d.data[0];
-    var cardText=c.desc||"No effect text.";
-    var cardInfo="<b>"+c.name+"</b> ("+c.type+")<br>";
-    if(c.atk!==undefined) cardInfo+="ATK:"+c.atk+" DEF:"+(c.def||"?")+"<br>";
-    cardInfo+="<br><b>Effect:</b><br>"+cardText.replace(/
-/g,"<br>")+"<br><br>";
-    /* Now find relevant rules */
-    var rules=[];
-    if(cardText.toLowerCase().indexOf("damage step")>=0) rules.push("Damage Step Restrictions");
-    if(cardText.toLowerCase().indexOf("quick effect")>=0||cardText.toLowerCase().indexOf("spell speed 2")>=0) rules.push("Spell Speed 2");
-    if(cardText.toLowerCase().indexOf("negate")>=0) rules.push("Negate Activation vs Negate Effect");
-    if(cardText.toLowerCase().indexOf("chain")>=0) rules.push("Chain Resolution LIFO");
-    if(cardText.toLowerCase().indexOf("special summon")>=0) rules.push("Proper Summon Requirement");
-    if(cardText.toLowerCase().indexOf("atk")>=0&&cardText.toLowerCase().indexOf("damage step")>=0) rules.push("ATK/DEF Modifiers in Damage Step");
-    var ruleText="";
-    if(rules.length>0){
-      ruleText="<br><b style='color:#e8d88a'>Relevant Rules:</b><br>";
-      rules.forEach(function(rt){
-        (RULES.ygo||[]).forEach(function(r){
-          if(r.t===rt) ruleText+="<b>"+r.t+"</b><br>"+r.e+"<br><br>";
-        });
-      });
-    }
-    if(!ruleText) ruleText="<br>Check the Rules tab for relevant mechanics.";
-    jmsg("ai",cardInfo+ruleText+"<span style='font-size:10px;color:#606070'>Card data from YGOPRODeck. Rules from offline ruleset.</span>");
-  })
-  .catch(function(){
-    jmsg("ai","Could not fetch card data - check internet connection. Use the Cards tab to look up card text manually.");
+// RULES
+function srg(g,el){
+  document.querySelectorAll("#rg .pill").forEach(function(p){p.classList.remove("on");});
+  el.classList.add("on");curRG=g;rr();
+}
+function rr(){
+  var q=(document.getElementById("rs")?document.getElementById("rs").value:"").toLowerCase().trim();
+  var list=document.getElementById("rl");list.innerHTML="";
+  var all=(RULES[curRG]||[]).filter(function(r){
+    return !q||r.t.toLowerCase().indexOf(q)>=0||r.s.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;
+  });
+  var ct=document.getElementById("rct");
+  if(!RULES[curRG]||!RULES[curRG].length){
+    ct.textContent="Loading rules...";
+    list.innerHTML="<div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'>Rules loading, please wait a moment</div>";
+    return;
+  }
+  ct.textContent=all.length+" rule"+(all.length!==1?"s":"");
+  if(!all.length){list.innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>No rules found</div>";return;}
+  all.forEach(function(r){
+    var d=document.createElement("div");d.className="ri";
+    d.innerHTML="<div class='rtt'>"+r.t+"</div><div class='rss'>"+r.s+"</div><div class='ree'>"+r.e+"</div>";
+    d.onclick=function(){d.classList.toggle("op");};
+    list.appendChild(d);
   });
 }
 
-function extractCardName(q) {
-  /* Try to find a 2-3 word sequence that looks like a card name */
-  var words = q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>1;});
-  /* Check 3-word combos first, then 2-word */
-  for(var i=0;i<words.length-2;i++){
-    var phrase=words[i]+" "+words[i+1]+" "+words[i+2];
-    if(YGO_CARD_HINTS.indexOf(words[i])>=0||YGO_CARD_HINTS.indexOf(words[i+1])>=0) return phrase;
-  }
-  for(var i=0;i<words.length-1;i++){
-    var phrase=words[i]+" "+words[i+1];
-    if(YGO_CARD_HINTS.indexOf(words[i])>=0||YGO_CARD_HINTS.indexOf(words[i+1])>=0) return phrase;
-  }
-  return words.slice(0,3).join(" ");
+// CARDS
+function scg(g,el){
+  cGame=g;
+  document.querySelectorAll("#pan-cards .pill").forEach(function(p){p.classList.remove("on");});
+  el.classList.add("on");
+  document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Type a card name and press Search</div>";
+  document.getElementById("cs").value="";
+}
+function scard(){
+  var q=document.getElementById("cs").value.trim();if(!q)return;
+  var key=cGame+":"+q.toLowerCase();
+  if(cCache[key]){showCard(cCache[key]);return;}
+  document.getElementById("cr").innerHTML="<div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'>Searching...</div>";
+  if(cGame==="ygo")fygo(q,key);
+  else if(cGame==="pkm")fpkm(q,key);
+  else if(cGame==="mtg")fmtg(q,key);
+}
+function fygo(q,k){
+  fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q))
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found. Check spelling.</div>";return;}
+    var c=d.data[0];
+    var tags=[c.type||""];
+    if(c.attribute)tags.push(c.attribute);
+    if(c.race)tags.push(c.race);
+    if(c.level)tags.push("Level "+c.level);
+    if(c.atk!==undefined)tags.push("ATK: "+c.atk);
+    if(c.def!==undefined)tags.push("DEF: "+c.def);
+    if(c.linkval)tags.push("Link-"+c.linkval);
+    var card={name:c.name,tags:tags,text:c.desc||"No text."};
+    cCache[k]=card;showCard(card);
+  }).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed. Check internet.</div>";});
+}
+function fpkm(q,k){
+  fetch("https://api.pokemontcg.io/v2/cards?q=name:"+encodeURIComponent(q)+"&pageSize=1")
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}
+    var c=d.data[0];
+    var tags=[c.supertype||""];
+    if(c.hp)tags.push("HP: "+c.hp);
+    if(c.types)tags.push(c.types.join("/"));
+    if(c.set&&c.set.name)tags.push(c.set.name);
+    var text="";
+    if(c.abilities)c.abilities.forEach(function(a){text+="[Ability] "+a.name+": "+a.text+"\n\n";});
+    if(c.attacks)c.attacks.forEach(function(a){text+=a.name+(a.damage?" - "+a.damage:"")+"\n"+(a.text||"")+"\n\n";});
+    var card={name:c.name,tags:tags,text:text.trim()||"No text."};
+    cCache[k]=card;showCard(card);
+  }).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});
+}
+function fmtg(q,k){
+  fetch("https://api.scryfall.com/cards/named?fuzzy="+encodeURIComponent(q))
+  .then(function(r){return r.json();})
+  .then(function(c){
+    if(c.object==="error"){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}
+    var tags=[];
+    if(c.type_line)tags.push(c.type_line);
+    if(c.mana_cost)tags.push(c.mana_cost);
+    if(c.power)tags.push("P/T: "+c.power+"/"+c.toughness);
+    if(c.loyalty)tags.push("Loyalty: "+c.loyalty);
+    var text=c.oracle_text||"";
+    if(c.card_faces)text=c.card_faces.map(function(f){return f.name+"\n"+f.oracle_text;}).join("\n---\n");
+    var card={name:c.name,tags:tags,text:text||"No text."};
+    cCache[k]=card;showCard(card);
+  }).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});
+}
+function showCard(card){
+  var th=card.tags.filter(function(t){return t;}).map(function(t){return "<span class='ctag'>"+t+"</span>";}).join("");
+  var tx=card.text.replace(/\n/g,"<br>");
+  document.getElementById("cr").innerHTML="<div class='card' style='border-color:rgba(232,216,138,0.2)'><div class='cn'>"+card.name+"</div><div style='display:flex;flex-wrap:wrap;margin-bottom:4px'>"+th+"</div><div class='cx'>"+tx+"</div></div>";
 }
 
+// MATCH
+function aw(p){W[p]++;document.getElementById("w"+p).textContent=W[p];addL("mL","P"+p+" wins game "+gNum);}
+function ng(){gNum++;document.getElementById("gn").textContent=gNum;lp[1]=sLP;lp[2]=sLP;turn=1;ul();addL("mL","Game "+gNum+" started");}
+function rmatch(){W[1]=0;W[2]=0;gNum=1;document.getElementById("w1").textContent=0;document.getElementById("w2").textContent=0;document.getElementById("gn").textContent=1;addL("mL","Match reset");}
+
+// JUDGE
+function jg(g,el){jGame=g;document.querySelectorAll(".jt").forEach(function(t){t.classList.remove("on");});el.classList.add("on");}
+function rsz(ta){ta.style.height="36px";ta.style.height=Math.min(ta.scrollHeight,76)+"px";}
+function ojk(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sj();}}
+function jmsg(role,text){
+  var msgs=document.getElementById("jm");
+  var div=document.createElement("div");
+  div.className="msg "+(role==="user"?"mu":"ma");
+  var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  div.innerHTML="<div class='bub'>"+text+"</div><span class='mt'>"+t+"</span>";
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
 function sj(){
   var inp=document.getElementById("ji");
   var q=inp.value.trim();if(!q)return;
   inp.value="";inp.style.height="36px";
   jmsg("user",q);
-
-  /* Detect card-specific questions for YGO */
-  if((jGame==="ygo"||jGame==="all") && isLikelyCardQuestion(q)){
-    var cardName=extractCardName(q);
-    fetchCardForJudge(cardName, q);
-    return;
-  }
-
-  var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1,happen:1,happens:1};
-  var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>1&&!stop[w];});
-  if(!wds.length){jmsg("ai","Please use specific keywords like: chain resolution, damage step, weakness, SEGOC.");return;}
-
+  document.getElementById("isb").disabled=true;
+  var msgs=document.getElementById("jm");
+  var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";
+  tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
+  msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
+  // Find relevant rules for context
+  var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1};
+  var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2&&!stop[w];});
   var exp={};
   wds.forEach(function(w){
     exp[w]=true;
     if(SYNS[w])SYNS[w].split(" ").forEach(function(s){exp[s]=true;});
     Object.keys(SYNS).forEach(function(k){
-      if(k.indexOf(w)>=0||w.indexOf(k)>=0){
-        exp[k]=true;
-        SYNS[k].split(" ").forEach(function(s){exp[s]=true;});
-      }
+      if(k.indexOf(w)>=0||w.indexOf(k)>=0){exp[k]=true;SYNS[k].split(" ").forEach(function(s){exp[s]=true;});}
     });
   });
-
   var games=jGame==="all"?Object.keys(RULES):[jGame];
   var res=[];
   games.forEach(function(g){
@@ -303,40 +573,49 @@ function sj(){
       var ti=r.t.toLowerCase(),su=r.s.toLowerCase(),de=r.e.toLowerCase();
       var sc=0;
       wds.forEach(function(w){if(ti.indexOf(w)>=0)sc+=15;if(su.indexOf(w)>=0)sc+=8;if(de.indexOf(w)>=0)sc+=3;});
-      Object.keys(exp).forEach(function(w){if(w.length<3)return;if(ti.indexOf(w)>=0)sc+=4;if(su.indexOf(w)>=0)sc+=2;if(de.indexOf(w)>=0)sc+=1;});
-      for(var i=0;i<wds.length-1;i++){
-        var ph=wds[i]+" "+wds[i+1];
-        if(ti.indexOf(ph)>=0)sc+=20;if(su.indexOf(ph)>=0)sc+=10;if(de.indexOf(ph)>=0)sc+=5;
-      }
-      if(sc>6)res.push({g:g,r:r,s:sc});
+      Object.keys(exp).forEach(function(w){if(w.length<3)return;if(ti.indexOf(w)>=0)sc+=5;if(su.indexOf(w)>=0)sc+=3;if(de.indexOf(w)>=0)sc+=1;});
+      for(var i=0;i<wds.length-1;i++){var ph=wds[i]+" "+wds[i+1];if(ti.indexOf(ph)>=0)sc+=25;if(su.indexOf(ph)>=0)sc+=12;if(de.indexOf(ph)>=0)sc+=6;}
+      if(sc>5)res.push({r:r,s:sc});
     });
   });
-
   res.sort(function(a,b){return b.s-a.s;});
-  res=res.slice(0,4);
-
-  if(!res.length||res[0].s<8){
-    /* Try card lookup as fallback */
-    if(jGame==="ygo"||jGame==="all"){
-      var cardName=extractCardName(q);
-      if(cardName) { fetchCardForJudge(cardName,q); return; }
-    }
-    jmsg("ai","No specific rule found. Try: chain resolution, MST monster reborn, damage step, weakness, SEGOC, commander damage. For card-specific questions, use the Cards tab first.");
-    return;
-  }
-
-  var GL={ygo:"Yu-Gi-Oh!",pkm:"Pokemon",mtg:"MTG",dig:"Digimon",gundam:"Gundam",op:"One Piece"};
-  var out="",lg="",top=res[0].s;
-  res.forEach(function(r){
-    if(r.s<top*0.35)return;
-    if(jGame==="all"&&r.g!==lg){out+="<b style='color:#e8d88a;font-size:11px;'>"+(GL[r.g]||r.g)+"</b><br>";lg=r.g;}
-    out+="<b>"+r.r.t+"</b><br>"+r.r.e+"<br><br>";
-  });
-  out+="<span style='font-size:10px;color:#606070'>From offline ruleset.</span>";
-  jmsg("ai",out.trim());
+  var context=res.slice(0,8).map(function(x){return "RULE: "+x.r.t+"\nSUMMARY: "+x.r.s+"\nDETAIL: "+x.r.e;}).join("\n\n");
+  var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam Card Game, and One Piece Card Game",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam Card Game",op:"One Piece Card Game"};
+  var sys="You are an expert "+gl[jGame]+" judge. Answer the ruling question directly and definitively. State exactly what happens. Reference rule names when relevant. Be concise and precise. Plain text only, no markdown.";
+  if(context)sys+="\n\nOFFICIAL RULES FOR REFERENCE:\n"+context;
+  fetch("https://tcg-judge.kirkcreason.workers.dev",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({system:sys,question:q})
+  }).then(function(r){return r.json();})
+  .then(function(d){
+    var t=document.getElementById("tp");if(t)t.remove();
+    var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
+    jmsg("ai",ans);
+  }).catch(function(){
+    var t=document.getElementById("tp");if(t)t.remove();
+    jmsg("ai","Connection error. Check internet and try again.");
+  }).finally(function(){document.getElementById("isb").disabled=false;});
 }
-function addL(id,msg){var el=document.getElementById(id);if(!el)return;var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});var line=document.createElement("div");line.className="ll";line.innerHTML="<b>"+msg+"</b><span>"+t+"</span>";el.insertBefore(line,el.firstChild);while(el.children.length>10)el.removeChild(el.lastChild);}
+
+// LOG
+function addL(id,msg){
+  var el=document.getElementById(id);if(!el)return;
+  var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  var line=document.createElement("div");line.className="ll";
+  line.innerHTML="<b>"+msg+"</b><span>"+t+"</span>";
+  el.insertBefore(line,el.firstChild);
+  while(el.children.length>10)el.removeChild(el.lastChild);
+}
+
 ut();
+
+// Load rules.js after page renders
+window.addEventListener("load",function(){
+  var s=document.createElement("script");
+  s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v="+Date.now();
+  s.onload=function(){if(typeof rr==="function")rr();};
+  document.body.appendChild(s);
+});
 </script>
 </body>
 </html>
