@@ -296,6 +296,136 @@ var SYNS={
 var CARD_RULINGS = {
 ygo: [
   {
+    cards: ["cyber dragon", "contact fusion", "machine", "dark law"],
+    q: "Can I contact fuse Cyber Dragon with opponent machine monsters while Dark Law is on the field?",
+    a: "Yes. Cyber Dragon can contact fuse with opponent machine monsters regardless of Masked HERO Dark Law. Contact fusion uses monsters as materials - they are not sent to the GY as a cost. Dark Law only affects cards being sent to the GY. Since contact fusion materials are not sent to the GY Dark Law does not interfere. The resulting Chimeratech Fortress Dragon is special summoned normally."
+  },
+  {
+    cards: ["cyber dragon", "chimeratech", "fortress", "machine", "contact"],
+    q: "How does Cyber Dragon contact fusion work?",
+    a: "Cyber Dragon can contact fuse during the Main Phase by sending itself and any number of Machine monsters from either field to the GY as materials. No Polymerization needed. The materials go to the GY as part of the fusion process not as a cost. Chimeratech Fortress Dragon gets 1000 ATK for each material used. Dark Law does not stop this because the materials are used for the summon not discarded as a cost."
+  },
+  {
+    cards: ["cyberdark realm", "mystical space typhoon", "search"],
+    q: "I activate Cyberdark Realm, opponent chains MST and destroys it, do I search?",
+    a: "No. Cyberdark Realm is a Continuous Spell. Continuous Spells require the card to remain on the field to resolve their effects. Since MST destroyed Realm before it resolved, the search effect disappears. This is different from Normal Spells which resolve even if destroyed on the chain."
+  },
+  {
+    cards: ["dark hole", "sky striker", "raye", "zero", "tribute", "chain"],
+    q: "Opponent activates Dark Hole, I chain Sky Striker Ace Zero to tribute and special summon from deck, what resolves?",
+    a: "Sky Striker Ace Zero resolves first since it was Chain Link 2. Zero tributes Raye as cost and special summons a Sky Striker from deck. Then Dark Hole resolves and destroys all monsters on the field including the Sky Striker that was just summoned. The order is: Zero resolves bringing out a monster, then Dark Hole destroys everything."
+  },
+  {
+    cards: ["skill drain", "sky striker", "raye", "tribute", "activate"],
+    q: "Skill Drain is face up, can I activate Sky Striker Ace Raye and resolve?",
+    a: "Yes. You can activate Raye and her effect will resolve. Tributing Raye is the activation cost and is paid before Skill Drain can negate anything. Since Raye is no longer on the field when the effect resolves, Skill Drain cannot negate it. Skill Drain only negates effects of face-up monsters on the field, and Raye is already gone."
+  },
+  {
+    cards: ["chimeratech rampage", "metamorphosis", "destroyed", "special summon back"],
+    q: "I special summoned Chimeratech Rampage Dragon using Metamorphosis and it got destroyed, can I special summon it back?",
+    a: "No. Chimeratech Rampage Dragon was not properly Fusion Summoned. Metamorphosis is not a Fusion Summon - it transforms one monster into another. Since Rampage was never properly Fusion Summoned, it cannot be revived from the GY or banished zone using Monster Reborn, Fusion Recovery, or similar effects. Proper summon requirement not met."
+  },
+  {
+    cards: ["nebra disk", "chronomaly", "search", "special summon", "same turn"],
+    q: "Can Nebra Disk use both its search effect and its GY special summon effect in the same turn?",
+    a: "No. Chronomaly Nebra Disk has a once per turn restriction shared between both its effects. You cannot use the effect to add a Chronomaly monster to hand and also use the effect to special summon itself from the GY in the same turn."
+  },
+  {
+    cards: ["cyber dragon core", "search", "cybernetic", "special summon", "same turn"],
+    q: "Can Cyber Dragon Core use both its search effect and its special summon effect in the same turn?",
+    a: "No. Only one of Core's effects can be used per turn. You cannot search a Cybernetic Spell/Trap and also special summon a Cyber Dragon from deck in the same turn. Core still counts as Cyber Dragon while on the field and in the GY even after using one effect."
+  },
+  {
+    cards: ["artifact ignition", "full", "spell trap zone", "occupied", "activate"],
+    q: "If all my Spell and Trap Zones are full can I activate Artifact Ignition?",
+    a: "You can activate it only if you target one of your own Spell/Trap Zone cards to destroy. You cannot target your opponent's cards if your zones are full. You also cannot target a Field Spell in the Field Zone or a Pendulum card in the Pendulum Zone."
+  },
+  {
+    cards: ["masked hero goka", "de-fusion", "mask change", "return"],
+    q: "If Masked HERO Goka was summoned by Mask Change can it be targeted by De-Fusion?",
+    a: "Yes. De-Fusion will return Goka to the Extra Deck. However no materials will be special summoned because Mask Change does not use fusion materials - it transforms the monster directly. De-Fusion only returns materials if the Fusion Monster was properly Fusion Summoned with materials."
+  },
+  {
+    cards: ["elemental hero core", "destroyed", "battle", "end of battle phase", "effect"],
+    q: "If Elemental HERO Core is destroyed in battle can its effect to destroy a monster activate?",
+    a: "No. Core must be on the field to activate its end of Battle Phase effect. Since Core is sent to the GY when destroyed in battle it is no longer on the field and cannot activate its effect."
+  },
+  {
+    cards: ["elemental hero core", "magic cylinder", "negated", "attack negated"],
+    q: "If Core's attack is negated by Magic Cylinder can it still use its end of Battle Phase effect?",
+    a: "No. Core's effect requires damage calculation to occur. Magic Cylinder negates the attack before damage calculation happens so the condition for Core's effect is never met and it cannot activate."
+  },
+  {
+    cards: ["dark law", "reinforcement of the army", "one card", "hand", "banish"],
+    q: "Opponent has one card in hand and activates Reinforcement of the Army, does Dark Law banish that card?",
+    a: "Yes. Masked HERO Dark Law banishes one card from the opponent hand whenever they add a card from their deck to their hand. This triggers even if there is only one card in hand. The opponent adds the warrior from deck then Dark Law banishes one card from their hand."
+  },
+  {
+    cards: ["dark law", "man eater bug", "flip", "destroy", "banished", "graveyard"],
+    q: "Dark Law attacks face-down Man Eater Bug, bug destroys Dark Law. Is the bug banished?",
+    a: "No. Once Dark Law is destroyed its continuous banish replacement effect no longer applies. Man Eater Bug is sent to the Graveyard normally. The replacement effect requires Dark Law to be face-up on the field at the moment the card would go to the GY."
+  },
+  {
+    cards: ["dark law", "same atk", "double ko", "both destroyed", "banished"],
+    q: "Dark Law battles a monster with equal ATK and both are destroyed. Is the opponent monster banished?",
+    a: "No. When both monsters are destroyed simultaneously in battle Dark Law is no longer on the field when the replacement effect would apply. The opponent monster is sent to the Graveyard normally. Dark Law must be face-up on the field for its banish effect to work."
+  },
+  {
+    cards: ["crimson blader", "same atk", "both destroyed", "level 5", "prevent summon"],
+    q: "Crimson Blader battles a monster with equal ATK and both are destroyed. Does its effect activate?",
+    a: "No. Crimson Blader's effect activates on the field at the end of the Damage Step. If Crimson Blader is destroyed during damage calculation it is sent to the GY and is no longer on the field, so its effect cannot activate."
+  },
+  {
+    cards: ["kycoo", "karma cut", "banish", "graveyard"],
+    q: "Kycoo the Ghost Destroyer prevents banishing from GY. Can opponent activate Karma Cut?",
+    a: "Yes. Karma Cut can still be activated and will still banish the targeted monster from the field. However due to Kycoo's effect the part of Karma Cut that banishes cards with the same name from the GY will not apply. The targeted monster is still banished but the GY cleanup does not happen."
+  },
+  {
+    cards: ["dzw", "chimera clad", "two copies", "attack twice", "number c39"],
+    q: "Can you equip two copies of DZW Chimera Clad to the same Number C39 monster?",
+    a: "Yes, you can equip multiple copies of DZW Chimera Clad to the same monster. However even with two copies equipped the monster can only perform one additional attack per Battle Phase. Multiple copies do not stack the additional attack - it behaves the same as having one copy."
+  },
+  {
+    cards: ["sonic warrior", "star changer", "level", "atk boost", "graveyard"],
+    q: "If Star Changer increases a Level 2 monster to Level 3 in the chain after Sonic Warrior, does it get the ATK boost?",
+    a: "No. Sonic Warrior's effect checks the Level of monsters when it resolves. A monster whose Level was increased to 3 does not receive the ATK boost. However monsters whose Level was reduced to 2 or lower do receive the boost since they qualify when the effect resolves."
+  },
+  {
+    cards: ["ghostrick vanish", "protection", "later that turn", "appears"],
+    q: "Does Ghostrick Vanish protection apply to Ghostrick cards that appear later the same turn?",
+    a: "Yes. Ghostrick Vanish's protection applies for the entire turn not just to cards present when it resolved. Ghostrick cards and face-down monsters that appear later in the same turn also gain the protection."
+  },
+  {
+    cards: ["ghostrick scare", "face-down", "non-ghostrick", "target"],
+    q: "Can Ghostrick Scare target face-down monsters that are not Ghostricks?",
+    a: "Yes. Ghostrick Scare can target any face-down monster. However for non-Ghostrick face-down monsters only the effect that flips them face-up applies. They will not be flipped back face-down and no opponent monsters will be flipped face-down as a result."
+  },
+  {
+    cards: ["rank up magic", "limited barians force", "bujintei susanowo", "bujincarnation"],
+    q: "Can Rank-Up-Magic Limited Barians Force target Bujintei Susanowo summoned by Bujincarnation?",
+    a: "Yes it can be activated. However due to Bujincarnation's summoning restriction you may only Xyz Summon a Beast, Beast-Warrior, or Winged-Beast type Xyz Monster as the result. The restriction from Bujincarnation carries over."
+  },
+  {
+    cards: ["pixie ring", "wildheart", "unaffected", "trap", "attack"],
+    q: "If Pixie Ring forces attacking the lowest ATK monster can Elemental HERO Wildheart ignore it?",
+    a: "Yes. Elemental HERO Wildheart is unaffected by Trap cards. Pixie Ring is a Trap card so Wildheart can ignore its restriction and attack whichever monster you choose regardless of ATK."
+  },
+  {
+    cards: ["gagaga cowboy", "divine dragon knight felgrand", "atk reduce", "protected"],
+    q: "Gagaga Cowboy tries to reduce opponent monster ATK but it is protected by Divine Dragon Knight Felgrand. What happens?",
+    a: "Only the part of Cowboy's effect that increases its own ATK by 1000 applies. The part that reduces the opponent monster ATK by 500 does not apply because the monster is protected by Felgrand. Effects that cannot apply are simply ignored while effects that can apply still resolve."
+  },
+  {
+    cards: ["queen of thorns", "dna surgery", "plant", "summon cost", "lp"],
+    q: "DNA Surgery makes all monsters Plant-type. Does Queen of Thorns still require LP payment to summon non-Plant monsters from hand?",
+    a: "Yes. Even though DNA Surgery treats all monsters as Plant-type while on the field, Queen of Thorns checks the original type printed on the card when determining the summoning cost. Non-Plant monsters from hand still require 1000 LP to summon."
+  },
+  {
+    cards: ["dragonecro nethersoul", "destroyed", "battle", "atk reduce", "token"],
+    q: "If Dragonecro Nethersoul Dragon is destroyed in battle does its effect still activate?",
+    a: "Yes. Dragonecro Nethersoul Dragon's effect activates in the Graveyard at the end of the Damage Step even when destroyed in battle. It reduces the ATK of the monster that destroyed it and special summons a Dark token. The GY activation allows it to work even after being destroyed."
+  },
+  {
     cards: ["droll", "lock bird", "dark law", "masked hero"],
     q: "Can Droll and Lock Bird be activated while Masked HERO Dark Law is on the field?",
     a: "No. Droll and Lock Bird cannot be activated while Masked HERO Dark Law is face-up on the field. Droll requires discarding itself to the GY as an activation cost. Dark Law replaces all cards that would be sent to the GY with banishing instead. Since Droll cannot be sent to the GY, the activation cost cannot be paid, so Droll and Lock Bird cannot be activated at all."
@@ -492,7 +622,7 @@ mtg: [
 ]
 };
 
-// Card ruling search function
+// Card ruling search function - requires ALL key cards to match
 function findCardRuling(question, game) {
   var q = question.toLowerCase();
   var games = game === "all" ? Object.keys(CARD_RULINGS) : [game];
@@ -500,15 +630,18 @@ function findCardRuling(question, game) {
   var bestScore = 0;
   games.forEach(function(g) {
     (CARD_RULINGS[g] || []).forEach(function(ruling) {
-      var score = 0;
-      ruling.cards.forEach(function(card) {
-        if (q.indexOf(card.toLowerCase()) >= 0) score += 20;
-      });
-      // Bonus for matching multiple cards
-      var matched = ruling.cards.filter(function(c) { return q.indexOf(c.toLowerCase()) >= 0; }).length;
-      if (matched >= 2) score += 30;
-      if (score > bestScore) { bestScore = score; best = ruling; }
+      // Count how many of the ruling's key cards appear in the question
+      var matched = ruling.cards.filter(function(c) {
+        return q.indexOf(c.toLowerCase()) >= 0;
+      }).length;
+      // Require at least half the cards to match AND minimum 2 matches
+      var threshold = Math.max(2, Math.ceil(ruling.cards.length * 0.5));
+      if (matched >= threshold) {
+        var score = matched * 20;
+        if (score > bestScore) { bestScore = score; best = ruling; }
+      }
     });
   });
-  return bestScore >= 20 ? best : null;
+  // Only return if strong match - prevents false positives
+  return bestScore >= 40 ? best : null;
 }
