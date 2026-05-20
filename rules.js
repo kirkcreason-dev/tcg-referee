@@ -607,6 +607,16 @@ ygo: [
     a: "Forbidden Droplet halves the ATK of the targeted monster and negates its effects until end of turn. Megamorph is an Equip Spell that modifies ATK - it is not negated by Forbidden Droplet since Droplet negates monster effects not equip spell effects. Both apply simultaneously. The monster ATK is modified by Megamorph first then halved by Forbidden Droplet. Megamorph doubles ATK if your LP is lower or halves it if your LP is higher, then Forbidden Droplet halves that result."
   },
   {
+    cards: ["nurakumo", "mitsurugi", "dimensional fissure", "ritual summon", "tribute", "banished"],
+    q: "Nurakumo No Mitsurugi is Ritual Summoned while Dimensional Fissure is on the field. What happens?",
+    a: "Mitsurugi is successfully Ritual Summoned and remains on the field. Dimensional Fissure does not prevent the Ritual Summon. However the monsters tributed as materials for the Ritual Summon are banished instead of going to the GY because Dimensional Fissure replaces all sends to the GY with banishing. The Ritual Summon itself resolves normally."
+  },
+  {
+    cards: ["dimensional fissure", "ritual summon", "tribute", "material", "banished"],
+    q: "Can you Ritual Summon while Dimensional Fissure is active?",
+    a: "Yes. Dimensional Fissure does not prevent Ritual Summons. The Ritual Summon resolves normally and the summoned monster hits the field. However the monsters tributed as Ritual materials are banished instead of going to the GY because Dimensional Fissure replaces all GY sends with banishing."
+  },
+  {
     cards: ["rescue rabbit", "skill drain", "banish", "cost", "normal monster", "special summon deck"],
     q: "Skill Drain is active. Player Normal Summons Rescue Rabbit and activates its effect banishing itself. Does it resolve?",
     a: "Yes. Rescue Rabbit banishes itself as the activation cost before Skill Drain can negate anything. Since Rescue Rabbit is no longer on the field when the effect resolves, Skill Drain cannot negate it. Skill Drain only negates effects of face-up monsters currently on the field. The two Normal Monsters are successfully Special Summoned from the Deck. Same mechanic as Sky Striker Raye."
