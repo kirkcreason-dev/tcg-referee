@@ -295,6 +295,287 @@ var SYNS={
 };
 var CARD_RULINGS = {
 ygo: [
+
+  {
+    cards: ["ultimate falcon", "raidraptor", "underworld goddess", "link material", "unaffected"],
+    q: "Can Underworld Goddess use an unaffected Ultimate Falcon as Link Material?",
+    a: "Yes. Underworld Goddess allowing you to use 1 opponent monster as Link Material is an unclassified condition that modifies Link Summoning mechanics. It is not an activated or continuous card effect, so it completely bypasses unaffected by card effects protection."
+  },
+  {
+    cards: ["evenly matched", "nibiru token", "token", "banish face-down"],
+    q: "Can a Nibiru Token be banished face-down by Evenly Matched?",
+    a: "No. Tokens cannot be banished face-down. Because Evenly Matched specifically forces cards to be banished face-down, Player A is legally forced to keep the Token on the field and banish their other cards instead."
+  },
+  {
+    cards: ["rivalry of warlords", "face-down", "tribute set", "dragon", "zombie"],
+    q: "Rivalry of Warlords is active. Can I tribute my Zombie to Tribute Set a Dragon face-down?",
+    a: "Yes. Face-down monsters do not possess a Type or Attribute while on the field. Because the monster is being placed face-down, Rivalry of Warlords does not restrict the Summoning attempt."
+  },
+  {
+    cards: ["gozen match", "kaiju", "light", "dark", "tribute"],
+    q: "Gozen Match is active. Can opponent Special Summon a DARK Kaiju to my field by Tributing my LIGHT monster?",
+    a: "No. Under Gozen Match you cannot attempt to summon a monster of a conflicting Attribute even if the conflicting monster would leave the field as the cost to perform the summon."
+  },
+  {
+    cards: ["skill drain", "blue eyes alternative", "name", "condition", "unclassified"],
+    q: "Skill Drain is active. Is Blue-Eyes Alternative White Dragon's name still Blue-Eyes White Dragon?",
+    a: "Yes. The text stating this card's name becomes Blue-Eyes White Dragon while on the field or in the GY is an Unclassified Effect (Condition) which cannot be negated by Skill Drain. Skill Drain only negates activated and continuous effects, not unclassified conditions."
+  },
+  {
+    cards: ["stratos", "call of the haunted", "chain", "miss timing", "when"],
+    q: "Stratos is summoned by Call of the Haunted as Chain Link 2. Chain Link 1 resolves after. Does Stratos get to search?",
+    a: "No. Stratos has an optional When you can Trigger Effect. Its summon must be the very last thing to happen for it to activate. Because Chain Link 1 resolved after the summon, Stratos misses the timing and cannot activate its search effect."
+  },
+  {
+    cards: ["sangan", "baobaboon", "polymerization", "segoc", "mandatory"],
+    q: "Polymerization uses Sangan and Baobaboon as materials. Both have mandatory GY triggers. How is the chain built?",
+    a: "Both are mandatory Trigger Effects controlled by the Turn Player that triggered simultaneously. The Turn Player chooses the chain order and can make Sangan CL1 and Baobaboon CL2 or vice versa. The opponent cannot activate a Fast Effect until both triggers are placed on the chain."
+  },
+  {
+    cards: ["torn scales", "phantom knights", "twin twisters", "discard", "cost", "trigger"],
+    q: "Torn Scales is discarded as cost for Twin Twisters. Does it trigger its GY effect?",
+    a: "Yes. Torn Scales triggers If a card is discarded. It does not matter that it was the very card discarded as a cost. The condition was met and it will trigger in a new chain after Twin Twisters resolves."
+  },
+  {
+    cards: ["dante", "beatrice", "detach", "xyz material", "graveyard", "if"],
+    q: "Dante is detached as Xyz Material to activate Beatrice's effect. Does Dante trigger its GY effect?",
+    a: "Yes. Dante's effect reads If this card is sent to the Graveyard. Detaching it as material successfully sends it to the Graveyard, fulfilling the If condition. If effects cannot miss timing."
+  },
+  {
+    cards: ["bacon saver", "damage step", "ash blossom", "negate attack"],
+    q: "Bacon Saver activates in GY during Damage Step to negate attack. Can opponent chain Ash Blossom?",
+    a: "No. Ash Blossom does not modify ATK or DEF and is not a Counter Trap, making it strictly illegal to activate during the Damage Step."
+  },
+  {
+    cards: ["ryko", "flip", "damage step", "before damage calculation", "after"],
+    q: "When is Ryko Lightsworn Hunter flipped face-up and when does its FLIP effect activate?",
+    a: "Ryko is flipped face-up at the Before Damage Calculation sub-step. Its FLIP effect activates After Damage Calculation. These are two separate sub-steps of the Damage Step."
+  },
+  {
+    cards: ["damage step", "destroyed", "replay", "battle step"],
+    q: "A defending monster is destroyed at the Start of the Damage Step. Does the attacker get a replay?",
+    a: "No. Attack replays can only occur during the Battle Step. Once the game state has transitioned into the Damage Step no replays can occur. The attack simply ends without reaching damage calculation."
+  },
+  {
+    cards: ["mind control", "interdimensional matter transporter", "banish", "return", "control"],
+    q: "Mind Control takes opponent monster. Interdimensional Matter Transporter banishes it. When it returns who controls it?",
+    a: "It physically returns to Player A's field because Player A banished it. However because Mind Control has expired it is immediately returned to Player B's control. The temporary control from Mind Control ends but the return destination is based on who banished it."
+  },
+  {
+    cards: ["link monster", "temporarily banished", "sp little knight", "extra monster zone", "return"],
+    q: "A Link Monster is temporarily banished and returns. Can it return to the Extra Monster Zone?",
+    a: "No. A monster returning to the field from temporary banishment must return to a Main Monster Zone. It cannot be placed in the Extra Monster Zone."
+  },
+  {
+    cards: ["macro cosmos", "dark world dealings", "discard", "dark world", "trigger"],
+    q: "Macro Cosmos is active. Can Dark World Dealings be activated and do Dark World monsters trigger?",
+    a: "The activation is legal because discarding is an effect not a cost. However Dark World monsters will not trigger because their text specifically requires being discarded to the Graveyard. Under Macro Cosmos they are banished instead so the condition is not met."
+  },
+  {
+    cards: ["macro cosmos", "effect veiler", "cost", "graveyard", "send", "illegal"],
+    q: "Macro Cosmos is active. Can Effect Veiler be activated?",
+    a: "No. Effect Veiler requires sending itself from hand to the Graveyard as the activation cost. You cannot pay a cost that explicitly requires a card to be sent to the Graveyard while a continuous banishing effect is active. The activation is entirely illegal."
+  },
+  {
+    cards: ["pot of extravagance", "5 cards", "extra deck", "banish 3 or 6"],
+    q: "I have exactly 5 cards in Extra Deck. Can I activate Pot of Extravagance?",
+    a: "Yes but with restrictions. You can activate it but because you do not have 6 cards you must choose to pay the cost of banishing 3. You cannot attempt to banish 6."
+  },
+  {
+    cards: ["forbidden droplet", "infinite impermanence", "damage step", "chain"],
+    q: "Forbidden Droplet is activated during Damage Step. Can opponent chain Infinite Impermanence?",
+    a: "No. Infinite Impermanence does not modify ATK or DEF and is not a Counter Trap, making it strictly illegal to activate during the Damage Step."
+  },
+  {
+    cards: ["fossil dyna", "flip effect", "special summon", "continuous", "after damage"],
+    q: "Fossil Dyna Pachycephalo is flipped by an attack. Does it immediately destroy Special Summoned monsters?",
+    a: "No. Fossil Dyna's continuous effect prevents new Special Summons but its Flip effect is what destroys existing Special Summoned monsters. That Flip effect activates After Damage Calculation, not immediately when flipped."
+  },
+  {
+    cards: ["eater of millions", "face-down", "banish", "start of damage step"],
+    q: "Can Eater of Millions banish a face-down monster when it attacks?",
+    a: "Yes. Eater of Millions triggers at the Start of the Damage Step which occurs before the defending monster is flipped face-up. The face-down monster can be banished without being revealed."
+  },
+  {
+    cards: ["apollousa", "honest", "damage step", "negate", "atk modify"],
+    q: "Apollousa is attacked. Opponent activates Honest during Damage Calculation. Can Apollousa negate it?",
+    a: "Yes. Apollousa's negation effect inherently modifies ATK (she loses 800 ATK when negating). Since her effect modifies ATK she is legally allowed to activate her negation effect during the Damage Step."
+  },
+  {
+    cards: ["el shaddoll construct", "avramax", "mekk knight crusadia", "damage step", "start before"],
+    q: "Construct attacks Mekk-Knight Crusadia Avramax. How does this resolve?",
+    a: "Construct activates at the Start of the Damage Step. Avramax can only activate During Damage Calculation. Construct resolves and destroys Avramax long before the window for Avramax to activate opens. Avramax never gets to use its effect."
+  },
+  {
+    cards: ["sangan", "baobaboon", "tribute summon", "chain block", "segoc"],
+    q: "I Tribute Summon Baobaboon using Sangan. Can I chain block Sangan with Baobaboon?",
+    a: "Yes. Both are mandatory Trigger Effects controlled by the Turn Player. Player A chooses the order, placing Sangan as CL1 and Baobaboon as CL2. Player B cannot respond to Sangan because Baobaboon is already on the chain above it."
+  },
+  {
+    cards: ["accesscode talker", "update jammer", "chain link 2", "effect veiler", "respond"],
+    q: "Accesscode is CL1 and Update Jammer is CL2. Can opponent chain Effect Veiler to CL2?",
+    a: "Yes. Accesscode only prevents the opponent from activating cards or effects in response to its own activation. By making Update Jammer CL2, Player A opens a window for Player B to respond to that chain link with Effect Veiler."
+  },
+  {
+    cards: ["magical meltdown", "ghost ogre", "field spell", "resolve"],
+    q: "Opponent chains Ghost Ogre to Magical Meltdown. Does the search resolve?",
+    a: "No. Ghost Ogre destroys Meltdown. Because Meltdown is a Field Spell it must remain face-up on the field at resolution to apply its search effect. Since it was destroyed it cannot search."
+  },
+  {
+    cards: ["branded lost", "ash blossom", "chain", "initial activation"],
+    q: "Can Ash Blossom be chained to Branded Lost's initial activation?",
+    a: "No. Branded Lost does not include an effect to add a card to the hand upon its initial activation. Its search effect triggers later when a Fusion Summon is performed. At initial activation there is no legal target for Ash Blossom."
+  },
+  {
+    cards: ["crossout designator", "ash blossom", "chain", "negate crossout"],
+    q: "Crossout Designator calls Ash Blossom. Can opponent chain their own Ash Blossom to negate Crossout?",
+    a: "No. Crossout Designator does not add a card to hand, Special Summon from Deck, or send from Deck to GY as an effect. It banishes for cost. It is not a legal target for Ash Blossom."
+  },
+  {
+    cards: ["ultimate falcon", "skill drain", "already active", "xyz summon", "negated immediately"],
+    q: "Skill Drain is already active. Player A Xyz Summons Ultimate Falcon. Is it negated?",
+    a: "Yes. Skill Drain was already applying before Falcon hit the field. Falcon's continuous effect that makes it unaffected is instantly negated the exact moment it hits the field because Skill Drain was already in place. If Falcon was on the field first and Skill Drain was activated after, Falcon would be unaffected."
+  },
+  {
+    cards: ["ultimate falcon", "destructive daruma karma cannon", "flip face down", "send"],
+    q: "Opponent activates Daruma Karma Cannon while Ultimate Falcon is on the field. What happens?",
+    a: "Falcon is unaffected so it is not flipped face-down. However because Player A controls a monster that was not flipped face-down, the secondary mandatory effect of Karma Cannon activates and Player A must send that monster (Falcon) to the GY."
+  },
+  {
+    cards: ["full armor master", "blackwing", "evenly matched", "unaffected", "banish"],
+    q: "Can Evenly Matched banish Blackwing Full Armor Master even though it is unaffected by card effects?",
+    a: "Yes. Evenly Matched forces the player to perform the banishing action as a game mechanic choice. Since it is the player performing the action (not a card effect targeting the monster), unaffected monsters can legally be banished by Evenly Matched."
+  },
+  {
+    cards: ["geomathmech final sigma", "extra monster zone", "nibiru", "tribute", "unaffected"],
+    q: "Nibiru activates after 5 summons. Player A controls Final Sigma in Extra Monster Zone. Is Sigma tributed?",
+    a: "No. Nibiru tributes monsters as part of its effect, not as a cost. Final Sigma is unaffected by card effects and remains on the field. Only monsters that are not unaffected are tributed."
+  },
+  {
+    cards: ["abyss dweller", "infinite impermanence", "lingering", "resolved", "gy effect"],
+    q: "Abyss Dweller's effect resolved. Opponent later negates Dweller with Impermanence. Do GY effects work now?",
+    a: "No. Dweller's effect is a lingering effect that successfully resolved earlier. Negating Dweller after the fact does not undo a resolved lingering effect. The restriction on GY effects remains for the rest of the turn."
+  },
+  {
+    cards: ["maxx c", "called by the grave", "lingering", "draw", "negate"],
+    q: "Maxx C resolved. Opponent Special Summons then activates Called by the Grave targeting Maxx C. Does player draw?",
+    a: "No. Called by the Grave negates the resolved effects of the card, effectively turning off the lingering draw effect for the rest of the turn even though Maxx C already resolved."
+  },
+  {
+    cards: ["dimensional barrier", "crossout designator", "lingering", "vanish"],
+    q: "Dimensional Barrier called Xyz this turn. Opponent activates Crossout Designator calling Dimensional Barrier. Does the Xyz restriction vanish?",
+    a: "Yes. Negating the effect of the card with Crossout Designator turns off the lingering restriction. The Xyz Summon restriction from Dimensional Barrier is removed for the rest of the turn."
+  },
+  {
+    cards: ["cosmic cyclone", "fire formation tenki", "imperial iron wall", "chain", "banish"],
+    q: "Cosmic Cyclone targets Tenki. Opponent chains Imperial Iron Wall. What happens?",
+    a: "Cosmic Cyclone resolves without effect because cards cannot be banished while Imperial Iron Wall is active. Tenki remains on the field and its search effect resolves successfully."
+  },
+  {
+    cards: ["ghost ogre", "toon kingdom", "activation", "chain", "face-up"],
+    q: "Can Ghost Ogre be chained to the initial activation of Toon Kingdom?",
+    a: "No. Ghost Ogre specifies it can respond to a Spell or Trap that is already face-up on the field and activates an effect. It cannot be chained to the initial placement/activation of a Spell or Trap card from the hand."
+  },
+  {
+    cards: ["token", "book of moon", "face-down defense", "cannot"],
+    q: "Can Book of Moon target a Token?",
+    a: "No. Tokens cannot exist in face-down Defense Position. Book of Moon places monsters face-down so it legally cannot target Tokens."
+  },
+  {
+    cards: ["token", "forbidden droplet", "cost", "graveyard", "send"],
+    q: "Can a Token be used as cost for Forbidden Droplet?",
+    a: "No. Forbidden Droplet requires sending the card to the Graveyard as a cost. Tokens cannot be sent to the Graveyard - they simply cease to exist when they would leave the field. Therefore Tokens cannot be used as cost for Forbidden Droplet."
+  },
+  {
+    cards: ["triple tactics talent", "ash blossom", "hand knowledge", "look at hand"],
+    q: "Triple Tactics Talent is activated to look at opponent hand. Can opponent chain Ash Blossom?",
+    a: "No. TTT was activated with the hand-knowledge effect. The current chain link does not include adding a card, drawing, or sending from Deck to GY. Ash Blossom has no legal activation condition here."
+  },
+  {
+    cards: ["small world", "droll lock bird", "chain", "trigger", "new chain"],
+    q: "Can Droll and Lock Bird be chained to Small World?",
+    a: "No. Droll and Lock Bird is a Trigger Effect and cannot be chained to a Spell activation. It must be activated in a new chain after a card has successfully been added to the hand from the Deck."
+  },
+  {
+    cards: ["nibiru", "crossout designator", "negated", "hand", "not destroyed"],
+    q: "Nibiru activates. Opponent chains Crossout Designator declaring Nibiru. What happens?",
+    a: "Nibiru resolves negated. It is not destroyed because Crossout Designator negates but does not destroy. Nibiru remains in Player A's hand."
+  },
+  {
+    cards: ["infinite impermanence", "hand", "no cards", "column", "set"],
+    q: "Infinite Impermanence is activated from hand while controlling no cards. Does the column negation apply?",
+    a: "No. For the column negation effect to apply, Impermanence must have been Set on the field prior to activation. Activating directly from hand does not grant the column negation effect even if you control no cards."
+  },
+  {
+    cards: ["sangan", "tributed", "field", "graveyard", "trigger", "sent from field"],
+    q: "Sangan is tributed as cost for a card effect. Does Sangan trigger its search effect?",
+    a: "Yes. Being Tributed as a cost successfully sends Sangan from the field to the GY, fulfilling the condition of if this card is sent from the field to the GY."
+  },
+  {
+    cards: ["absolute zero", "compulsory evacuation device", "return", "extra deck", "leaves field"],
+    q: "Compulsory Evacuation Device returns Absolute Zero to the Extra Deck. Does Absolute Zero's destroy all monsters effect trigger?",
+    a: "No. Under the 2020 Master Rules revision, any monster returned to the Main Deck or Extra Deck cannot activate its leaves the field trigger effects unless the card specifically states it triggers when returning to the Deck."
+  },
+  {
+    cards: ["mirrorjade", "evenly matched", "banish face-down", "end phase", "wipe"],
+    q: "Evenly Matched banishes Mirrorjade face-down. Does its End Phase wipe effect trigger?",
+    a: "No. Cards banished face-down cannot activate their leaves the field effects because their text and properties are completely obscured from the game state."
+  },
+  {
+    cards: ["xyz material", "leaves field", "trigger effect", "overlay"],
+    q: "A monster with a leaves the field trigger effect is used as Xyz Material. Does its effect trigger?",
+    a: "No. Becoming an Xyz Material is not considered leaving the field. Once a card becomes an Xyz Material it is no longer treated as a card on the field and cannot activate leaves the field effects."
+  },
+  {
+    cards: ["dante", "change of heart", "link summon", "owner gy", "who activates"],
+    q: "Player A takes control of Player B's Dante with Change of Heart, then Link Summons sending Dante to GY. Whose GY does it go to?",
+    a: "Dante goes to Player B's GY because cards always go to the owner's GY. Player B will be the one to activate Dante's Trigger Effect because the effect triggered in their possession (their GY)."
+  },
+  {
+    cards: ["shangri-ira", "kashtira", "zone lock", "raigeki", "destroyed", "unlock"],
+    q: "Kashtira Shangri-Ira is destroyed by Raigeki. Do the locked zones immediately become usable?",
+    a: "Yes. Shangri-Ira's zone lock is a continuous application of a resolved effect that requires Shangri-Ira to remain face-up. Once it leaves the field the zones immediately unlock."
+  },
+  {
+    cards: ["sp little knight", "direct attack", "restriction", "lingering", "link material"],
+    q: "SP Little Knight's effect applies your monsters cannot attack directly. If SP Little Knight is used as Link Material, does the restriction lift?",
+    a: "No. The restriction your monsters cannot attack directly this turn is a lingering condition applied to the player for resolving the effect. It applies for the rest of the turn regardless of what happens to SP Little Knight afterward."
+  },
+  {
+    cards: ["ultimate falcon", "raidraptor", "kaiju", "tribute", "unaffected", "cost"],
+    q: "Can a Kaiju be Special Summoned by Tributing an unaffected Ultimate Falcon?",
+    a: "Yes. Kaijus tribute monsters as an inherent summoning condition (a cost to attempt the Special Summon), not as an activated card effect. Unaffected monsters can be Tributed as costs. This also applies to Lava Golem and other monsters that tribute as a summoning condition."
+  },
+  {
+    cards: ["nadir servant", "ash blossom", "extra deck", "restriction", "negated"],
+    q: "Ash Blossom negates Nadir Servant. Can Player A still Special Summon from Extra Deck this turn?",
+    a: "Yes. The restriction you cannot Special Summon from the Extra Deck is part of Nadir Servant's effect. Since the effect was negated by Ash Blossom the restriction is not applied."
+  },
+  {
+    cards: ["red eyes fusion", "ash blossom", "normal summon", "restriction", "activation"],
+    q: "Ash Blossom negates Red-Eyes Fusion. Can Player A still Normal Summon this turn?",
+    a: "No. Red-Eyes Fusion restricts summoning the turn you activate this card. Ash Blossom negates the effect but not the activation. The activation is still recognized by the game so the restriction still applies even though the Fusion Summon did not happen."
+  },
+  {
+    cards: ["apollousa", "same atk", "battle", "damage calculation", "negate effect"],
+    q: "Apollousa is battling a monster with the same ATK. Can Apollousa lower her ATK to activate her negate effect?",
+    a: "No. If Apollousa is currently in damage calculation her ATK is locked in for the battle outcome. She cannot lower her ATK to activate her effect once damage calculation has begun."
+  },
+  {
+    cards: ["kashtira", "arise heart", "pot of prosperity", "banish", "mandatory trigger"],
+    q: "Player A controls Arise-Heart. Opponent activates Pot of Prosperity. When does Arise-Heart trigger?",
+    a: "Arise-Heart's mandatory effect triggers when a card is banished. It will activate as Chain Link 1 in a new chain after Pot of Prosperity finishes resolving and each banished card triggers Arise-Heart separately."
+  },
+  {
+    cards: ["macro cosmos", "branded fusion", "materials", "send", "banish", "resolve"],
+    q: "Macro Cosmos is active. Does Branded Fusion resolve?",
+    a: "Yes. Sending materials to the GY for Branded Fusion is an effect not a cost. The materials are banished instead of going to the GY and the Fusion Monster is successfully Special Summoned. The fusion still works."
+  },
+  {
+    cards: ["tearlaments rulkallos", "bystial magnamhut", "kaleido-heart", "chain", "special summon"],
+    q: "Can Tearlaments Kaleido-Heart be chained after Rulkallos negates a Special Summon and Bystial Magnamhut is chained?",
+    a: "No. Kaleido-Heart only shuffles a card and does not include a Special Summon in its effect. Rulkallos can only chain to effects that include a Special Summon."
+  },
   {
     cards: ["cyber dragon", "contact fusion", "machine", "dark law"],
     q: "Can I contact fuse Cyber Dragon with opponent machine monsters while Dark Law is on the field?",
