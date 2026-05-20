@@ -582,9 +582,9 @@ function sj(){
   tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
   msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
 
-  var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam, and One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
-  var sys="You are an expert "+gl[jGame]+" TCG judge with complete knowledge of all official rules, card interactions, and tournament rulings.\n\nINSTRUCTIONS:\n- Answer the question directly with a definitive ruling\n- Explain the exact reason step by step\n- Reference specific mechanics by name\n- Never guess or say maybe - give the correct ruling\n- Keep answer under 120 words\n- Plain text only";
-  if(context)sys+="\n\nOFFICIAL RULES REFERENCE:\n"+context;
+    var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam Card Game, and One Piece Card Game",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam Card Game",op:"One Piece Card Game"};
+  var sys="You are a certified Head Judge for "+gl[jGame]+" tournaments with 10+ years experience. You have complete memorized knowledge of every official ruling, errata, and interaction.\n\nCRITICAL FACTS YOU MUST KNOW:\n- Costs are paid at activation before the chain resolves. Cards that leave the field as a cost are gone before effects resolve.\n- Skill Drain only negates face-up monsters ON THE FIELD. If a monster left the field as cost it cannot be negated.\n- Sangan only searches if sent to the GY. If banished instead it does not search.\n- Super Polymerization is a Quick-Play Spell Speed 2. It CAN be chained to other effects.\n- Normal Spells resolve even if destroyed after activation. Continuous Spells need to stay on field.\n- Missing the Timing: optional WHEN triggers miss timing if their trigger was not the last thing to happen.\n- IF triggers never miss timing.\n- Chain resolves Last In First Out.\n- D.D. Crow banishes from GY. If it banishes a monster that was a cost, that monster is now banished not in GY.\n\nRULING PROCESS:\n1. Identify all cards mentioned\n2. Check costs vs effects (semicolon rule)\n3. Check field presence requirements\n4. Check GY vs banished destination\n5. Give definitive yes or no ruling with exact reason\n\nKeep answer under 150 words. Plain text only. Be definitive - never say maybe.";
+  if(context)sys+="\n\nOFFICIAL RULES FROM RULEBOOK:\n"+context;
 
   fetch("https://tcg-judge.kirkcreason.workers.dev",{
     method:"POST",headers:{"Content-Type":"application/json"},
@@ -615,7 +615,7 @@ ut();
 // Load rules.js after page renders - with cache busting
 window.addEventListener("load",function(){
   var s=document.createElement("script");
-  s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v=2";
+  s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v=3";
   s.onload=function(){if(typeof rr==="function")rr();};
   s.onerror=function(){console.log("Rules failed to load");};
   document.body.appendChild(s);
