@@ -539,10 +539,10 @@ function sj(){
   var inp=document.getElementById("ji");
   var q=inp.value.trim();if(!q)return;
   inp.value="";inp.style.height="36px";
-  jmsg("user",q,"");
+  jmsg("user",q);
   document.getElementById("isb").disabled=true;
 
-  // STEP 1: Check card-specific rulings database first
+  // STEP 1: Check Official Rulings database first
   var cardRuling=findCardRuling(q,jGame);
   if(cardRuling){
     jmsg("ai",cardRuling.a,"Official Ruling");
@@ -550,56 +550,161 @@ function sj(){
     return;
   }
 
-  // STEP 2: Build context from rules database
-  var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1};
-  var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2&&!stop[w];});
-  var exp={};
-  wds.forEach(function(w){
-    exp[w]=true;
-    if(SYNS[w])SYNS[w].split(" ").forEach(function(s){exp[s]=true;});
-    Object.keys(SYNS).forEach(function(k){
-      if(k.indexOf(w)>=0||w.indexOf(k)>=0){exp[k]=true;SYNS[k].split(" ").forEach(function(s){exp[s]=true;});}
-    });
-  });
-  var games=jGame==="all"?Object.keys(RULES):[jGame];
-  var res=[];
-  games.forEach(function(g){
-    (RULES[g]||[]).forEach(function(r){
-      var ti=r.t.toLowerCase(),su=r.s.toLowerCase(),de=r.e.toLowerCase();
-      var sc=0;
-      wds.forEach(function(w){if(ti.indexOf(w)>=0)sc+=15;if(su.indexOf(w)>=0)sc+=8;if(de.indexOf(w)>=0)sc+=3;});
-      Object.keys(exp).forEach(function(w){if(w.length<3)return;if(ti.indexOf(w)>=0)sc+=5;if(su.indexOf(w)>=0)sc+=3;if(de.indexOf(w)>=0)sc+=1;});
-      for(var i=0;i<wds.length-1;i++){var ph=wds[i]+" "+wds[i+1];if(ti.indexOf(ph)>=0)sc+=25;if(su.indexOf(ph)>=0)sc+=12;if(de.indexOf(ph)>=0)sc+=6;}
-      if(sc>5)res.push({r:r,s:sc});
-    });
-  });
-  res.sort(function(a,b){return b.s-a.s;});
-  var context=res.slice(0,8).map(function(x){return "RULE - "+x.r.t+":\n"+x.r.e;}).join("\n\n");
-
   // Show thinking indicator
   var msgs=document.getElementById("jm");
   var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";
-  tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
+  tp.innerHTML="<div class='bub' style='color:#505068'>Looking up cards...</div>";
   msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
 
-    var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam Card Game, and One Piece Card Game",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam Card Game",op:"One Piece Card Game"};
-  var sys="You are a certified Head Judge for "+gl[jGame]+" tournaments with 10+ years experience. You have complete memorized knowledge of every official ruling, errata, and interaction.\n\nCRITICAL FACTS YOU MUST KNOW:\n- Costs are paid at activation before the chain resolves. Cards that leave the field as a cost are gone before effects resolve.\n- Skill Drain only negates face-up monsters ON THE FIELD. If a monster left the field as cost it cannot be negated.\n- Sangan only searches if sent to the GY. If banished instead it does not search.\n- Super Polymerization is a Quick-Play Spell Speed 2. It CAN be chained to other effects.\n- Normal Spells resolve even if destroyed after activation. Continuous Spells need to stay on field.\n- Missing the Timing: optional WHEN triggers miss timing if their trigger was not the last thing to happen.\n- IF triggers never miss timing.\n- Chain resolves Last In First Out.\n- D.D. Crow banishes from GY. If it banishes a monster that was a cost, that monster is now banished not in GY.\n\nRULING PROCESS:\n1. Identify all cards mentioned\n2. Check costs vs effects (semicolon rule)\n3. Check field presence requirements\n4. Check GY vs banished destination\n5. Give definitive yes or no ruling with exact reason\n\nKeep answer under 150 words. Plain text only. Be definitive - never say maybe.";
-  if(context)sys+="\n\nOFFICIAL RULES FROM RULEBOOK:\n"+context;
+  // STEP 2: Extract potential card names from question
+  // Look for sequences of capitalized words and known card patterns
+  var cardNames = extractCardNames(q);
+  
+  if(cardNames.length > 0 && (jGame==="ygo"||jGame==="all")){
+    // Fetch card texts then answer
+    fetchCardsAndAnswer(q, cardNames);
+  } else {
+    // No card names detected - go straight to AI with rules context
+    answerWithRules(q);
+  }
+}
+
+function extractCardNames(q){
+  var names = [];
+  var text = q;
+  
+  // Common YGO card name patterns - sequences of proper nouns
+  // Look for 2-4 word capitalized sequences
+  var matches = text.match(/[A-Z][a-zA-Z]+([ &-][A-Z][a-zA-Z]+){1,4}/g) || [];
+  matches.forEach(function(m){
+    if(m.length > 4 && !["Player","During","What","When","While","After","Before","Can","Does","Will","This","That","Your","Their","Both","Each"].includes(m.split(" ")[0])){
+      names.push(m);
+    }
+  });
+  
+  // Also check for known partial card names in lowercase
+  var lower = q.toLowerCase();
+  var knownCards = ["ash blossom","effect veiler","dark law","masked hero","nibiru","solemn judgment","solemn strike",
+    "droll lock bird","called by the grave","infinite impermanence","ghost ogre","maxx c","skill drain",
+    "dimensional fissure","macro cosmos","forbidden droplet","lightning storm","pot of desires","pot of extravagance",
+    "monster reborn","dark hole","raigeki","mystical space typhoon","twin twisters","super polymerization",
+    "rescue rabbit","cyber dragon","chimeratech","accesscode talker","apollousa","borrelsword","el shaddoll",
+    "tearlaments","kashtira","branded fusion","mirrorjade","lubellion","sangan","man eater bug",
+    "crimson blader","kycoo","gagaga cowboy","dragonecro","dante","beatrice","eldlich"];
+  
+  knownCards.forEach(function(card){
+    if(lower.indexOf(card) >= 0 && names.indexOf(card) < 0){
+      names.push(card);
+    }
+  });
+  
+  return names.slice(0,3); // Max 3 cards to keep API calls fast
+}
+
+function fetchCardsAndAnswer(question, cardNames){
+  var cardTexts = [];
+  var fetched = 0;
+  var total = cardNames.length;
+  
+  if(total === 0){ answerWithRules(question); return; }
+  
+  cardNames.forEach(function(name){
+    fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(name))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.data && d.data.length > 0){
+        var c = d.data[0];
+        cardTexts.push(c.name+": "+c.desc);
+      }
+      fetched++;
+      if(fetched >= total) answerWithCards(question, cardTexts);
+    }).catch(function(){
+      fetched++;
+      if(fetched >= total) answerWithCards(question, cardTexts);
+    });
+  });
+  
+  // Timeout fallback after 3 seconds
+  setTimeout(function(){
+    if(fetched < total) answerWithCards(question, cardTexts);
+  }, 3000);
+}
+
+function answerWithCards(question, cardTexts){
+  var tp=document.getElementById("tp");
+  if(tp) tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
+  
+  // Build rules context
+  var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1};
+  var wds=question.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2&&!stop[w];});
+  var res=[];
+  var games=jGame==="all"?Object.keys(RULES):[jGame];
+  games.forEach(function(g){(RULES[g]||[]).forEach(function(r){var sc=0;wds.forEach(function(w){if(r.t.toLowerCase().indexOf(w)>=0)sc+=10;if(r.s.toLowerCase().indexOf(w)>=0)sc+=5;if(r.e.toLowerCase().indexOf(w)>=0)sc+=2;});if(sc>4)res.push({r:r,s:sc});});});
+  res.sort(function(a,b){return b.s-a.s;});
+  var context=res.slice(0,5).map(function(x){return x.r.t+": "+x.r.e;}).join("
+
+");
+
+  var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam, and One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
+  var sys="You are a certified "+gl[jGame]+" Head Judge. You have been given the EXACT card text for the cards mentioned in this question. Use this card text to give a precise ruling.\n\nCRITICAL RULES:\n- Costs are paid at activation before chain resolves\n- Skill Drain only negates face-up monsters ON the field\n- If a monster left the field as cost it cannot be negated by Skill Drain\n- Sangan only searches if sent to GY not if banished\n- Normal Spells resolve even if destroyed after activation\n- Continuous Spells need to remain on field to resolve\n- Super Polymerization is Quick-Play Spell Speed 2\n- Chain resolves Last In First Out\n\nGive a direct definitive ruling. State yes or no first then explain why using the card text provided. Plain text only.";
+  
+  if(cardTexts.length > 0){
+    sys += "\n\nEXACT CARD TEXT:\n" + cardTexts.join("\n\n");
+  }
+  if(context){
+    sys += "\n\nOFFICIAL RULES:\n" + context;
+  }
 
   fetch("https://tcg-judge.kirkcreason.workers.dev",{
     method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({system:sys,question:q})
+    body:JSON.stringify({system:sys,question:question})
   }).then(function(r){return r.json();})
   .then(function(d){
     var t=document.getElementById("tp");if(t)t.remove();
-    var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
+    var ans=(d.answer||d.error||"No response.").replace(/
+
+/g,"<br><br>").replace(/
+/g,"<br>");
     jmsg("ai",ans,"AI Judge");
   }).catch(function(){
     var t=document.getElementById("tp");if(t)t.remove();
-    jmsg("ai","Connection error. Check internet and try again.","");
+    jmsg("ai","Connection error. Check internet.","");
   }).finally(function(){document.getElementById("isb").disabled=false;});
 }
 
+function answerWithRules(question){
+  var tp=document.getElementById("tp");
+  if(tp) tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
+  
+  var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1};
+  var wds=question.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2&&!stop[w];});
+  var exp={};
+  wds.forEach(function(w){exp[w]=true;if(SYNS[w])SYNS[w].split(" ").forEach(function(s){exp[s]=true;});Object.keys(SYNS).forEach(function(k){if(k.indexOf(w)>=0||w.indexOf(k)>=0){exp[k]=true;SYNS[k].split(" ").forEach(function(s){exp[s]=true;});}});});
+  var games=jGame==="all"?Object.keys(RULES):[jGame];
+  var res=[];
+  games.forEach(function(g){(RULES[g]||[]).forEach(function(r){var ti=r.t.toLowerCase(),su=r.s.toLowerCase(),de=r.e.toLowerCase();var sc=0;wds.forEach(function(w){if(ti.indexOf(w)>=0)sc+=15;if(su.indexOf(w)>=0)sc+=8;if(de.indexOf(w)>=0)sc+=3;});Object.keys(exp).forEach(function(w){if(w.length<3)return;if(ti.indexOf(w)>=0)sc+=5;if(su.indexOf(w)>=0)sc+=3;if(de.indexOf(w)>=0)sc+=1;});for(var i=0;i<wds.length-1;i++){var ph=wds[i]+" "+wds[i+1];if(ti.indexOf(ph)>=0)sc+=25;if(su.indexOf(ph)>=0)sc+=12;if(de.indexOf(ph)>=0)sc+=6;}if(sc>5)res.push({r:r,s:sc});});});
+  res.sort(function(a,b){return b.s-a.s;});
+  var context=res.slice(0,8).map(function(x){return "RULE - "+x.r.t+":\n"+x.r.e;}).join("\n\n");
+  var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam, and One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
+  var sys="You are a certified "+gl[jGame]+" Head Judge. Answer the ruling question directly and definitively. State yes or no first then explain. Plain text only.";
+  if(context)sys+="\n\nOFFICIAL RULES:\n"+context;
+  
+  fetch("https://tcg-judge.kirkcreason.workers.dev",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({system:sys,question:question})
+  }).then(function(r){return r.json();})
+  .then(function(d){
+    var t=document.getElementById("tp");if(t)t.remove();
+    var ans=(d.answer||d.error||"No response.").replace(/
+
+/g,"<br><br>").replace(/
+/g,"<br>");
+    jmsg("ai",ans,"AI Judge");
+  }).catch(function(){
+    var t=document.getElementById("tp");if(t)t.remove();
+    jmsg("ai","Connection error.","");
+  }).finally(function(){document.getElementById("isb").disabled=false;});
+}
 // LOG
 function addL(id,msg){
   var el=document.getElementById(id);if(!el)return;
@@ -615,7 +720,7 @@ ut();
 // Load rules.js after page renders - with cache busting
 window.addEventListener("load",function(){
   var s=document.createElement("script");
-  s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v=6";
+  s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v=7";
   s.onload=function(){if(typeof rr==="function")rr();};
   s.onerror=function(){console.log("Rules failed to load");};
   document.body.appendChild(s);
