@@ -577,6 +577,36 @@ ygo: [
     a: "No. Kaleido-Heart only shuffles a card and does not include a Special Summon in its effect. Rulkallos can only chain to effects that include a Special Summon."
   },
   {
+    cards: ["forbidden crown", "super polymerization", "chain", "fuse", "quick play"],
+    q: "Opponent activates Forbidden Crown on their monster. Can I chain Super Polymerization and fuse with that monster?",
+    a: "Yes. Super Polymerization is a Quick-Play Spell with Spell Speed 2. Forbidden Crown is also Speed 2. You can chain Super Polymerization to Forbidden Crown's activation and use the targeted monster as Fusion Material. The monster is sent to the GY as Fusion Material before Forbidden Crown resolves, so Forbidden Crown resolves without effect since its target is gone."
+  },
+  {
+    cards: ["super polymerization", "speed", "quick play", "chain", "spell speed 2"],
+    q: "What Spell Speed is Super Polymerization?",
+    a: "Super Polymerization is a Quick-Play Spell with Spell Speed 2. It can be activated during either player turn and can be chained to other Spell Speed 2 or lower activations. It cannot be responded to because no player can activate cards or effects in response to Super Polymerization."
+  },
+  {
+    cards: ["sangan", "dd crow", "enemy controller", "banished", "chain", "crow"],
+    q: "Sangan is tributed as cost for Enemy Controller. Opponent chains DD Crow banishing Sangan from GY. Does Sangan search?",
+    a: "No. Sangan was banished by D.D. Crow, not sent to the Graveyard. Sangan's effect specifically requires it to be sent to the Graveyard. Even though Sangan was originally sent to the GY as a tribute cost, D.D. Crow banished it from the GY during the chain. Sangan ended up in the banished zone, not the GY, so its search condition was never met. Sangan does not activate."
+  },
+  {
+    cards: ["sangan", "banished", "not graveyard", "search condition"],
+    q: "Sangan is banished instead of going to the Graveyard. Does it search?",
+    a: "No. Sangan's effect specifically requires it to be sent to the Graveyard. If Sangan is banished by any means such as Macro Cosmos, D.D. Crow, or Dimensional Fissure instead of going to the GY, its search effect does not activate because the condition was not met."
+  },
+  {
+    cards: ["sangan", "tribute", "cost", "graveyard", "normally", "search activate"],
+    q: "Sangan is tributed as cost and goes to GY normally with no chain. Does it search?",
+    a: "Yes. When Sangan is tributed as a cost and successfully sent to the Graveyard with nothing negating or redirecting it, its mandatory trigger effect activates. Being tributed as a cost counts as being sent from the field to the GY, fulfilling Sangan's condition. But if Sangan is banished instead by DD Crow or Macro Cosmos it does NOT search."
+  },
+  {
+    cards: ["rescue rabbit", "skill drain", "banish", "cost", "normal monster", "special summon deck"],
+    q: "Skill Drain is active. Player Normal Summons Rescue Rabbit and activates its effect banishing itself. Does it resolve?",
+    a: "Yes. Rescue Rabbit banishes itself as the activation cost before Skill Drain can negate anything. Since Rescue Rabbit is no longer on the field when the effect resolves, Skill Drain cannot negate it. Skill Drain only negates effects of face-up monsters currently on the field. The two Normal Monsters are successfully Special Summoned from the Deck. Same mechanic as Sky Striker Raye."
+  },
+  {
     cards: ["cyber dragon", "contact fusion", "machine", "dark law"],
     q: "Can I contact fuse Cyber Dragon with opponent machine monsters while Dark Law is on the field?",
     a: "Yes. Cyber Dragon can contact fuse with opponent machine monsters regardless of Masked HERO Dark Law. Contact fusion uses monsters as materials - they are not sent to the GY as a cost. Dark Law only affects cards being sent to the GY. Since contact fusion materials are not sent to the GY Dark Law does not interfere. The resulting Chimeratech Fortress Dragon is special summoned normally."
@@ -782,7 +812,7 @@ ygo: [
     a: "No. Skill Drain only negates the effects of face-up monsters on the field. Effects that activate in the GY, hand, or while banished are NOT negated by Skill Drain. Only effects that are active while the monster is face-up on the field are negated."
   },
   {
-    cards: ["solemn judgment", "special summon", "negate"],
+    cards: ["solemn judgment", "special summon", "extra deck", "negate summon counter trap"],
     q: "Can Solemn Judgment negate a Special Summon from the Extra Deck?",
     a: "Yes. Solemn Judgment is a Counter Trap that can negate the activation of any monster summon including Special Summons from Extra Deck, Normal Summons, and Ritual Summons. Pay half your LP. The summoned monster is sent to the GY and is treated as if it was never summoned."
   },
