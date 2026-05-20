@@ -1,0 +1,641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"&gt;</p>
+<p class="p1">&lt;title&gt;TCG Referee&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1">*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}</p>
+<p class="p1">body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;background:#0d0d12;color:#e8e4f0;height:100vh;overflow:hidden;}</p>
+<p class="p1">.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;}</p>
+<p class="p1">.top{background:#12122a;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,216,138,0.2);flex-shrink:0;}</p>
+<p class="p1">.logo{color:#e8d88a;font-size:14px;font-weight:700;}</p>
+<p class="p1">.badge{color:#e8d88a;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(232,216,138,0.3);cursor:pointer;}</p>
+<p class="p1">.tabs{display:flex;background:#0d0d18;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;}</p>
+<p class="p1">.tab{flex:1;padding:9px 2px 7px;text-align:center;font-size:9px;color:#505068;cursor:pointer;border-bottom:2px solid transparent;}</p>
+<p class="p1">.tab.on{color:#e8d88a;border-bottom-color:#e8d88a;}</p>
+<p class="p1">.panel{display:none;flex:1;overflow-y:auto;padding:14px;}</p>
+<p class="p1">.panel.on{display:block;}</p>
+<p class="p1">.sec{font-size:10px;color:#606070;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}</p>
+<p class="p1">.card{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;margin-bottom:10px;}</p>
+<p class="p1">.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}</p>
+<p class="p1">.btn{padding:10px 8px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:8px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;}</p>
+<p class="p1">.btn.r{color:#e05050;border-color:rgba(224,80,80,0.4);}</p>
+<p class="p1">.btn.g{color:#40c880;border-color:rgba(64,200,128,0.4);background:rgba(64,200,128,0.06);}</p>
+<p class="p1">.btn.y{background:#12122a;border-color:rgba(232,216,138,0.4);color:#e8d88a;}</p>
+<p class="p1">.pill{padding:5px 11px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block;}</p>
+<p class="p1">.pill.on{background:#12122a;border-color:#e8d88a;color:#e8d88a;}</p>
+<p class="p1">.lpg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}</p>
+<p class="p1">.pc{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px;text-align:center;}</p>
+<p class="p1">.pn{font-size:10px;color:#9090a8;margin-bottom:4px;}</p>
+<p class="p1">.plp{font-size:36px;font-weight:700;line-height:1;margin-bottom:8px;}</p>
+<p class="p1">.lb4{display:grid;grid-template-columns:1fr 1fr;gap:4px;}</p>
+<p class="p1">.lb{padding:7px 4px;font-size:11px;border:1px solid rgba(255,255,255,0.1);border-radius:7px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center;}</p>
+<p class="p1">.lb.m{color:#e05050;border-color:rgba(224,80,80,0.3);}</p>
+<p class="p1">.lb.p{color:#40c880;border-color:rgba(64,200,128,0.3);}</p>
+<p class="p1">.inp{width:100%;padding:8px 10px;font-size:13px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;margin-bottom:8px;}</p>
+<p class="p1">.log{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px;max-height:80px;overflow-y:auto;}</p>
+<p class="p1">.ll{font-size:11px;color:#9090a8;padding:2px 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04);}</p>
+<p class="p1">.ll b{color:#e8e4f0;}</p>
+<p class="p1">.tdisp{background:#12122a;border-radius:12px;padding:20px;text-align:center;margin-bottom:12px;border:1px solid rgba(232,216,138,0.15);}</p>
+<p class="p1">.tdig{font-size:56px;font-weight:700;color:#e8d88a;line-height:1;font-variant-numeric:tabular-nums;}</p>
+<p class="p1">.tdig.u{color:#e8a050;}.tdig.d{color:#e05050;}</p>
+<p class="p1">.tlbl{font-size:10px;color:#505068;margin-top:4px;text-transform:uppercase;}</p>
+<p class="p1">.tbb{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:10px;overflow:hidden;}</p>
+<p class="p1">.tb{height:4px;background:#e8d88a;border-radius:2px;transition:width 1s linear;}</p>
+<p class="p1">.rc{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px;text-align:center;margin-bottom:10px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;}</p>
+<p class="p1">.pips{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;min-height:40px;align-items:center;margin-bottom:6px;}</p>
+<p class="p1">.pip{width:40px;height:40px;background:#1a1a24;border:1px solid rgba(255,255,255,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;}</p>
+<p class="p1">.pip.hi{background:rgba(64,200,128,0.12);border-color:rgba(64,200,128,0.4);color:#40c880;}</p>
+<p class="p1">.ri{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px 11px;margin-bottom:7px;cursor:pointer;}</p>
+<p class="p1">.ri.op .rtt{color:#e8d88a;}</p>
+<p class="p1">.rtt{font-size:13px;font-weight:500;margin-bottom:2px;}</p>
+<p class="p1">.rss{font-size:11px;color:#9090a8;line-height:1.5;}</p>
+<p class="p1">.ree{font-size:11px;color:#9090a8;line-height:1.55;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,0.06);display:none;}</p>
+<p class="p1">.ri.op .ree{display:block;}</p>
+<p class="p1">.wn{font-size:34px;font-weight:700;margin:5px 0 8px;}</p>
+<p class="p1">.jt{padding:5px 11px;font-size:11px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block;}</p>
+<p class="p1">.jt.on{background:#12122a;border-color:#e8d88a;color:#e8d88a;}</p>
+<p class="p1">.msgs{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:260px;overflow-y:auto;}</p>
+<p class="p1">.msg{max-width:92%;display:flex;flex-direction:column;gap:2px;}</p>
+<p class="p1">.mu{align-self:flex-end;align-items:flex-end;}</p>
+<p class="p1">.ma{align-self:flex-start;}</p>
+<p class="p1">.bub{padding:8px 11px;border-radius:12px;font-size:12px;line-height:1.55;}</p>
+<p class="p1">.mu .bub{background:#12122a;color:#e8d88a;border:1px solid rgba(232,216,138,0.2);border-bottom-right-radius:3px;}</p>
+<p class="p1">.ma .bub{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:3px;}</p>
+<p class="p1">.mt{font-size:10px;color:#505068;}</p>
+<p class="p1">.ruling-badge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(64,200,128,0.12);color:#40c880;border:1px solid rgba(64,200,128,0.3);margin-bottom:6px;display:inline-block;}</p>
+<p class="p1">.ir{display:flex;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);}</p>
+<p class="p1">.ir textarea{flex:1;padding:7px 9px;font-size:12px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;resize:none;height:36px;font-family:inherit;}</p>
+<p class="p1">.isb{width:36px;height:36px;border:1px solid rgba(232,216,138,0.3);border-radius:8px;background:#12122a;color:#e8d88a;cursor:pointer;font-size:14px;flex-shrink:0;}</p>
+<p class="p1">.isb:disabled{opacity:0.4;}</p>
+<p class="p1">.ctag{padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(255,255,255,0.06);color:#9090a8;margin:2px;}</p>
+<p class="p1">.cx{font-size:12px;color:#e8e4f0;line-height:1.6;background:rgba(0,0,0,0.2);border-radius:8px;padding:10px;margin-top:8px;}</p>
+<p class="p1">.cn{font-size:15px;font-weight:700;color:#e8d88a;margin-bottom:6px;}</p>
+<p class="p1">/* SETUP */</p>
+<p class="p1">.setup{position:fixed;top:0;left:0;right:0;bottom:0;background:#0d0d12;z-index:999;display:flex;flex-direction:column;max-width:480px;margin:0 auto;}</p>
+<p class="p1">.sh{background:#12122a;padding:24px 16px 16px;border-bottom:1px solid rgba(232,216,138,0.2);}</p>
+<p class="p1">.sh h1{color:#e8d88a;font-size:22px;font-weight:700;margin-bottom:6px;}</p>
+<p class="p1">.sh p{color:#9090a8;font-size:12px;line-height:1.5;}</p>
+<p class="p1">.sb2{flex:1;overflow-y:auto;padding:16px;}</p>
+<p class="p1">.gc{background:#1a1a24;border:2px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;}</p>
+<p class="p1">.gc.sel{border-color:#e8d88a;background:#12122a;}</p>
+<p class="p1">.gi{font-size:32px;flex-shrink:0;}</p>
+<p class="p1">.ginfo{flex:1;}</p>
+<p class="p1">.gname{font-size:15px;font-weight:600;color:#e8e4f0;margin-bottom:2px;}</p>
+<p class="p1">.gdesc{font-size:11px;color:#9090a8;}</p>
+<p class="p1">.gck{width:24px;height:24px;border:2px solid rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:transparent;}</p>
+<p class="p1">.gc.sel .gck{background:#e8d88a;border-color:#e8d88a;color:#0d0d12;}</p>
+<p class="p1">.sf{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.08);}</p>
+<p class="p1">.sf button{width:100%;padding:15px;font-size:15px;font-weight:700;border:none;border-radius:12px;background:#e8d88a;color:#0d0d12;cursor:pointer;}</p>
+<p class="p1">.sf button:disabled{opacity:0.35;cursor:not-allowed;}</p>
+<p class="p1">::-webkit-scrollbar{width:3px;}</p>
+<p class="p1">::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- SETUP SCREEN --&gt;</p>
+<p class="p1">&lt;div class="setup" id="setupScreen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sh"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;TCG Referee&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Select your game to get started. Switch games anytime from the top bar.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sb2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="gc" id="gc-ygo" onclick="pickGame('ygo',this)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gi"&gt;&amp;#127183;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ginfo"&gt;&lt;div class="gname"&gt;Yu-Gi-Oh!&lt;/div&gt;&lt;div class="gdesc"&gt;8000 LP &amp;bull; Chain resolution &amp;bull; Full rulebook&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gck"&gt;&amp;#10003;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="gc" id="gc-pkm" onclick="pickGame('pkm',this)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gi"&gt;&amp;#9889;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ginfo"&gt;&lt;div class="gname"&gt;Pokemon TCG&lt;/div&gt;&lt;div class="gdesc"&gt;Prize cards &amp;bull; Status conditions &amp;bull; All formats&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gck"&gt;&amp;#10003;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="gc" id="gc-mtg" onclick="pickGame('mtg',this)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gi"&gt;&amp;#129497;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ginfo"&gt;&lt;div class="gname"&gt;Magic: The Gathering&lt;/div&gt;&lt;div class="gdesc"&gt;20 life &amp;bull; Stack &amp;bull; Commander &amp;bull; All keywords&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gck"&gt;&amp;#10003;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="gc" id="gc-dig" onclick="pickGame('dig',this)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gi"&gt;&amp;#129422;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ginfo"&gt;&lt;div class="gname"&gt;Digimon TCG&lt;/div&gt;&lt;div class="gdesc"&gt;Memory gauge &amp;bull; Security checks &amp;bull; Digivolving&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gck"&gt;&amp;#10003;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="gc" id="gc-gundam" onclick="pickGame('gundam',this)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gi"&gt;&amp;#129302;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ginfo"&gt;&lt;div class="gname"&gt;Gundam Card Game&lt;/div&gt;&lt;div class="gdesc"&gt;Base HP &amp;bull; Penetrating damage &amp;bull; Flagship&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gck"&gt;&amp;#10003;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="gc" id="gc-op" onclick="pickGame('op',this)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gi"&gt;&amp;#9760;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ginfo"&gt;&lt;div class="gname"&gt;One Piece Card Game&lt;/div&gt;&lt;div class="gdesc"&gt;Life cards &amp;bull; DON!! system &amp;bull; Leader attacks&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="gck"&gt;&amp;#10003;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sf"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="setupBtn" onclick="finishSetup()" disabled&gt;Select a game to continue&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- MAIN APP --&gt;</p>
+<p class="p1">&lt;div class="app" id="mainApp" style="display:none"&gt;</p>
+<p class="p1">&lt;div class="top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="logo"&gt;TCG Referee&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="badge" id="ab" onclick="changeGame()"&gt;Yu-Gi-Oh! &amp;#9881;&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="tabs"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tab on" onclick="sw('lp',this)"&gt;LP&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tab" onclick="sw('timer',this)"&gt;Timer&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tab" onclick="sw('dice',this)"&gt;Dice&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tab" onclick="sw('rules',this)"&gt;Rules&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tab" onclick="sw('cards',this)"&gt;Cards&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tab" onclick="sw('match',this)"&gt;Match&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tab" onclick="sw('judge',this)"&gt;Judge&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- LP --&gt;</p>
+<p class="p1">&lt;div class="panel on" id="pan-lp"&gt;</p>
+<p class="p1">&lt;div class="sec"&gt;Game&lt;/div&gt;</p>
+<p class="p1">&lt;div style="margin-bottom:12px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill on" onclick="sg('Yu-Gi-Oh!',8000,this)"&gt;Yu-Gi-Oh!&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="sg('Pokemon',0,this)"&gt;Pokemon&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="sg('MTG',20,this)"&gt;MTG&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="sg('Digimon',4000,this)"&gt;Digimon&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="sg('Gundam',10,this)"&gt;Gundam&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="sg('One Piece',5,this)"&gt;One Piece&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;margin-bottom:10px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div&gt;&lt;div class="sec" style="margin:0 0 2px"&gt;Turn&lt;/div&gt;&lt;div style="font-size:20px;font-weight:700" id="tn"&gt;1&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="display:flex;gap:6px"&gt;&lt;button class="btn" onclick="ct(-1)"&gt;-&lt;/button&gt;&lt;button class="btn" onclick="ct(1)"&gt;Next&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="lpg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="pc"&gt;&lt;div class="pn"&gt;Player 1&lt;/div&gt;&lt;div class="plp" id="l1"&gt;8000&lt;/div&gt;&lt;div class="lb4"&gt;&lt;button class="lb m" onclick="al(1,-500)"&gt;-500&lt;/button&gt;&lt;button class="lb m" onclick="al(1,-1000)"&gt;-1k&lt;/button&gt;&lt;button class="lb p" onclick="al(1,500)"&gt;+500&lt;/button&gt;&lt;button class="lb p" onclick="al(1,1000)"&gt;+1k&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="pc"&gt;&lt;div class="pn"&gt;Player 2&lt;/div&gt;&lt;div class="plp" id="l2"&gt;8000&lt;/div&gt;&lt;div class="lb4"&gt;&lt;button class="lb m" onclick="al(2,-500)"&gt;-500&lt;/button&gt;&lt;button class="lb m" onclick="al(2,-1000)"&gt;-1k&lt;/button&gt;&lt;button class="lb p" onclick="al(2,500)"&gt;+500&lt;/button&gt;&lt;button class="lb p" onclick="al(2,1000)"&gt;+1k&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div style="display:flex;gap:6px;margin-bottom:8px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;input class="inp" type="number" id="ca" placeholder="Custom amount" style="margin:0;flex:1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn" onclick="ac(1,-1)"&gt;P1-&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn" onclick="ac(2,-1)"&gt;P2-&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn" onclick="ac(1,1)"&gt;P1+&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="g2"&gt;&lt;button class="btn r" onclick="rl()"&gt;Reset&lt;/button&gt;&lt;button class="btn" onclick="hv()"&gt;Halve Both&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div class="log" id="lpL"&gt;&lt;div class="ll"&gt;&lt;b&gt;Game started&lt;/b&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- TIMER --&gt;</p>
+<p class="p1">&lt;div class="panel" id="pan-timer"&gt;</p>
+<p class="p1">&lt;div class="tdisp"&gt;&lt;div class="tdig" id="td"&gt;40:00&lt;/div&gt;&lt;div class="tlbl" id="tl"&gt;Round Timer&lt;/div&gt;&lt;div class="tbb"&gt;&lt;div class="tb" id="tb" style="width:100%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div class="sec"&gt;Presets&lt;/div&gt;</p>
+<p class="p1">&lt;div class="g2" style="margin-bottom:8px"&gt;&lt;button class="btn" onclick="spr(40)"&gt;40 min YGO&lt;/button&gt;&lt;button class="btn" onclick="spr(50)"&gt;50 min Tournament&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div class="g2" style="margin-bottom:12px"&gt;&lt;button class="btn" onclick="spr(25)"&gt;25 min Single&lt;/button&gt;&lt;button class="btn" onclick="spr(60)"&gt;60 min Extended&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div style="display:flex;gap:6px;margin-bottom:10px"&gt;&lt;input class="inp" type="number" id="cm" placeholder="Custom minutes" style="margin:0;flex:1"&gt;&lt;button class="btn" onclick="act()"&gt;Set&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px"&gt;&lt;button class="btn y" onclick="stT()"&gt;Start&lt;/button&gt;&lt;button class="btn r" onclick="paT()"&gt;Pause&lt;/button&gt;&lt;button class="btn" onclick="reT()"&gt;Reset&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div class="g2"&gt;&lt;button class="btn" onclick="aT(3)"&gt;+3 min&lt;/button&gt;&lt;button class="btn" onclick="aT(5)"&gt;+5 min&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- DICE --&gt;</p>
+<p class="p1">&lt;div class="panel" id="pan-dice"&gt;</p>
+<p class="p1">&lt;div class="sec"&gt;Coin Flip&lt;/div&gt;</p>
+<p class="p1">&lt;div class="rc"&gt;&lt;div id="ci" style="font-size:28px;font-weight:700;color:#e8d88a"&gt;COIN&lt;/div&gt;&lt;div id="ct_" style="font-size:13px;color:#9090a8"&gt;Tap to flip&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;button class="btn y" onclick="fc()" style="width:100%;margin-bottom:14px"&gt;Flip Coin&lt;/button&gt;</p>
+<p class="p1">&lt;div class="sec"&gt;Dice Roll&lt;/div&gt;</p>
+<p class="p1">&lt;div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span style="font-size:12px;color:#9090a8;flex:1"&gt;Number of dice&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn" onclick="cq(-1)" style="width:32px;padding:6px"&gt;-&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span style="font-size:15px;font-weight:700;min-width:20px;text-align:center" id="dq"&gt;1&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn" onclick="cq(1)" style="width:32px;padding:6px"&gt;+&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="pips" id="pb"&gt;&lt;span style="font-size:12px;color:#505068"&gt;Choose a die below&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div id="tr_" style="display:none;justify-content:space-between;padding:6px 0;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:8px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span style="font-size:12px;color:#9090a8"&gt;Total&lt;/span&gt;&lt;span style="font-size:17px;font-weight:700" id="tv"&gt;&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="g2"&gt;&lt;button class="btn" onclick="rd(4)"&gt;D4&lt;/button&gt;&lt;button class="btn" onclick="rd(6)"&gt;D6&lt;/button&gt;&lt;button class="btn" onclick="rd(8)"&gt;D8&lt;/button&gt;&lt;button class="btn" onclick="rd(20)"&gt;D20&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div class="log" id="dL" style="margin-top:10px"&gt;&lt;div class="ll"&gt;&lt;b&gt;No rolls yet&lt;/b&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- RULES --&gt;</p>
+<p class="p1">&lt;div class="panel" id="pan-rules"&gt;</p>
+<p class="p1">&lt;div class="sec"&gt;Game&lt;/div&gt;</p>
+<p class="p1">&lt;div style="margin-bottom:10px" id="rg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill on" onclick="srg('ygo',this)"&gt;Yu-Gi-Oh!&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="srg('pkm',this)"&gt;Pokemon&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="srg('mtg',this)"&gt;MTG&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="srg('dig',this)"&gt;Digimon&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="srg('gundam',this)"&gt;Gundam&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="srg('op',this)"&gt;One Piece&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;input class="inp" id="rs" type="text" placeholder="Search rules..." oninput="rr()"&gt;</p>
+<p class="p1">&lt;div style="font-size:10px;color:#505068;margin-bottom:8px" id="rct"&gt;Loading rules...&lt;/div&gt;</p>
+<p class="p1">&lt;div id="rl"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- CARDS --&gt;</p>
+<p class="p1">&lt;div class="panel" id="pan-cards"&gt;</p>
+<p class="p1">&lt;div class="sec"&gt;Card Lookup&lt;/div&gt;</p>
+<p class="p1">&lt;div style="margin-bottom:10px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill on" onclick="scg('ygo',this)"&gt;Yu-Gi-Oh!&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="scg('pkm',this)"&gt;Pokemon&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="pill" onclick="scg('mtg',this)"&gt;MTG&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div style="display:flex;gap:6px;margin-bottom:10px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;input class="inp" id="cs" type="text" placeholder="Card name..." style="margin:0;flex:1" onkeydown="if(event.key==='Enter')scard()"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn" onclick="scard()"&gt;Search&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div id="cr"&gt;&lt;div style="color:#505068;font-size:12px;padding:16px;text-align:center"&gt;Type a card name and press Search&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- MATCH --&gt;</p>
+<p class="p1">&lt;div class="panel" id="pan-match"&gt;</p>
+<p class="p1">&lt;div class="sec"&gt;Match Record&lt;/div&gt;</p>
+<p class="p1">&lt;div class="g2" style="margin-bottom:10px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card" style="text-align:center"&gt;&lt;div class="pn"&gt;Player 1&lt;/div&gt;&lt;div class="wn" id="w1"&gt;0&lt;/div&gt;&lt;button class="btn g" onclick="aw(1)" style="width:100%"&gt;+ Win&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card" style="text-align:center"&gt;&lt;div class="pn"&gt;Player 2&lt;/div&gt;&lt;div class="wn" id="w2"&gt;0&lt;/div&gt;&lt;button class="btn g" onclick="aw(2)" style="width:100%"&gt;+ Win&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="card" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div&gt;&lt;div class="sec" style="margin:0 0 2px"&gt;Game #&lt;/div&gt;&lt;div style="font-size:20px;font-weight:700" id="gn"&gt;1&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn" onclick="ng()"&gt;Next Game&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;button class="btn r" style="width:100%;margin-bottom:10px" onclick="rmatch()"&gt;Reset Match&lt;/button&gt;</p>
+<p class="p1">&lt;div class="log" id="mL"&gt;&lt;div class="ll"&gt;&lt;b&gt;Match started&lt;/b&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- JUDGE --&gt;</p>
+<p class="p1">&lt;div class="panel" id="pan-judge"&gt;</p>
+<p class="p1">&lt;div class="sec"&gt;Game Focus&lt;/div&gt;</p>
+<p class="p1">&lt;div style="margin-bottom:10px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="jt on" onclick="jg('all',this)"&gt;All&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="jt" onclick="jg('ygo',this)"&gt;YGO&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="jt" onclick="jg('pkm',this)"&gt;Pokemon&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="jt" onclick="jg('mtg',this)"&gt;MTG&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="jt" onclick="jg('dig',this)"&gt;Digimon&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="jt" onclick="jg('gundam',this)"&gt;Gundam&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="jt" onclick="jg('op',this)"&gt;One Piece&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="msgs" id="jm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="msg ma"&gt;&lt;div class="bub"&gt;Ask any TCG ruling question. I check official card rulings first, then use AI for anything not in the database.&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="ir"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;textarea id="ji" placeholder="Ask a rules question..." onkeydown="ojk(event)" oninput="rsz(this)"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="isb" id="isb" onclick="sj()"&gt;&amp;#10148;&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">var lp=[0,8000,8000],W=[0,0,0],turn=1,gNum=1,sLP=8000,dQ=1;</p>
+<p class="p1">var tT=2400,tL=2400,tI=null,tR=false;</p>
+<p class="p1">var jGame="all",cGame="ygo",cCache={},curRG="ygo";</p>
+<p class="p1">var RULES={ygo:[],pkm:[],mtg:[],dig:[],gundam:[],op:[]};</p>
+<p class="p1">var SYNS={};</p>
+<p class="p1">var CARD_RULINGS={ygo:[],pkm:[],mtg:[]};</p>
+<p class="p2"><br></p>
+<p class="p1">var GCFG={</p>
+<p class="p1"><span class="Apple-converted-space">  </span>ygo:{name:"Yu-Gi-Oh!",lp:8000,rk:"ygo",jk:"ygo"},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>pkm:{name:"Pokemon",lp:0,rk:"pkm",jk:"pkm"},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>mtg:{name:"MTG",lp:20,rk:"mtg",jk:"mtg"},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>dig:{name:"Digimon",lp:4000,rk:"dig",jk:"dig"},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gundam:{name:"Gundam",lp:10,rk:"gundam",jk:"gundam"},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>op:{name:"One Piece",lp:5,rk:"op",jk:"op"}</p>
+<p class="p1">};</p>
+<p class="p2"><br></p>
+<p class="p1">// SETUP</p>
+<p class="p1">var selGame=null;</p>
+<p class="p1">function pickGame(g,el){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll(".gc").forEach(function(c){c.classList.remove("sel");});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>el.classList.add("sel");selGame=g;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var btn=document.getElementById("setupBtn");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>btn.disabled=false;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>btn.textContent="Start with "+GCFG[g].name;</p>
+<p class="p1">}</p>
+<p class="p1">function finishSetup(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!selGame)return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>localStorage.setItem("tcgGame",selGame);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("setupScreen").style.display="none";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("mainApp").style.display="flex";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>applyGame(selGame);</p>
+<p class="p1">}</p>
+<p class="p1">function changeGame(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(confirm("Change game? Your current LP and match data will be reset.")){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>localStorage.removeItem("tcgGame");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>location.reload();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">}</p>
+<p class="p1">function applyGame(g){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var cfg=GCFG[g];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>sLP=cfg.lp;lp[1]=cfg.lp;lp[2]=cfg.lp;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("ab").textContent=cfg.name+" \u2699";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>turn=1;ul();addL("lpL",cfg.name+" started");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var gmap={ygo:"Yu-Gi-Oh!",pkm:"Pokemon",mtg:"MTG",dig:"Digimon",gundam:"Gundam",op:"One Piece"};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll("#pan-lp .pill").forEach(function(p){p.classList.toggle("on",p.textContent===gmap[g]);});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>curRG=cfg.rk;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var rkeys=["ygo","pkm","mtg","dig","gundam","op"];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll("#rg .pill").forEach(function(p,i){p.classList.toggle("on",rkeys[i]===cfg.rk);});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>jGame=cfg.jk;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll(".jt").forEach(function(t){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var match=t.textContent.toLowerCase()===cfg.jk||(t.textContent==="YGO"&amp;&amp;cfg.jk==="ygo");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>t.classList.toggle("on",match);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">}</p>
+<p class="p1">(function(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var saved=localStorage.getItem("tcgGame");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(saved&amp;&amp;GCFG[saved]){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("setupScreen").style.display="none";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("mainApp").style.display="flex";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>applyGame(saved);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">})();</p>
+<p class="p2"><br></p>
+<p class="p1">// NAV</p>
+<p class="p1">function sw(id,el){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("on");});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("on");});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>el.classList.add("on");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("pan-"+id).classList.add("on");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(id==="rules")rr();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// LP</p>
+<p class="p1">function sg(n,s,el){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll("#pan-lp .pill").forEach(function(p){p.classList.remove("on");});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>el.classList.add("on");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(s===0&amp;&amp;n==="Pokemon"){sLP=0;lp[1]=0;lp[2]=0;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>else if(s===0){var v=parseInt(prompt("Starting LP?","20")||"20");sLP=isNaN(v)?20:v;lp[1]=sLP;lp[2]=sLP;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>else{sLP=s;lp[1]=s;lp[2]=s;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("ab").textContent=n+" \u2699";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>turn=1;ul();addL("lpL",n+" started");</p>
+<p class="p1">}</p>
+<p class="p1">function ul(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for(var i=1;i&lt;=2;i++){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var e=document.getElementById("l"+i);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>e.textContent=lp[i].toLocaleString();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var p=sLP&gt;0?lp[i]/sLP:1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>e.style.color=p&lt;=0.15?"#e05050":p&lt;=0.35?"#e8a050":"#e8e4f0";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("tn").textContent=turn;</p>
+<p class="p1">}</p>
+<p class="p1">function al(p,a){lp[p]=Math.max(0,lp[p]+a);ul();addL("lpL","P"+p+": "+(a&gt;0?"+":"")+a+" = "+lp[p]);}</p>
+<p class="p1">function ac(p,s){var v=parseInt(document.getElementById("ca").value)||0;if(v)al(p,s*v);}</p>
+<p class="p1">function hv(){lp[1]=Math.floor(lp[1]/2);lp[2]=Math.floor(lp[2]/2);ul();addL("lpL","Halved");}</p>
+<p class="p1">function rl(){lp[1]=sLP;lp[2]=sLP;turn=1;ul();addL("lpL","Reset");}</p>
+<p class="p1">function ct(d){turn=Math.max(1,turn+d);document.getElementById("tn").textContent=turn;}</p>
+<p class="p2"><br></p>
+<p class="p1">// TIMER</p>
+<p class="p1">function ft(s){var m=Math.floor(s/60),sc=s%60;return(m&lt;10?"0":"")+m+":"+(sc&lt;10?"0":"")+sc;}</p>
+<p class="p1">function ut(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var d=document.getElementById("td"),b=document.getElementById("tb");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var p=tT&gt;0?Math.round(tL/tT*100):0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>d.textContent=ft(tL);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>d.className="tdig"+(tL&lt;=0?" d":tL&lt;=60?" u":"");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>b.style.width=p+"%";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>b.style.background=tL&lt;=0?"#e05050":tL&lt;=60?"#e8a050":"#e8d88a";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("tl").textContent=tL&lt;=0?"Time is up!":tR?"Running":"Round Timer";</p>
+<p class="p1">}</p>
+<p class="p1">function spr(m){paT();tT=m*60;tL=m*60;ut();}</p>
+<p class="p1">function act(){var v=parseInt(document.getElementById("cm").value);if(v&amp;&amp;v&gt;0){paT();tT=v*60;tL=v*60;ut();}}</p>
+<p class="p1">function stT(){if(tR||tL&lt;=0)return;tR=true;tI=setInterval(function(){if(tL&gt;0){tL--;ut();}else{clearInterval(tI);tR=false;}},1000);}</p>
+<p class="p1">function paT(){clearInterval(tI);tR=false;ut();}</p>
+<p class="p1">function reT(){paT();tL=tT;ut();}</p>
+<p class="p1">function aT(m){tL=Math.min(tL+m*60,9999);tT=Math.max(tT,tL);ut();}</p>
+<p class="p2"><br></p>
+<p class="p1">// DICE</p>
+<p class="p1">function fc(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var h=Math.random()&lt;0.5;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var ic=document.getElementById("ci"),tx=document.getElementById("ct_");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>ic.textContent=h?"HEADS":"TAILS";ic.style.color=h?"#40c880":"#5090e0";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>tx.textContent=h?"Heads":"Tails";tx.style.color=h?"#40c880":"#5090e0";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>addL("dL","Coin: "+(h?"Heads":"Tails"));</p>
+<p class="p1">}</p>
+<p class="p1">function cq(d){dQ=Math.max(1,Math.min(6,dQ+d));document.getElementById("dq").textContent=dQ;}</p>
+<p class="p1">function rd(sides){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var rolls=[],total=0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for(var i=0;i&lt;dQ;i++){var r=Math.floor(Math.random()*sides)+1;rolls.push(r);total+=r;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var box=document.getElementById("pb");box.innerHTML="";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>rolls.forEach(function(r){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var e=document.createElement("div");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>e.className="pip"+(r===sides?" hi":"");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>e.textContent=r;box.appendChild(e);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var tr=document.getElementById("tr_");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(dQ&gt;1){tr.style.display="flex";document.getElementById("tv").textContent=total;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>else tr.style.display="none";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>addL("dL","D"+sides+": "+(dQ&gt;1?"["+rolls.join(",")+"] = "+total:rolls[0]));</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// RULES</p>
+<p class="p1">function srg(g,el){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll("#rg .pill").forEach(function(p){p.classList.remove("on");});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>el.classList.add("on");curRG=g;rr();</p>
+<p class="p1">}</p>
+<p class="p1">function rr(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var q=(document.getElementById("rs")?document.getElementById("rs").value:"").toLowerCase().trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var list=document.getElementById("rl");list.innerHTML="";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var rct=document.getElementById("rct");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!RULES[curRG]||!RULES[curRG].length){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rct.textContent="Loading rules...";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>list.innerHTML="&lt;div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'&gt;Rules are loading, please wait a moment then tap Rules again&lt;/div&gt;";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var all=(RULES[curRG]||[]).filter(function(r){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return !q||r.t.toLowerCase().indexOf(q)&gt;=0||r.s.toLowerCase().indexOf(q)&gt;=0||r.e.toLowerCase().indexOf(q)&gt;=0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>rct.textContent=all.length+" rule"+(all.length!==1?"s":"");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(!all.length){list.innerHTML="&lt;div style='color:#505068;font-size:12px;padding:16px;text-align:center'&gt;No rules found&lt;/div&gt;";return;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>all.forEach(function(r){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var d=document.createElement("div");d.className="ri";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>d.innerHTML="&lt;div class='rtt'&gt;"+r.t+"&lt;/div&gt;&lt;div class='rss'&gt;"+r.s+"&lt;/div&gt;&lt;div class='ree'&gt;"+r.e+"&lt;/div&gt;";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>d.onclick=function(){d.classList.toggle("op");};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>list.appendChild(d);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// CARDS</p>
+<p class="p1">function scg(g,el){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cGame=g;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll("#pan-cards .pill").forEach(function(p){p.classList.remove("on");});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>el.classList.add("on");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("cr").innerHTML="&lt;div style='color:#505068;font-size:12px;padding:16px;text-align:center'&gt;Type a card name and press Search&lt;/div&gt;";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("cs").value="";</p>
+<p class="p1">}</p>
+<p class="p1">function scard(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var q=document.getElementById("cs").value.trim();if(!q)return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var key=cGame+":"+q.toLowerCase();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(cCache[key]){showCard(cCache[key]);return;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("cr").innerHTML="&lt;div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'&gt;Searching...&lt;/div&gt;";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(cGame==="ygo")fygo(q,key);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>else if(cGame==="pkm")fpkm(q,key);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>else if(cGame==="mtg")fmtg(q,key);</p>
+<p class="p1">}</p>
+<p class="p1">function fygo(q,k){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q))</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.then(function(r){return r.json();})</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.then(function(d){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="&lt;div style='color:#505068;font-size:12px;padding:16px;text-align:center'&gt;Card not found. Check spelling.&lt;/div&gt;";return;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var c=d.data[0];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var tags=[c.type||""];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.attribute)tags.push(c.attribute);if(c.race)tags.push(c.race);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.level)tags.push("Level "+c.level);if(c.atk!==undefined)tags.push("ATK: "+c.atk);if(c.def!==undefined)tags.push("DEF: "+c.def);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.linkval)tags.push("Link-"+c.linkval);if(c.rank)tags.push("Rank "+c.rank);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var card={name:c.name,tags:tags,text:c.desc||"No text."};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>cCache[k]=card;showCard(card);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).catch(function(){document.getElementById("cr").innerHTML="&lt;div style='color:#e05050;font-size:12px;padding:16px;text-align:center'&gt;Search failed. Check internet.&lt;/div&gt;";});</p>
+<p class="p1">}</p>
+<p class="p1">function fpkm(q,k){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>fetch("https://api.pokemontcg.io/v2/cards?q=name:"+encodeURIComponent(q)+"&amp;pageSize=1")</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.then(function(r){return r.json();})</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.then(function(d){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="&lt;div style='color:#505068;font-size:12px;padding:16px;text-align:center'&gt;Card not found.&lt;/div&gt;";return;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var c=d.data[0];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var tags=[c.supertype||""];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.hp)tags.push("HP: "+c.hp);if(c.types)tags.push(c.types.join("/"));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.set&amp;&amp;c.set.name)tags.push(c.set.name);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var text="";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.abilities)c.abilities.forEach(function(a){text+="[Ability] "+a.name+": "+a.text+"\n\n";});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.attacks)c.attacks.forEach(function(a){text+=a.name+(a.damage?" - "+a.damage:"")+"\n"+(a.text||"")+"\n\n";});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var card={name:c.name,tags:tags,text:text.trim()||"No text."};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>cCache[k]=card;showCard(card);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).catch(function(){document.getElementById("cr").innerHTML="&lt;div style='color:#e05050;font-size:12px;padding:16px;text-align:center'&gt;Search failed.&lt;/div&gt;";});</p>
+<p class="p1">}</p>
+<p class="p1">function fmtg(q,k){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>fetch("https://api.scryfall.com/cards/named?fuzzy="+encodeURIComponent(q))</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.then(function(r){return r.json();})</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.then(function(c){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.object==="error"){document.getElementById("cr").innerHTML="&lt;div style='color:#505068;font-size:12px;padding:16px;text-align:center'&gt;Card not found.&lt;/div&gt;";return;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var tags=[];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.type_line)tags.push(c.type_line);if(c.mana_cost)tags.push(c.mana_cost);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.power)tags.push("P/T: "+c.power+"/"+c.toughness);if(c.loyalty)tags.push("Loyalty: "+c.loyalty);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var text=c.oracle_text||"";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(c.card_faces)text=c.card_faces.map(function(f){return f.name+"\n"+f.oracle_text;}).join("\n---\n");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var card={name:c.name,tags:tags,text:text||"No text."};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>cCache[k]=card;showCard(card);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).catch(function(){document.getElementById("cr").innerHTML="&lt;div style='color:#e05050;font-size:12px;padding:16px;text-align:center'&gt;Search failed.&lt;/div&gt;";});</p>
+<p class="p1">}</p>
+<p class="p1">function showCard(card){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var th=card.tags.filter(function(t){return t;}).map(function(t){return "&lt;span class='ctag'&gt;"+t+"&lt;/span&gt;";}).join("");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var tx=card.text.replace(/\n/g,"&lt;br&gt;");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("cr").innerHTML="&lt;div class='card' style='border-color:rgba(232,216,138,0.2)'&gt;&lt;div class='cn'&gt;"+card.name+"&lt;/div&gt;&lt;div style='display:flex;flex-wrap:wrap;margin-bottom:4px'&gt;"+th+"&lt;/div&gt;&lt;div class='cx'&gt;"+tx+"&lt;/div&gt;&lt;/div&gt;";</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// MATCH</p>
+<p class="p1">function aw(p){W[p]++;document.getElementById("w"+p).textContent=W[p];addL("mL","P"+p+" wins game "+gNum);}</p>
+<p class="p1">function ng(){gNum++;document.getElementById("gn").textContent=gNum;lp[1]=sLP;lp[2]=sLP;turn=1;ul();addL("mL","Game "+gNum+" started");}</p>
+<p class="p1">function rmatch(){W[1]=0;W[2]=0;gNum=1;document.getElementById("w1").textContent=0;document.getElementById("w2").textContent=0;document.getElementById("gn").textContent=1;addL("mL","Match reset");}</p>
+<p class="p2"><br></p>
+<p class="p1">// JUDGE</p>
+<p class="p1">function jg(g,el){jGame=g;document.querySelectorAll(".jt").forEach(function(t){t.classList.remove("on");});el.classList.add("on");}</p>
+<p class="p1">function rsz(ta){ta.style.height="36px";ta.style.height=Math.min(ta.scrollHeight,76)+"px";}</p>
+<p class="p1">function ojk(e){if(e.key==="Enter"&amp;&amp;!e.shiftKey){e.preventDefault();sj();}}</p>
+<p class="p1">function jmsg(role,text,badge){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var msgs=document.getElementById("jm");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var div=document.createElement("div");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>div.className="msg "+(role==="user"?"mu":"ma");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var badgeHtml=badge?"&lt;span class='ruling-badge'&gt;"+badge+"&lt;/span&gt;&lt;br&gt;":"";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>div.innerHTML=badgeHtml+"&lt;div class='bub'&gt;"+text+"&lt;/div&gt;&lt;span class='mt'&gt;"+t+"&lt;/span&gt;";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function sj(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var inp=document.getElementById("ji");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var q=inp.value.trim();if(!q)return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>inp.value="";inp.style.height="36px";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>jmsg("user",q,"");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("isb").disabled=true;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// STEP 1: Check card-specific rulings database first</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var cardRuling=findCardRuling(q,jGame);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(cardRuling){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>jmsg("ai",cardRuling.a,"Official Ruling");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("isb").disabled=false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// STEP 2: Build context from rules database</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length&gt;2&amp;&amp;!stop[w];});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var exp={};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>wds.forEach(function(w){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>exp[w]=true;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(SYNS[w])SYNS[w].split(" ").forEach(function(s){exp[s]=true;});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Object.keys(SYNS).forEach(function(k){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(k.indexOf(w)&gt;=0||w.indexOf(k)&gt;=0){exp[k]=true;SYNS[k].split(" ").forEach(function(s){exp[s]=true;});}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var games=jGame==="all"?Object.keys(RULES):[jGame];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var res=[];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>games.forEach(function(g){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>(RULES[g]||[]).forEach(function(r){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var ti=r.t.toLowerCase(),su=r.s.toLowerCase(),de=r.e.toLowerCase();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var sc=0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>wds.forEach(function(w){if(ti.indexOf(w)&gt;=0)sc+=15;if(su.indexOf(w)&gt;=0)sc+=8;if(de.indexOf(w)&gt;=0)sc+=3;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>Object.keys(exp).forEach(function(w){if(w.length&lt;3)return;if(ti.indexOf(w)&gt;=0)sc+=5;if(su.indexOf(w)&gt;=0)sc+=3;if(de.indexOf(w)&gt;=0)sc+=1;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>for(var i=0;i&lt;wds.length-1;i++){var ph=wds[i]+" "+wds[i+1];if(ti.indexOf(ph)&gt;=0)sc+=25;if(su.indexOf(ph)&gt;=0)sc+=12;if(de.indexOf(ph)&gt;=0)sc+=6;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(sc&gt;5)res.push({r:r,s:sc});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>res.sort(function(a,b){return b.s-a.s;});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var context=res.slice(0,8).map(function(x){return "RULE - "+x.r.t+":\n"+x.r.e;}).join("\n\n");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Show thinking indicator</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var msgs=document.getElementById("jm");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>tp.innerHTML="&lt;div class='bub' style='color:#505068'&gt;Thinking...&lt;/div&gt;";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam Card Game, and One Piece Card Game",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam Card Game",op:"One Piece Card Game"};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var sys="You are a certified Head Judge for "+gl[jGame]+" tournaments with 10+ years experience. You have complete memorized knowledge of every official ruling, errata, and interaction.\n\nCRITICAL FACTS YOU MUST KNOW:\n- Costs are paid at activation before the chain resolves. Cards that leave the field as a cost are gone before effects resolve.\n- Skill Drain only negates face-up monsters ON THE FIELD. If a monster left the field as cost it cannot be negated.\n- Sangan only searches if sent to the GY. If banished instead it does not search.\n- Super Polymerization is a Quick-Play Spell Speed 2. It CAN be chained to other effects.\n- Normal Spells resolve even if destroyed after activation. Continuous Spells need to stay on field.\n- Missing the Timing: optional WHEN triggers miss timing if their trigger was not the last thing to happen.\n- IF triggers never miss timing.\n- Chain resolves Last In First Out.\n- D.D. Crow banishes from GY. If it banishes a monster that was a cost, that monster is now banished not in GY.\n\nRULING PROCESS:\n1. Identify all cards mentioned\n2. Check costs vs effects (semicolon rule)\n3. Check field presence requirements\n4. Check GY vs banished destination\n5. Give definitive yes or no ruling with exact reason\n\nKeep answer under 150 words. Plain text only. Be definitive - never say maybe.";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(context)sys+="\n\nOFFICIAL RULES FROM RULEBOOK:\n"+context;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>fetch("https://tcg-judge.kirkcreason.workers.dev",{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>method:"POST",headers:{"Content-Type":"application/json"},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body:JSON.stringify({system:sys,question:q})</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).then(function(r){return r.json();})</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.then(function(d){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var t=document.getElementById("tp");if(t)t.remove();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"&lt;br&gt;&lt;br&gt;").replace(/\n/g,"&lt;br&gt;");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>jmsg("ai",ans,"AI Judge");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).catch(function(){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var t=document.getElementById("tp");if(t)t.remove();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>jmsg("ai","Connection error. Check internet and try again.","");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).finally(function(){document.getElementById("isb").disabled=false;});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// LOG</p>
+<p class="p1">function addL(id,msg){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var el=document.getElementById(id);if(!el)return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var line=document.createElement("div");line.className="ll";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>line.innerHTML="&lt;b&gt;"+msg+"&lt;/b&gt;&lt;span&gt;"+t+"&lt;/span&gt;";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>el.insertBefore(line,el.firstChild);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>while(el.children.length&gt;10)el.removeChild(el.lastChild);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">ut();</p>
+<p class="p2"><br></p>
+<p class="p1">// Load rules.js after page renders - with cache busting</p>
+<p class="p1">window.addEventListener("load",function(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var s=document.createElement("script");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v=2";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>s.onload=function(){if(typeof rr==="function")rr();};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>s.onerror=function(){console.log("Rules failed to load");};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.body.appendChild(s);</p>
+<p class="p1">});</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
