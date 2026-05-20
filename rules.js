@@ -602,6 +602,11 @@ ygo: [
     a: "Yes. When Sangan is tributed as a cost and successfully sent to the Graveyard with nothing negating or redirecting it, its mandatory trigger effect activates. Being tributed as a cost counts as being sent from the field to the GY, fulfilling Sangan's condition. But if Sangan is banished instead by DD Crow or Macro Cosmos it does NOT search."
   },
   {
+    cards: ["megamorph", "forbidden droplet", "atk", "halve", "equip"],
+    q: "Opponent monster is equipped with Megamorph and I activate Forbidden Droplet targeting it. What happens to its ATK?",
+    a: "Forbidden Droplet halves the ATK of the targeted monster and negates its effects until end of turn. Megamorph is an Equip Spell that modifies ATK - it is not negated by Forbidden Droplet since Droplet negates monster effects not equip spell effects. Both apply simultaneously. The monster ATK is modified by Megamorph first then halved by Forbidden Droplet. Megamorph doubles ATK if your LP is lower or halves it if your LP is higher, then Forbidden Droplet halves that result."
+  },
+  {
     cards: ["rescue rabbit", "skill drain", "banish", "cost", "normal monster", "special summon deck"],
     q: "Skill Drain is active. Player Normal Summons Rescue Rabbit and activates its effect banishing itself. Does it resolve?",
     a: "Yes. Rescue Rabbit banishes itself as the activation cost before Skill Drain can negate anything. Since Rescue Rabbit is no longer on the field when the effect resolves, Skill Drain cannot negate it. Skill Drain only negates effects of face-up monsters currently on the field. The two Normal Monsters are successfully Special Summoned from the Deck. Same mechanic as Sky Striker Raye."
