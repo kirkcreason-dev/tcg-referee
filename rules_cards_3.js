@@ -1429,4 +1429,10 @@ var CARD_RULINGS_3 = {ygo: [
     q: "Does the Commander Tax apply when cast from hand or graveyard?",
     a: "No. The Commander Tax only increases when casting from the Command Zone. Casting your Commander from hand or graveyard does not increase the tax and does not count as a cast from the Command Zone for tax purposes. The tax accumulates separately only for Command Zone casts."
   }
-]};
+]},
+  {
+    cards: ["book of moon", "chimeratech fortress dragon", "face-down", "defense position"],
+    q: "I activate Book of Moon targeting Chimeratech Fortress Dragon. What happens?",
+    a: "Book of Moon resolves and Chimeratech Fortress Dragon is changed to face-down Defense Position. Chimeratech can be targeted and flipped face-down by card effects. While face-down, its continuous effect that grants 1000 ATK per Fusion Material no longer applies, so its ATK is effectively 0. The restriction on Special Summoning also stops applying while it is face-down."
+  },
+;
