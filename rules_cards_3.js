@@ -1435,4 +1435,66 @@ var CARD_RULINGS_3 = {ygo: [
     q: "I activate Book of Moon targeting Chimeratech Fortress Dragon. What happens?",
     a: "Book of Moon resolves and Chimeratech Fortress Dragon is changed to face-down Defense Position. Chimeratech can be targeted and flipped face-down by card effects. While face-down, its continuous effect that grants 1000 ATK per Fusion Material no longer applies, so its ATK is effectively 0. The restriction on Special Summoning also stops applying while it is face-down."
   },
+,
+  {
+    cards: ["book of moon", "chimeratech rampage dragon", "attack", "flip summon"],
+    q: "I activate Book of Moon on Chimeratech Rampage Dragon who can attack 3 times. It gets Flip Summoned. Can it still attack 3 times?",
+    a: "No. Chimeratech Rampage Dragon's multi-attack effect reads 'If this card is Fusion Summoned' - it is a one-time trigger that only activates on Fusion Summon. When Book of Moon sets it face-down and it is Flip Summoned, it is not being Fusion Summoned again so the effect does not re-trigger. It can only attack once that turn."
+  },
+,
+  {
+    cards: ["pot of prosperity", "damage", "opponent", "half"],
+    q: "Pot of Prosperity was activated this turn. Does my opponent take half damage?",
+    a: "Yes. Pot of Prosperity halves any battle damage your opponent takes for the rest of the turn it was activated. Apply Megamorph or other ATK modifiers first, then halve the resulting battle damage."
+  },
+  {
+    cards: ["magical citadel of endymion", "spell counter", "negated", "lost"],
+    q: "Magical Citadel of Endymion has 10 spell counters and gets negated. What happens to the counters?",
+    a: "All spell counters are lost when Magical Citadel of Endymion is negated. The counters are removed from the card when its effects are negated."
+  },
+  {
+    cards: ["bottomless trap hole", "pendulum summon", "solemn strike", "solemn judgment", "multiple"],
+    q: "My opponent pendulum summons 3 monsters with over 1500 ATK. I activate Bottomless Trap Hole. How many monsters are destroyed?",
+    a: "All monsters with 1500 or more ATK are destroyed and banished. Bottomless Trap Hole, Solemn Strike, and Solemn Judgment all respond to the entire Pendulum Summon as one event, affecting all monsters summoned simultaneously that meet the condition."
+  },
+  {
+    cards: ["cyber dragon core", "effect veiler", "super polymerization", "chain", "effect resolves"],
+    q: "I normal summon Cyber Dragon Core, opponent chains Effect Veiler, I chain Super Polymerization fusing Core away. Does Core's effect still resolve?",
+    a: "Yes. Chain resolves LIFO. Super Polymerization resolves first, removing Core from the field. Effect Veiler then resolves but its target is gone so its effect disappears. Core's effect was already on the chain and resolves normally since Effect Veiler lost its target."
+  },
+  {
+    cards: ["miracle fusion", "forbidden crown", "fusion material", "unaffected"],
+    q: "My opponent activates Miracle Fusion. I chain Forbidden Crown on one of their monsters. How does Miracle Fusion resolve?",
+    a: "Chain resolves LIFO. Forbidden Crown resolves first, negating the targeted monster's effects and making it unaffected by other Spell and Trap effects. Miracle Fusion then resolves but cannot banish the Forbidden Crown target as Fusion Material since it is unaffected by Spell effects. If other valid materials exist, Miracle Fusion can still Fusion Summon using those. If no other valid materials exist, Miracle Fusion resolves without effect."
+  },
+  {
+    cards: ["cyber dragon", "face-down", "contact fusion", "chimeratech"],
+    q: "Can I contact fuse with Cyber Dragon while it is face-down?",
+    a: "Yes. The original Cyber Dragon can be used as contact fusion material even while face-down on the field."
+  },
+  {
+    cards: ["icarus attack", "winged beast", "two cards", "activate"],
+    q: "My opponent has one Winged Beast and I control 1 monster with no spells or traps. Can they activate Icarus Attack?",
+    a: "No. Icarus Attack must destroy exactly 2 cards. After tributing the Winged Beast as cost, if there are not 2 cards remaining on the field to destroy, Icarus Attack cannot be activated."
+  },
+  {
+    cards: ["amazoness swordswoman", "stone statue of the aztecs", "battle damage"],
+    q: "Amazoness Swordswoman attacks Stone Statue of the Aztecs. Who takes damage and how much?",
+    a: "The Stone Statue controller takes 1000 damage. Swordswoman ATK 1500 vs Stone Statue DEF 2000 means 500 damage to Swordswoman controller. Stone Statue doubles battle damage taken by the opponent to 1000. Swordswoman redirects that 1000 damage to the Stone Statue controller."
+  },
+  {
+    cards: ["sky striker ace raye", "destiny hero charisma", "tribute", "graveyard"],
+    q: "My opponent controls Destiny HERO Charisma. Can I activate Sky Striker Ace Raye's effect and resolve?",
+    a: "Yes. Raye tributes itself as cost before the effect resolves, so it is already in the GY when the effect resolves. Destiny HERO Charisma cannot prevent Raye from resolving because the cost is paid at activation. The effect resolves successfully from the GY and Special Summons a Sky Striker Ace from the Extra Deck."
+  },
+  {
+    cards: ["cyber dragon herz", "droll lockbird", "graveyard", "search"],
+    q: "Cyber Dragon Herz is sent to the GY while Droll and Lock Bird is in effect. There is a Cyber Dragon in the GY. Can Herz activate its effect?",
+    a: "Yes. Droll and Lock Bird only prevents adding cards from the Deck to the hand. Herz can still add a Cyber Dragon from the GY since that is not restricted by Droll and Lock Bird."
+  },
+  {
+    cards: ["forbidden droplet", "blue-eyes white dragon", "normal monster", "activate"],
+    q: "Can I activate Forbidden Droplet targeting Blue-Eyes White Dragon?",
+    a: "No. Blue-Eyes White Dragon is a Normal Monster with no effects. Forbidden Droplet can only target Effect Monsters to negate their effects. It cannot be activated targeting a Normal Monster."
+  }
 ;
