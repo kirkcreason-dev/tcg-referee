@@ -541,7 +541,16 @@ function sj(){
   jmsg("user",q);
   document.getElementById("isb").disabled=true;
 
-  // STEP 1: Check Official Rulings database first
+  // STEP 1: Ensure card rulings are loaded then check
+  if(!window._cardRulingsLoaded){
+    loadCardRulings(function(){
+      // Re-run after loading
+      document.getElementById("ji").value=q;
+      sj();
+    });
+    document.getElementById("isb").disabled=false;
+    return;
+  }
   var cardRuling=findCardRuling(q,jGame);
   if(cardRuling){
     jmsg("ai",cardRuling.a,"Official Ruling");
@@ -740,35 +749,47 @@ function loadSyns(cb){
   s.src=BASE+"rules_syns.js?v=1";
   s.onload=function(){
     if(window.SYNS) SYNS=window.SYNS;
-    // Load card rulings in 3 chunks
-    var chunks=["rules_cards_1.js","rules_cards_2.js","rules_cards_3.js"];
-    var loaded=0;
-    chunks.forEach(function(chunk){
-      var sc=document.createElement("script");
-      sc.src=BASE+chunk+"?v=1";
-      sc.onload=function(){
-        loaded++;
-        if(loaded===chunks.length){
-          window._synsLoaded=true;
-          if(cb)cb();
-        }
-      };
-      document.body.appendChild(sc);
-    });
+    window._synsLoaded=true;
+    if(cb)cb();
   };
   document.body.appendChild(s);
+}
+
+function loadCardRulings(cb){
+  if(window._cardRulingsLoaded){if(cb)cb();return;}
+  var chunks=["rules_cards_1.js","rules_cards_2.js","rules_cards_3.js"];
+  var loaded=0;
+  // Load one at a time to avoid memory spike
+  function loadNext(i){
+    if(i>=chunks.length){
+      window._cardRulingsLoaded=true;
+      if(cb)cb();
+      return;
+    }
+    var sc=document.createElement("script");
+    sc.src=BASE+chunks[i]+"?v=1";
+    sc.onload=function(){loadNext(i+1);};
+    sc.onerror=function(){loadNext(i+1);};
+    document.body.appendChild(sc);
+  }
+  loadNext(0);
 }
 
 // Override sw to lazy load rules when Rules tab opened
 var _origSw=sw;
 function sw(id,el){
   _origSw(id,el);
-  if(id==="rules"||id==="judge"){
+  if(id==="rules"){
     var saved=localStorage.getItem("tcgGame")||"ygo";
     loadSyns(function(){
-      loadGameRules(saved,function(){
-        if(id==="rules")rr();
-      });
+      loadGameRules(saved,function(){rr();});
+    });
+  }
+  if(id==="judge"){
+    var saved=localStorage.getItem("tcgGame")||"ygo";
+    loadSyns(function(){
+      loadGameRules(saved,null);
+      loadCardRulings(null);
     });
   }
 }
@@ -780,13 +801,11 @@ function srg(g,el){
   loadGameRules(g,function(){rr();});
 }
 
-// Load current game rules in background after 2s
+// Load only game rules in background after 2s - card rulings load on demand
 window.addEventListener("load",function(){
   setTimeout(function(){
     var saved=localStorage.getItem("tcgGame")||"ygo";
-    loadSyns(function(){
-      loadGameRules(saved,null);
-    });
+    loadGameRules(saved,null);
   },2000);
 });
 </script>
