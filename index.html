@@ -492,7 +492,7 @@ function answerQ(q){
     var ctx=res.slice(0,5).map(function(x){return x.r.t+": "+x.r.e;}).join("\n\n");
 
     var gl={all:"Yu-Gi-Oh!, Pokemon, MTG, Digimon, Gundam, One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic: The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
-    var sys="You are a certified "+gl[jGame]+" Head Judge. Give a direct definitive ruling based ONLY on the exact card texts provided. Do not invent or assume card effects. Plain text only. Under 200 words.\n\nKEY RULES: Costs paid before chain resolves. Chain resolves Last In First Out (LIFO). Effects that have already been activated still resolve even if the card is destroyed. IF triggers never miss timing. WHEN optional triggers can miss timing.";
+    var sys="You are a certified "+gl[jGame]+" Head Judge. Give a direct definitive ruling. Use provided card texts for accuracy. If no card text is provided, use your expert knowledge. Plain text only. Under 150 words.\n\nKEY RULES: Costs paid before chain resolves. Chain resolves Last In First Out (LIFO). Effects that have already been activated still resolve even if the card is destroyed. IF triggers never miss timing. WHEN optional triggers can miss timing.";
     if(cardTexts.length>0)sys+="\n\nEXACT CARD TEXTS (use these only - do not guess effects):\n"+cardTexts.join("\n\n");
     if(ctx)sys+="\n\nRELEVANT RULES:\n"+ctx;
 
@@ -501,7 +501,7 @@ function answerQ(q){
     var nonce="[ref:"+Math.random().toString(36).slice(2,7)+"]";
     var fullQ=q+" "+nonce;
     if(cardTexts.length>0){
-      fullQ="EXACT CARD TEXTS (base your ruling ONLY on these):\n"+cardTexts.join("\n\n")+"\n\nQUESTION: "+q+" "+nonce;
+      fullQ="CARD TEXTS FOUND (use these for accuracy, use your knowledge for any cards not listed):\n"+cardTexts.join("\n\n")+"\n\nQUESTION: "+q+" "+nonce;
     }
     // Show which cards were found
     var tEl=document.getElementById("tp");
