@@ -487,7 +487,7 @@ var CARD_RULINGS_3 = {ygo: [
   {
     cards: ["super starslayer", "ty", "ultimate tyranno", "sky striker", "zero", "xyz", "chain"],
     q: "I activate Super Starslayer TY as CL1 and opponent chains Sky Striker Ace Zero as CL2. How do both effects resolve?",
-    a: "Chain resolves Last In First Out. Sky Striker Ace Zero resolves first as CL2. Zero negates the effects of 1 face-up monster on the field until end of turn. Zero can negate TY's effects. Super Starslayer TY does NOT target - it destroys 1 CARD (not just monsters - any card on the field) chosen at resolution, then inflicts damage equal to that card's original ATK. If Zero negated TY's effects TY resolves negated and does nothing. If Zero targeted a different monster TY resolves normally destroying 1 card chosen at resolution and dealing damage equal to its original ATK."
+    a: "Chain resolves LIFO. Sky Striker Ace - Zero resolves first (CL2). Zero tributes itself as cost, then Special Summons up to 2 Sky Striker Ace monsters (Raye and/or Roze) from GY or Deck in face-up Defense, then destroys Super Starslayer TY-PHON. Then TY-PHON resolves (CL1) - even though it was destroyed by Zero, its effect already activated so it still resolves. TY-PHON returns 1 monster on the field to the owner's hand (it was already detached as activation cost before the chain started)."
   },
   {
     cards: ["rescue rabbit", "skill drain", "banish cost", "resolve"],
