@@ -1497,4 +1497,10 @@ var CARD_RULINGS_3 = {ygo: [
     q: "Can I activate Forbidden Droplet targeting Blue-Eyes White Dragon?",
     a: "No. Blue-Eyes White Dragon is a Normal Monster with no effects. Forbidden Droplet can only target Effect Monsters to negate their effects. It cannot be activated targeting a Normal Monster."
   }
+,
+  {
+    cards: ["premature burial", "return", "hand", "monster"],
+    q: "When I return Premature Burial to my hand while equipped to a monster, what happens to the monster?",
+    a: "The monster stays on the field. Premature Burial only destroys its equipped monster when Premature Burial itself is DESTROYED. Returning it to the hand is not destruction - the monster remains on the field without the equip card attached."
+  },
 ;
