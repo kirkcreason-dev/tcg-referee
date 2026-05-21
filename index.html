@@ -5,269 +5,380 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>TCG Referee</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,sans-serif;font-size:14px;background:#0d0d12;color:#e8e4f0;height:100vh;overflow:hidden;-webkit-text-size-adjust:100%}
-.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto}
-.top{background:#12122a;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,216,138,0.2);flex-shrink:0}
-.logo{color:#e8d88a;font-size:14px;font-weight:700}
-.badge{color:#e8d88a;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(232,216,138,0.3)}
-.tabs{display:flex;background:#0d0d18;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
-.tab{flex:1;padding:9px 2px 7px;text-align:center;font-size:9px;color:#505068;cursor:pointer;border-bottom:2px solid transparent}
-.tab.on{color:#e8d88a;border-bottom-color:#e8d88a}
-.panel{display:none;flex:1;overflow-y:auto;padding:14px}
-.panel.on{display:block}
-.sec{font-size:10px;color:#606070;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
-.card{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;margin-bottom:10px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.btn{padding:10px 8px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:8px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center}
-.btn.r{color:#e05050;border-color:rgba(224,80,80,0.4)}
-.btn.g{color:#40c880;border-color:rgba(64,200,128,0.4)}
-.btn.y{background:#12122a;border-color:rgba(232,216,138,0.4);color:#e8d88a}
-.pill{padding:5px 11px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block}
-.pill.on{background:#12122a;border-color:#e8d88a;color:#e8d88a}
-.lpg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.pc{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px;text-align:center}
-.pn{font-size:10px;color:#9090a8;margin-bottom:4px}
-.plp{font-size:36px;font-weight:700;line-height:1;margin-bottom:8px}
-.lb4{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-.lb{padding:7px 4px;font-size:11px;border:1px solid rgba(255,255,255,0.1);border-radius:7px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center}
-.lb.m{color:#e05050;border-color:rgba(224,80,80,0.3)}
-.lb.p{color:#40c880;border-color:rgba(64,200,128,0.3)}
-.inp{width:100%;padding:8px 10px;font-size:13px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;margin-bottom:8px}
-.log{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px;max-height:80px;overflow-y:auto}
-.ll{font-size:11px;color:#9090a8;padding:2px 0;display:flex;justify-content:space-between}
-.ll b{color:#e8e4f0}
-.tdisp{background:#12122a;border-radius:12px;padding:20px;text-align:center;margin-bottom:12px;border:1px solid rgba(232,216,138,0.15)}
-.tdig{font-size:56px;font-weight:700;color:#e8d88a;line-height:1}
-.tdig.u{color:#e8a050}.tdig.d{color:#e05050}
-.tlbl{font-size:10px;color:#505068;margin-top:4px}
-.tbb{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:10px;overflow:hidden}
-.tb{height:4px;background:#e8d88a;border-radius:2px;transition:width 1s linear}
-.rc{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px;text-align:center;margin-bottom:10px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
-.pips{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;min-height:40px;align-items:center;margin-bottom:6px}
-.pip{width:40px;height:40px;background:#1a1a24;border:1px solid rgba(255,255,255,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
-.pip.hi{background:rgba(64,200,128,0.12);border-color:rgba(64,200,128,0.4);color:#40c880}
-.ri{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px 11px;margin-bottom:7px;cursor:pointer}
-.ri.op .rtt{color:#e8d88a}
-.rtt{font-size:13px;font-weight:500;margin-bottom:2px}
-.rss{font-size:11px;color:#9090a8;line-height:1.5}
-.ree{font-size:11px;color:#9090a8;line-height:1.55;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,0.06);display:none}
-.ri.op .ree{display:block}
-.wn{font-size:34px;font-weight:700;margin:5px 0 8px}
-.jt{padding:5px 11px;font-size:11px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block}
-.jt.on{background:#12122a;border-color:#e8d88a;color:#e8d88a}
-.msgs{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:300px;overflow-y:auto}
-.msg{max-width:92%;display:flex;flex-direction:column;gap:2px}
-.mu{align-self:flex-end;align-items:flex-end}
-.ma{align-self:flex-start}
-.bub{padding:8px 11px;border-radius:12px;font-size:12px;line-height:1.55}
-.mu .bub{background:#12122a;color:#e8d88a;border:1px solid rgba(232,216,138,0.2);border-bottom-right-radius:3px}
-.ma .bub{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:3px}
-.mt{font-size:10px;color:#505068}
-.rbadge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(64,200,128,0.12);color:#40c880;border:1px solid rgba(64,200,128,0.3);margin-bottom:6px;display:inline-block}
-.aibadge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(80,80,168,0.15);color:#8080e0;border:1px solid rgba(80,80,168,0.3);margin-bottom:6px;display:inline-block}
-.ir{display:flex;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08)}
-.ir textarea{flex:1;padding:7px 9px;font-size:12px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;resize:none;height:36px;font-family:inherit}
-.isb{width:36px;height:36px;border:1px solid rgba(232,216,138,0.3);border-radius:8px;background:#12122a;color:#e8d88a;cursor:pointer;font-size:14px;flex-shrink:0}
-.isb:disabled{opacity:0.4}
-.ctag{padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(255,255,255,0.06);color:#9090a8;margin:2px}
-.cx{font-size:12px;color:#e8e4f0;line-height:1.6;background:rgba(0,0,0,0.2);border-radius:8px;padding:10px;margin-top:8px}
-.cn{font-size:15px;font-weight:700;color:#e8d88a;margin-bottom:6px}
-.setup{position:fixed;top:0;left:0;right:0;bottom:0;background:#0d0d12;z-index:999;display:flex;flex-direction:column;max-width:480px;margin:0 auto}
-.sh{background:#12122a;padding:24px 16px 16px;border-bottom:1px solid rgba(232,216,138,0.2)}
-.sh h1{color:#e8d88a;font-size:22px;font-weight:700;margin-bottom:6px}
-.sh p{color:#9090a8;font-size:12px;line-height:1.5}
-.sb{flex:1;overflow-y:auto;padding:16px}
-.gc{background:#1a1a24;border:2px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;-webkit-user-select:none;user-select:none}
-.gc.sel{border-color:#e8d88a;background:#12122a}
-.gi{font-size:32px;flex-shrink:0}
-.ginfo{flex:1}
-.gname{font-size:15px;font-weight:600;color:#e8e4f0;margin-bottom:2px}
-.gdesc{font-size:11px;color:#9090a8}
-.gck{width:24px;height:24px;border:2px solid rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:transparent}
-.gc.sel .gck{background:#e8d88a;border-color:#e8d88a;color:#0d0d12}
-.sf{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.08)}
-.sf button{width:100%;padding:15px;font-size:15px;font-weight:700;border:none;border-radius:12px;background:#e8d88a;color:#0d0d12;cursor:pointer}
-.sf button:disabled{opacity:0.35}
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+:root{
+  --bg:#0a0a14;
+  --bg2:#111122;
+  --bg3:#1a1a2e;
+  --border:#2a2a44;
+  --accent:#7b5ea7;
+  --accent2:#e8d88a;
+  --text:#e8e4f0;
+  --text2:#9090b0;
+  --red:#e05050;
+  --orange:#e8a050;
+  --green:#50c878;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Helvetica Neue',sans-serif;height:100dvh;overflow:hidden;display:flex;flex-direction:column;}
+
+/* START SCREEN */
+#S{display:flex;flex-direction:column;height:100dvh;overflow-y:auto;padding:24px 16px 32px;}
+#S.hide{display:none;}
+.sh{text-align:center;padding:32px 0 24px;}
+.sh h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;background:linear-gradient(135deg,#e8d88a,#c49fd8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sh p{color:var(--text2);font-size:14px;margin-top:6px;}
+.sb{display:flex;flex-direction:column;gap:10px;max-width:480px;margin:0 auto;width:100%;}
+.gc{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color 0.15s,background 0.15s;}
+.gc.sel{border-color:var(--accent);background:var(--bg3);}
+.gi{font-size:28px;width:40px;text-align:center;flex-shrink:0;}
+.ginfo{flex:1;}
+.gname{font-size:15px;font-weight:600;}
+.gdesc{font-size:12px;color:var(--text2);margin-top:2px;}
+.gck{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;flex-shrink:0;transition:all 0.15s;}
+.gc.sel .gck{background:var(--accent);border-color:var(--accent);color:#fff;}
+#sBtn{margin:20px auto 0;display:block;width:100%;max-width:480px;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:600;cursor:pointer;opacity:0.4;pointer-events:none;transition:opacity 0.15s;}
+#sBtn.on{opacity:1;pointer-events:auto;}
+
+/* MAIN APP */
+#A{display:none;flex-direction:column;height:100dvh;}
+#A.show{display:flex;}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.topbar-title{font-size:15px;font-weight:700;color:var(--accent2);}
+.topbar-game{font-size:12px;color:var(--text2);}
+.chg-btn{background:none;border:1px solid var(--border);color:var(--text2);font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;}
+
+/* TABS */
+.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:1;min-width:60px;padding:11px 4px;text-align:center;font-size:11px;font-weight:600;color:var(--text2);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:0.3px;}
+.tab.on{color:var(--accent2);border-bottom-color:var(--accent2);}
+
+/* PANELS */
+.panels{flex:1;overflow:hidden;position:relative;}
+.panel{display:none;flex-direction:column;height:100%;overflow-y:auto;padding:14px 16px 32px;}
+.panel.on{display:flex;}
+
+/* JUDGE */
+#jm{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-bottom:8px;}
+.msg{display:flex;flex-direction:column;}
+.mu .bub{background:var(--accent);color:#fff;border-radius:16px 16px 4px 16px;align-self:flex-end;margin-left:40px;}
+.ma .bub{background:var(--bg3);border:1px solid var(--border);border-radius:16px 16px 16px 4px;align-self:flex-start;margin-right:40px;}
+.bub{padding:10px 14px;font-size:14px;line-height:1.5;}
+.mlbl{font-size:10px;color:var(--text2);margin-bottom:3px;padding:0 4px;}
+.mu .mlbl{text-align:right;}
+.jin{display:flex;gap:8px;padding-top:10px;flex-shrink:0;border-top:1px solid var(--border);}
+#ji{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;color:var(--text);font-size:14px;resize:none;height:42px;max-height:120px;overflow-y:auto;}
+#isb{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;}
+#isb:disabled{opacity:0.4;}
+
+/* RULES */
+.rsrch{display:flex;gap:8px;margin-bottom:12px;flex-shrink:0;}
+.rsrch input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;color:var(--text);font-size:14px;}
+.rct{font-size:11px;color:var(--text2);margin-bottom:8px;flex-shrink:0;}
+#rl_{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
+.ri{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
+.rit{font-size:13px;font-weight:600;color:var(--accent2);margin-bottom:4px;}
+.rie{font-size:13px;line-height:1.5;color:var(--text);}
+.ris{font-size:11px;color:var(--text2);margin-top:4px;}
+
+/* CARDS */
+.csrch{display:flex;gap:8px;margin-bottom:12px;flex-shrink:0;}
+.csrch input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;color:var(--text);font-size:14px;}
+.csrch button{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:10px 16px;font-size:14px;cursor:pointer;}
+#cr{flex:1;overflow-y:auto;}
+.crd{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.crn{font-size:16px;font-weight:700;margin-bottom:6px;}
+.crt{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.tag{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--text2);}
+.crd img{width:100%;max-width:220px;border-radius:8px;display:block;margin:0 auto 10px;}
+.crd p{font-size:13px;line-height:1.6;color:var(--text);}
+
+/* LP TRACKER */
+.lpt{display:flex;flex-direction:column;gap:12px;flex:1;}
+.lpp{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.lpn{font-size:12px;color:var(--text2);font-weight:600;letter-spacing:1px;}
+.lpv{font-size:44px;font-weight:700;font-variant-numeric:tabular-nums;}
+.lpbtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.lpb{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:8px 14px;color:var(--text);font-size:14px;cursor:pointer;font-weight:600;}
+.lpb.pos{color:var(--green);}
+.lpb.neg{color:var(--red);}
+.lpc{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;color:var(--text);font-size:16px;text-align:center;}
+.lpinput-row{display:flex;gap:8px;width:100%;}
+.lpinput-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;color:var(--text);font-size:16px;text-align:center;}
+.lpinput-row button{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:8px 14px;font-size:14px;cursor:pointer;font-weight:600;}
+.turn-row{display:flex;align-items:center;gap:12px;justify-content:center;padding:8px 0;}
+.turn-row span{font-size:14px;color:var(--text2);}
+.turn-row b{font-size:18px;color:var(--accent2);}
+.turn-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 14px;color:var(--text);font-size:14px;cursor:pointer;}
+.lp-log{margin-top:8px;}
+.lp-log-title{font-size:11px;color:var(--text2);margin-bottom:6px;letter-spacing:1px;}
+#llog{display:flex;flex-direction:column;gap:4px;max-height:120px;overflow-y:auto;}
+.ll{display:flex;justify-content:space-between;font-size:12px;padding:4px 8px;background:var(--bg2);border-radius:6px;}
+.ll b{color:var(--text);}
+.ll span{color:var(--text2);}
+.lpreset-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:4px;}
+.lpreset{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--text2);cursor:pointer;}
+
+/* TIMER */
+.timer-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding-top:16px;}
+#tl{font-size:13px;color:var(--text2);letter-spacing:1px;font-weight:600;}
+#td{font-size:72px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-2px;}
+#td.u{color:var(--orange);}
+#td.d{color:var(--red);}
+.tbar-wrap{width:100%;max-width:320px;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+#tb{height:100%;border-radius:3px;transition:width 0.5s linear,background 0.5s;}
+.tbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.tbtn{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px 20px;color:var(--text);font-size:14px;cursor:pointer;font-weight:600;}
+.tbtn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.tpresets{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.tpre{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;}
+
+/* LOG */
+.log-panel{display:flex;flex-direction:column;gap:0;}
+.log-title{font-size:11px;color:var(--text2);margin-bottom:8px;letter-spacing:1px;}
+.loglist{display:flex;flex-direction:column;gap:4px;}
 </style>
 </head>
 <body>
 
-<div class="setup" id="S">
-  <div class="sh"><h1>TCG Referee</h1><p>Select your game to get started.</p></div>
-  <div class="sb">
-    <div class="gc" id="g-ygo" onclick="pg('ygo',this)" ontouchend="pg('ygo',this);event.preventDefault()"><div class="gi">&#127183;</div><div class="ginfo"><div class="gname">Yu-Gi-Oh!</div><div class="gdesc">8000 LP &bull; Full rulebook &bull; 885 official rulings</div></div><div class="gck">&#10003;</div></div>
-    <div class="gc" id="g-pkm" onclick="pg('pkm',this)" ontouchend="pg('pkm',this);event.preventDefault()"><div class="gi">&#9889;</div><div class="ginfo"><div class="gname">Pokemon TCG</div><div class="gdesc">Prize cards &bull; Status conditions &bull; All formats</div></div><div class="gck">&#10003;</div></div>
-    <div class="gc" id="g-mtg" onclick="pg('mtg',this)" ontouchend="pg('mtg',this);event.preventDefault()"><div class="gi">&#129497;</div><div class="ginfo"><div class="gname">Magic: The Gathering</div><div class="gdesc">20 life &bull; Stack &bull; Commander &bull; All keywords</div></div><div class="gck">&#10003;</div></div>
-    <div class="gc" id="g-dig" onclick="pg('dig',this)" ontouchend="pg('dig',this);event.preventDefault()"><div class="gi">&#129422;</div><div class="ginfo"><div class="gname">Digimon TCG</div><div class="gdesc">Memory gauge &bull; Security checks &bull; Digivolving</div></div><div class="gck">&#10003;</div></div>
-    <div class="gc" id="g-gundam" onclick="pg('gundam',this)" ontouchend="pg('gundam',this);event.preventDefault()"><div class="gi">&#129302;</div><div class="ginfo"><div class="gname">Gundam Card Game</div><div class="gdesc">Base HP &bull; Penetrating damage &bull; Flagship</div></div><div class="gck">&#10003;</div></div>
-    <div class="gc" id="g-op" onclick="pg('op',this)" ontouchend="pg('op',this);event.preventDefault()"><div class="gi">&#9760;</div><div class="ginfo"><div class="gname">One Piece Card Game</div><div class="gdesc">Life cards &bull; DON!! system &bull; Leader attacks</div></div><div class="gck">&#10003;</div></div>
+<!-- START SCREEN -->
+<div id="S">
+  <div class="sh">
+    <h1>TCG Referee</h1>
+    <p>Select your game to begin</p>
   </div>
-  <div class="sf"><button id="sBtn" onclick="go()" ontouchend="go();event.preventDefault()" disabled>Select a game to continue</button></div>
+  <div class="sb">
+    <div class="gc" id="g-ygo" onclick="pg('ygo',this)" ontouchend="pg('ygo',this);event.preventDefault()">
+      <div class="gi">&#127183;</div>
+      <div class="ginfo"><div class="gname">Yu-Gi-Oh!</div><div class="gdesc">8000 LP &bull; 885+ official rulings</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="g-pkm" onclick="pg('pkm',this)" ontouchend="pg('pkm',this);event.preventDefault()">
+      <div class="gi">&#9728;</div>
+      <div class="ginfo"><div class="gname">Pokemon TCG</div><div class="gdesc">Prize cards &bull; AI judge</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="g-mtg" onclick="pg('mtg',this)" ontouchend="pg('mtg',this);event.preventDefault()">
+      <div class="gi">&#9956;</div>
+      <div class="ginfo"><div class="gname">Magic: The Gathering</div><div class="gdesc">20 life &bull; AI judge</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="g-dig" onclick="pg('dig',this)" ontouchend="pg('dig',this);event.preventDefault()">
+      <div class="gi">&#128421;</div>
+      <div class="ginfo"><div class="gname">Digimon TCG</div><div class="gdesc">4000 Security &bull; AI judge</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="g-gundam" onclick="pg('gundam',this)" ontouchend="pg('gundam',this);event.preventDefault()">
+      <div class="gi">&#129302;</div>
+      <div class="ginfo"><div class="gname">Gundam Card Game</div><div class="gdesc">10 HP &bull; AI judge</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+    <div class="gc" id="g-op" onclick="pg('op',this)" ontouchend="pg('op',this);event.preventDefault()">
+      <div class="gi">&#9875;</div>
+      <div class="ginfo"><div class="gname">One Piece TCG</div><div class="gdesc">5 Life &bull; AI judge</div></div>
+      <div class="gck">&#10003;</div>
+    </div>
+  </div>
+  <button id="sBtn" onclick="go()">Select a game</button>
 </div>
 
-<div class="app" id="A" style="display:none">
-<div class="top"><span class="logo">TCG Referee</span><span class="badge" id="ab">Yu-Gi-Oh!</span></div>
-<div class="tabs">
-  <div class="tab on" onclick="sw('lp',this)">LP</div>
-  <div class="tab" onclick="sw('timer',this)">Timer</div>
-  <div class="tab" onclick="sw('dice',this)">Dice</div>
-  <div class="tab" onclick="sw('rules',this)">Rules</div>
-  <div class="tab" onclick="sw('cards',this)">Cards</div>
-  <div class="tab" onclick="sw('match',this)">Match</div>
-  <div class="tab" onclick="sw('judge',this)">Judge</div>
-</div>
+<!-- MAIN APP -->
+<div id="A">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">TCG Referee</div>
+      <div class="topbar-game" id="ab"></div>
+    </div>
+    <button class="chg-btn" onclick="chg()">Change Game</button>
+    
+  </div>
+  <div class="tabs">
+    <button class="tab" id="tab-judge" onclick="sw('judge',this)">JUDGE</button>
+    
+    <button class="tab" id="tab-cards" onclick="sw('cards',this)">CARDS</button>
+    <button class="tab on" id="tab-lp" onclick="sw('lp',this)">LP</button>
+    
+  </div>
+  <div class="panels">
 
-<div class="panel on" id="pan-lp">
-<div class="sec">Game</div>
-<div id="lpg" style="margin-bottom:12px"></div>
-<div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;margin-bottom:10px">
-  <div><div class="sec" style="margin:0 0 2px">Turn</div><div style="font-size:20px;font-weight:700" id="tn">1</div></div>
-  <div style="display:flex;gap:6px"><button class="btn" onclick="ct(-1)">-</button><button class="btn" onclick="ct(1)">Next</button></div>
-</div>
-<div class="lpg">
-  <div class="pc"><div class="pn">Player 1</div><div class="plp" id="l1">8000</div><div class="lb4"><button class="lb m" onclick="al(1,-500)">-500</button><button class="lb m" onclick="al(1,-1000)">-1k</button><button class="lb p" onclick="al(1,500)">+500</button><button class="lb p" onclick="al(1,1000)">+1k</button></div></div>
-  <div class="pc"><div class="pn">Player 2</div><div class="plp" id="l2">8000</div><div class="lb4"><button class="lb m" onclick="al(2,-500)">-500</button><button class="lb m" onclick="al(2,-1000)">-1k</button><button class="lb p" onclick="al(2,500)">+500</button><button class="lb p" onclick="al(2,1000)">+1k</button></div></div>
-</div>
-<div style="display:flex;gap:6px;margin-bottom:8px"><input class="inp" type="number" id="ca" placeholder="Custom amount" style="margin:0;flex:1"><button class="btn" onclick="ac(1,-1)">P1-</button><button class="btn" onclick="ac(2,-1)">P2-</button><button class="btn" onclick="ac(1,1)">P1+</button></div>
-<div class="g2"><button class="btn r" onclick="rl()">Reset</button><button class="btn" onclick="hv()">Halve Both</button></div>
-<div class="log" id="lpL" style="margin-top:8px"><div class="ll"><b>Game started</b><span></span></div></div>
-<button class="btn" onclick="chg()" style="width:100%;margin-top:10px;color:#9090a8;border-color:rgba(144,144,168,0.2);font-size:11px">Change Game</button>
-</div>
+    <!-- JUDGE -->
+    <div class="panel" id="pan-judge">
+      <div id="jm"></div>
+      <div class="jin">
+        <textarea id="ji" placeholder="Ask a ruling question..." oninput="ar(this)" onkeydown="ek(event)"></textarea>
+        <button id="isb" onclick="sj()">ASK</button>
+      </div>
+    </div>
 
-<div class="panel" id="pan-timer">
-<div class="tdisp"><div class="tdig" id="td">40:00</div><div class="tlbl" id="tl">Round Timer</div><div class="tbb"><div class="tb" id="tb" style="width:100%"></div></div></div>
-<div class="sec">Presets</div>
-<div class="g2" style="margin-bottom:8px"><button class="btn" onclick="spr(40)">40 min YGO</button><button class="btn" onclick="spr(50)">50 min Tournament</button></div>
-<div class="g2" style="margin-bottom:12px"><button class="btn" onclick="spr(25)">25 min Single</button><button class="btn" onclick="spr(60)">60 min Extended</button></div>
-<div style="display:flex;gap:6px;margin-bottom:10px"><input class="inp" type="number" id="cm" placeholder="Custom minutes" style="margin:0;flex:1"><button class="btn" onclick="act()">Set</button></div>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px"><button class="btn y" onclick="stT()">Start</button><button class="btn r" onclick="paT()">Pause</button><button class="btn" onclick="reT()">Reset</button></div>
-<div class="g2"><button class="btn" onclick="aT(3)">+3 min</button><button class="btn" onclick="aT(5)">+5 min</button></div>
-</div>
+        <!-- CARDS -->
+    <div class="panel" id="pan-cards">
+      <div class="csrch">
+        <input id="ci" placeholder="Search card name..." type="search" onkeydown="if(event.key==='Enter')sc()">
+        <button onclick="sc()">Search</button>
+      </div>
+      <div id="cr"><div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0">Enter a card name to search</div></div>
+    </div>
 
-<div class="panel" id="pan-dice">
-<div class="sec">Coin Flip</div>
-<div class="rc"><div id="ci" style="font-size:28px;font-weight:700;color:#e8d88a">COIN</div><div id="ct_" style="font-size:13px;color:#9090a8">Tap to flip</div></div>
-<button class="btn y" onclick="fc()" style="width:100%;margin-bottom:14px">Flip Coin</button>
-<div class="sec">Dice Roll</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:#9090a8;flex:1">Number of dice</span><button class="btn" onclick="cq(-1)" style="width:32px;padding:6px">-</button><span style="font-size:15px;font-weight:700;min-width:20px;text-align:center" id="dq">1</span><button class="btn" onclick="cq(1)" style="width:32px;padding:6px">+</button></div>
-<div class="pips" id="pb"><span style="font-size:12px;color:#505068">Choose a die below</span></div>
-<div id="tr_" style="display:none;justify-content:space-between;padding:6px 0;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:8px"><span style="font-size:12px;color:#9090a8">Total</span><span style="font-size:17px;font-weight:700" id="tv"></span></div>
-<div class="g2"><button class="btn" onclick="rd(4)">D4</button><button class="btn" onclick="rd(6)">D6</button><button class="btn" onclick="rd(8)">D8</button><button class="btn" onclick="rd(20)">D20</button></div>
-<div class="log" id="dL" style="margin-top:10px"><div class="ll"><b>No rolls yet</b><span></span></div></div>
-</div>
+    <!-- LP TRACKER -->
+    <div class="panel on" id="pan-lp">
+      <div class="lpt">
+        <div class="lpp">
+          <div class="lpn">PLAYER 1</div>
+          <div class="lpv" id="l1" style="color:var(--accent2)">8000</div>
+          <div class="lpbtns">
+            <button class="lpb neg" onclick="lpa(1,-100)">-100</button>
+            <button class="lpb neg" onclick="lpa(1,-500)">-500</button>
+            <button class="lpb neg" onclick="lpa(1,-1000)">-1000</button>
+            <button class="lpb pos" onclick="lpa(1,100)">+100</button>
+            <button class="lpb pos" onclick="lpa(1,500)">+500</button>
+            <button class="lpb pos" onclick="lpa(1,1000)">+1000</button>
+          </div>
+          <div class="lpinput-row">
+            <input id="lci1" type="number" placeholder="Custom amount" inputmode="numeric">
+            <button class="lpb neg" onclick="lpc(1,-1)">-</button>
+            <button class="lpb pos" onclick="lpc(1,1)">+</button>
+          </div>
+        </div>
+        <div class="lpp">
+          <div class="lpn">PLAYER 2</div>
+          <div class="lpv" id="l2" style="color:var(--accent2)">8000</div>
+          <div class="lpbtns">
+            <button class="lpb neg" onclick="lpa(2,-100)">-100</button>
+            <button class="lpb neg" onclick="lpa(2,-500)">-500</button>
+            <button class="lpb neg" onclick="lpa(2,-1000)">-1000</button>
+            <button class="lpb pos" onclick="lpa(2,100)">+100</button>
+            <button class="lpb pos" onclick="lpa(2,500)">+500</button>
+            <button class="lpb pos" onclick="lpa(2,1000)">+1000</button>
+          </div>
+          <div class="lpinput-row">
+            <input id="lci2" type="number" placeholder="Custom amount" inputmode="numeric">
+            <button class="lpb neg" onclick="lpc(2,-1)">-</button>
+            <button class="lpb pos" onclick="lpc(2,1)">+</button>
+          </div>
+        </div>
+        <div class="turn-row">
+          <button class="turn-btn" onclick="turn=Math.max(1,turn-1);ul()">&#9664;</button>
+          <span>Turn</span><b id="tn">1</b>
+          <button class="turn-btn" onclick="turn++;ul()">&#9654;</button>
+          <button class="turn-btn" onclick="rlp()" style="margin-left:8px;color:var(--text2)">Reset</button>
+        </div>
+        <div class="lp-log">
+          <div class="lp-log-title">LOG</div>
+          <div id="llog"></div>
+        </div>
 
-<div class="panel" id="pan-rules">
-<div class="sec">Game</div>
-<div style="margin-bottom:10px" id="rg"><span class="pill on" onclick="srg('ygo',this)">Yu-Gi-Oh!</span><span class="pill" onclick="srg('pkm',this)">Pokemon</span><span class="pill" onclick="srg('mtg',this)">MTG</span><span class="pill" onclick="srg('dig',this)">Digimon</span><span class="pill" onclick="srg('gundam',this)">Gundam</span><span class="pill" onclick="srg('op',this)">One Piece</span></div>
-<input class="inp" id="rs" type="text" placeholder="Search rules..." oninput="rr()">
-<div style="font-size:10px;color:#505068;margin-bottom:8px" id="rct">Tap a game to load rules</div>
-<div id="rl_"></div>
-</div>
+        <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:14px;">
+          <div class="timer-wrap">
+            <div id="tl">ROUND TIMER</div>
+            <div id="td">40:00</div>
+            <div class="tbar-wrap"><div id="tb" style="width:100%;background:#e8d88a"></div></div>
+            <div class="tbtns">
+              <button class="tbtn primary" id="tsb" onclick="ts()">START</button>
+              <button class="tbtn" onclick="tr_()">RESET</button>
+            </div>
+            <div class="tpresets">
+              <button class="tpre" onclick="tset(20)">20 min</button>
+              <button class="tpre" onclick="tset(30)">30 min</button>
+              <button class="tpre" onclick="tset(40)">40 min</button>
+              <button class="tpre" onclick="tset(50)">50 min</button>
+              <button class="tpre" onclick="tset(60)">60 min</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div class="panel" id="pan-cards">
-<div class="sec">Card Lookup</div>
-<div style="margin-bottom:10px"><span class="pill on" onclick="scg('ygo',this)">Yu-Gi-Oh!</span><span class="pill" onclick="scg('pkm',this)">Pokemon</span><span class="pill" onclick="scg('mtg',this)">MTG</span></div>
-<div style="display:flex;gap:6px;margin-bottom:10px"><input class="inp" id="cs" type="text" placeholder="Card name..." style="margin:0;flex:1" onkeydown="if(event.key==='Enter')scard()"><button class="btn" onclick="scard()">Search</button></div>
-<div id="cr"><div style="color:#505068;font-size:12px;padding:16px;text-align:center">Type a card name and press Search</div></div>
-</div>
-
-<div class="panel" id="pan-match">
-<div class="sec">Match Record</div>
-<div class="g2" style="margin-bottom:10px"><div class="card" style="text-align:center"><div class="pn">Player 1</div><div class="wn" id="w1">0</div><button class="btn g" onclick="aw(1)" style="width:100%">+ Win</button></div><div class="card" style="text-align:center"><div class="pn">Player 2</div><div class="wn" id="w2">0</div><button class="btn g" onclick="aw(2)" style="width:100%">+ Win</button></div></div>
-<div class="card" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div><div class="sec" style="margin:0 0 2px">Game #</div><div style="font-size:20px;font-weight:700" id="gn">1</div></div><button class="btn" onclick="ng()">Next Game</button></div>
-<button class="btn r" style="width:100%;margin-bottom:10px" onclick="rmatch()">Reset Match</button>
-<div class="log" id="mL"><div class="ll"><b>Match started</b><span></span></div></div>
-</div>
-
-<div class="panel" id="pan-judge">
-<div class="sec">Game Focus</div>
-<div style="margin-bottom:10px"><span class="jt on" onclick="jg('all',this)">All</span><span class="jt" onclick="jg('ygo',this)">YGO</span><span class="jt" onclick="jg('pkm',this)">Pokemon</span><span class="jt" onclick="jg('mtg',this)">MTG</span><span class="jt" onclick="jg('dig',this)">Digimon</span><span class="jt" onclick="jg('gundam',this)">Gundam</span><span class="jt" onclick="jg('op',this)">One Piece</span></div>
-<div class="msgs" id="jm"><div class="msg ma"><div class="bub">Ask any TCG ruling question. I check 885 official rulings first, then use AI for anything else.</div></div></div>
-<div class="ir"><textarea id="ji" placeholder="Ask a rules question..." onkeydown="ojk(event)" oninput="rsz(this)"></textarea><button class="isb" id="isb" onclick="sj()">&#10148;</button></div>
-</div>
+  </div>
 </div>
 
 <script>
-var lp=[0,8000,8000],W=[0,0,0],turn=1,gNum=1,sLP=8000,dQ=1;
-var tT=2400,tL=2400,tI=null,tR=false;
-var jGame="all",cGame="ygo",cCache={},curRG="ygo",selGame=null;
+var BASE="https://kirkcreason-dev.github.io/tcg-referee/";
+var GCFG={
+  ygo:{n:"Yu-Gi-Oh!",lp:8000,api:"ygo"},
+  pkm:{n:"Pokemon TCG",lp:0,api:"pkm"},
+  mtg:{n:"Magic: The Gathering",lp:20,api:"mtg"},
+  dig:{n:"Digimon TCG",lp:4000,api:"dig"},
+  gundam:{n:"Gundam Card Game",lp:10,api:"gundam"},
+  op:{n:"One Piece TCG",lp:5,api:"op"}
+};
 var RULES={ygo:[],pkm:[],mtg:[],dig:[],gundam:[],op:[]};
 var SYNS={},CARDS_ALL=[],cardsLoaded=false,rulesLoaded={};
-var BASE="https://kirkcreason-dev.github.io/tcg-referee/";
+var selGame=null,curGame=null;
+var lp={1:8000,2:8000},sLP=8000,turn=1;
+var tL=2400,tT=2400,tR=false,tInt=null;
 
-var GCFG={ygo:{n:"Yu-Gi-Oh!",lp:8000},pkm:{n:"Pokemon",lp:0},mtg:{n:"MTG",lp:20},dig:{n:"Digimon",lp:4000},gundam:{n:"Gundam",lp:10},op:{n:"One Piece",lp:5}};
-
-// BOOT - check saved game
-(function(){
-  try{
-    var g=localStorage.getItem("tcgGame");
-    if(g&&GCFG[g]){document.getElementById("S").style.display="none";document.getElementById("A").style.display="flex";applyGame(g);}
-  }catch(e){}
-})();
-
-// SETUP
+// GAME SELECT
 function pg(g,el){
   document.querySelectorAll(".gc").forEach(function(c){c.classList.remove("sel");});
-  el.classList.add("sel");selGame=g;
-  document.getElementById("sBtn").disabled=false;
-  document.getElementById("sBtn").textContent="Start with "+GCFG[g].n;
+  el.classList.add("sel");
+  selGame=g;
+  var btn=document.getElementById("sBtn");
+  btn.textContent="Start "+GCFG[g].n;
+  btn.classList.add("on");
 }
+
 function go(){
   if(!selGame)return;
   try{localStorage.setItem("tcgGame",selGame);}catch(e){}
-  document.getElementById("S").style.display="none";
-  document.getElementById("A").style.display="flex";
-  applyGame(selGame);
+  curGame=selGame;
+  document.getElementById("S").classList.add("hide");
+  document.getElementById("A").classList.add("show");
+  applyGame(curGame);
+  // Reset to judge tab
+  sw("lp",document.getElementById("tab-lp"));
 }
-function chg(){try{localStorage.removeItem("tcgGame");}catch(e){}location.reload();}
+
+function chg(){
+  try{localStorage.removeItem("tcgGame");}catch(e){}
+  document.getElementById("S").classList.remove("hide");
+  document.getElementById("A").classList.remove("show");
+  selGame=null;curGame=null;
+  document.querySelectorAll(".gc").forEach(function(c){c.classList.remove("sel");});
+  var btn=document.getElementById("sBtn");
+  btn.textContent="Select a game";
+  btn.classList.remove("on");
+  // Clear judge messages
+  document.getElementById("jm").innerHTML="";
+}
 
 function applyGame(g){
   var c=GCFG[g];
-  sLP=c.lp;lp[1]=c.lp;lp[2]=c.lp;turn=1;
+  sLP=c.lp>0?c.lp:20;
+  lp[1]=sLP;lp[2]=sLP;turn=1;
   document.getElementById("ab").textContent=c.n;
-  curRG=g;
-  buildPills(g);ul();
+  ul();
+  // Update LP tab label
+  updateLPLabels(g);
 }
 
-function buildPills(active){
-  var el=document.getElementById("lpg");el.innerHTML="";
-  Object.keys(GCFG).forEach(function(g){
-    var p=document.createElement("span");
-    p.className="pill"+(g===active?" on":"");
-    p.textContent=GCFG[g].n;
-    (function(gg){p.onclick=function(){
-      document.querySelectorAll("#lpg .pill").forEach(function(x){x.classList.remove("on");});
-      p.classList.add("on");
-      try{localStorage.setItem("tcgGame",gg);}catch(e){}
-      document.getElementById("ab").textContent=GCFG[gg].n;
-      sLP=GCFG[gg].lp;lp[1]=sLP;lp[2]=sLP;turn=1;ul();curRG=gg;
-    };})(g);
-    el.appendChild(p);
-  });
+function updateLPLabels(g){
+  // Update preset buttons based on game
+  var btns=document.querySelectorAll(".lpb");
+  // LP values differ per game but keep same buttons
 }
 
-// NAV
+// TAB SWITCHING
 function sw(id,el){
   document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("on");});
   document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("on");});
   el.classList.add("on");
   document.getElementById("pan-"+id).classList.add("on");
-  if(id==="rules")loadRules(curRG,rr);
+  if(id==="rules")loadRules(curGame,rr);
+  if(id==="cards")document.getElementById("ci").focus();
 }
 
-// LAZY LOAD
+// RULES
 function loadScript(src,cb){
   var s=document.createElement("script");
-  s.src=src+"?v=5";
+  s.src=src+"?v=6";
   s.onload=function(){if(cb)cb();};
   s.onerror=function(){if(cb)cb();};
   document.body.appendChild(s);
 }
 
 function loadRules(g,cb){
+  if(!g)return;
   if(rulesLoaded[g]){if(cb)cb();return;}
   loadScript(BASE+"rules_"+g+".js",function(){
     var k="RULES_"+g.toUpperCase();
@@ -282,6 +393,132 @@ function loadRules(g,cb){
   });
 }
 
+function rr(){
+  if(!curGame)return;
+  var q=(document.getElementById("rs")||{value:""}).value.toLowerCase().trim();
+  var list=document.getElementById("rl_");list.innerHTML="";
+  var rct=document.getElementById("rct");
+  if(!RULES[curGame]||!RULES[curGame].length){
+    rct.textContent="Loading...";
+    loadRules(curGame,rr);
+    return;
+  }
+  var all=RULES[curGame].filter(function(r){
+    return !q||r.t.toLowerCase().indexOf(q)>=0||r.s.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;
+  });
+  rct.textContent=all.length+" rule"+(all.length!==1?"s":"");
+  all.slice(0,80).forEach(function(r){
+    var d=document.createElement("div");d.className="ri";
+    d.innerHTML="<div class='rit'>"+esc(r.t)+"</div><div class='rie'>"+esc(r.e)+"</div>"+(r.s?"<div class='ris'>"+esc(r.s)+"</div>":"");
+    list.appendChild(d);
+  });
+}
+
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+// CARD SEARCH
+function sc(){
+  if(!curGame)return;
+  var q=(document.getElementById("ci").value||"").trim();
+  if(!q)return;
+  var el=document.getElementById("cr");
+  el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Searching...</div>";
+  if(curGame==="ygo"){
+    fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d.data||!d.data.length){el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Not found.</div>";return;}
+      var c=d.data[0];
+      var tags=[c.type||""];
+      if(c.attribute)tags.push(c.attribute);
+      if(c.level)tags.push("Level "+c.level);
+      if(c.atk!==undefined)tags.push("ATK "+c.atk);
+      if(c.def!==undefined)tags.push("DEF "+c.def);
+      el.innerHTML="<div class='crd'>"+(c.card_images&&c.card_images[0]?"<img src='"+c.card_images[0].image_url_small+"' loading='lazy'>":"")+"<div class='crn'>"+esc(c.name)+"</div><div class='crt'>"+tags.map(function(t){return "<span class='tag'>"+esc(t)+"</span>";}).join("")+"</div><p>"+esc(c.desc)+"</p></div>";
+    })
+    .catch(function(){el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Search failed.</div>";});
+  } else {
+    el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Card search coming soon for "+GCFG[curGame].n+"</div>";
+  }
+}
+
+// LP TRACKER
+function ul(){
+  for(var i=1;i<=2;i++){
+    var e=document.getElementById("l"+i);
+    var v=lp[i];
+    e.textContent=v.toLocaleString();
+    var p=sLP>0?v/sLP:0.5;
+    e.style.color=p<=0.15?"#e05050":p<=0.35?"#e8a050":"#e8d88a";
+  }
+  document.getElementById("tn").textContent=turn;
+}
+
+function lpa(p,amt){
+  var old=lp[p];
+  lp[p]=Math.max(0,lp[p]+amt);
+  addL("llog",(amt>0?"P"+p+" +":("P"+p+" "))+amt+" ("+lp[p].toLocaleString()+" LP)");
+  ul();
+}
+
+function lpc(p,dir){
+  var inp=document.getElementById("lci"+p);
+  var v=parseInt(inp.value)||0;
+  if(!v)return;
+  lpa(p,dir*v);
+  inp.value="";
+}
+
+function rlp(){
+  lp[1]=sLP;lp[2]=sLP;turn=1;
+  document.getElementById("llog").innerHTML="";
+  ul();
+}
+
+function addL(id,msg){
+  var el=document.getElementById(id);if(!el)return;
+  var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  var line=document.createElement("div");
+  line.className="ll";
+  line.innerHTML="<b>"+msg+"</b><span>"+t+"</span>";
+  el.insertBefore(line,el.firstChild);
+  while(el.children.length>15)el.removeChild(el.lastChild);
+}
+
+// TIMER
+function ft(s){
+  var m=Math.floor(Math.abs(s)/60),sec=Math.abs(s)%60;
+  return (s<0?"-":"")+(m<10?"0":"")+m+":"+(sec<10?"0":"")+sec;
+}
+
+function ut(){
+  var d=document.getElementById("td"),b=document.getElementById("tb");
+  d.textContent=ft(tL);
+  d.className="tdig"+(tL<=0?" d":tL<=60?" u":"");
+  b.style.width=(tT>0?Math.round(tL/tT*100):0)+"%";
+  b.style.background=tL<=0?"#e05050":tL<=60?"#e8a050":"#e8d88a";
+  document.getElementById("tl").textContent=tL<=0?"TIME IS UP!":tR?"RUNNING":"ROUND TIMER";
+}
+
+function ts(){
+  if(tR){clearInterval(tInt);tR=false;document.getElementById("tsb").textContent="START";}
+  else{tR=true;document.getElementById("tsb").textContent="PAUSE";tInt=setInterval(function(){tL--;ut();if(tL===0){playAlarm();}if(tL<=-10){clearInterval(tInt);tR=false;document.getElementById("tsb").textContent="START";}},1000);}
+  ut();
+}
+
+function tr_(){
+  clearInterval(tInt);tR=false;tL=tT;
+  document.getElementById("tsb").textContent="START";
+  ut();
+}
+
+function tset(m){
+  clearInterval(tInt);tR=false;tL=m*60;tT=m*60;
+  document.getElementById("tsb").textContent="START";
+  ut();
+}
+
+// JUDGE
 function loadCards(cb){
   if(cardsLoaded){if(cb)cb();return;}
   loadScript(BASE+"rules_cards_1.js",function(){
@@ -311,148 +548,48 @@ function findRuling(q){
   return bScore>=60?best:null;
 }
 
-// LP
-function ul(){
-  for(var i=1;i<=2;i++){
-    var e=document.getElementById("l"+i);
-    e.textContent=lp[i].toLocaleString();
-    var p=sLP>0?lp[i]/sLP:1;
-    e.style.color=p<=0.15?"#e05050":p<=0.35?"#e8a050":"#e8e4f0";
-  }
-  document.getElementById("tn").textContent=turn;
-}
-function al(p,a){lp[p]=Math.max(0,lp[p]+a);ul();addL("lpL","P"+p+": "+(a>0?"+":"")+a+" = "+lp[p]);}
-function ac(p,s){var v=parseInt(document.getElementById("ca").value)||0;if(v)al(p,s*v);}
-function hv(){lp[1]=Math.floor(lp[1]/2);lp[2]=Math.floor(lp[2]/2);ul();addL("lpL","Halved");}
-function rl(){lp[1]=sLP;lp[2]=sLP;turn=1;ul();addL("lpL","Reset");}
-function ct(d){turn=Math.max(1,turn+d);document.getElementById("tn").textContent=turn;}
-
-// TIMER
-function ft(s){var m=Math.floor(s/60),sc=s%60;return(m<10?"0":"")+m+":"+(sc<10?"0":"")+sc;}
-function ut(){
-  var d=document.getElementById("td"),b=document.getElementById("tb");
-  d.textContent=ft(tL);
-  d.className="tdig"+(tL<=0?" d":tL<=60?" u":"");
-  b.style.width=(tT>0?Math.round(tL/tT*100):0)+"%";
-  b.style.background=tL<=0?"#e05050":tL<=60?"#e8a050":"#e8d88a";
-  document.getElementById("tl").textContent=tL<=0?"Time is up!":tR?"Running":"Round Timer";
-}
-function spr(m){paT();tT=m*60;tL=m*60;ut();}
-function act(){var v=parseInt(document.getElementById("cm").value);if(v&&v>0){paT();tT=v*60;tL=v*60;ut();}}
-function stT(){if(tR||tL<=0)return;tR=true;tI=setInterval(function(){if(tL>0){tL--;ut();}else{clearInterval(tI);tR=false;}},1000);}
-function paT(){clearInterval(tI);tR=false;ut();}
-function reT(){paT();tL=tT;ut();}
-function aT(m){tL=Math.min(tL+m*60,9999);tT=Math.max(tT,tL);ut();}
-
-// DICE
-function fc(){
-  var h=Math.random()<0.5;
-  document.getElementById("ci").textContent=h?"HEADS":"TAILS";
-  document.getElementById("ci").style.color=h?"#40c880":"#5090e0";
-  document.getElementById("ct_").textContent=h?"Heads":"Tails";
-  addL("dL","Coin: "+(h?"Heads":"Tails"));
-}
-function cq(d){dQ=Math.max(1,Math.min(6,dQ+d));document.getElementById("dq").textContent=dQ;}
-function rd(sides){
-  var rolls=[],total=0;
-  for(var i=0;i<dQ;i++){var r=Math.floor(Math.random()*sides)+1;rolls.push(r);total+=r;}
-  var box=document.getElementById("pb");box.innerHTML="";
-  rolls.forEach(function(r){var e=document.createElement("div");e.className="pip"+(r===sides?" hi":"");e.textContent=r;box.appendChild(e);});
-  var tr=document.getElementById("tr_");
-  if(dQ>1){tr.style.display="flex";document.getElementById("tv").textContent=total;}else tr.style.display="none";
-  addL("dL","D"+sides+": "+(dQ>1?"["+rolls.join(",")+"] = "+total:rolls[0]));
-}
-
-// RULES
-function srg(g,el){
-  document.querySelectorAll("#rg .pill").forEach(function(p){p.classList.remove("on");});
-  el.classList.add("on");curRG=g;
-  loadRules(g,rr);
-}
-function rr(){
-  var q=(document.getElementById("rs")||{value:""}).value.toLowerCase().trim();
-  var list=document.getElementById("rl_");list.innerHTML="";
-  var rct=document.getElementById("rct");
-  if(!RULES[curRG]||!RULES[curRG].length){rct.textContent="Loading...";return;}
-  var all=RULES[curRG].filter(function(r){return !q||r.t.toLowerCase().indexOf(q)>=0||r.s.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;});
-  rct.textContent=all.length+" rule"+(all.length!==1?"s":"");
-  all.forEach(function(r){
-    var d=document.createElement("div");d.className="ri";
-    d.innerHTML="<div class='rtt'>"+r.t+"</div><div class='rss'>"+r.s+"</div><div class='ree'>"+r.e+"</div>";
-    d.onclick=function(){d.classList.toggle("op");};
-    list.appendChild(d);
-  });
-}
-
-// CARDS
-function scg(g,el){cGame=g;document.querySelectorAll("#pan-cards .pill").forEach(function(p){p.classList.remove("on");});el.classList.add("on");document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Type a card name and press Search</div>";}
-function scard(){
-  var q=document.getElementById("cs").value.trim();if(!q)return;
-  var k=cGame+":"+q.toLowerCase();
-  if(cCache[k]){showCard(cCache[k]);return;}
-  document.getElementById("cr").innerHTML="<div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'>Searching...</div>";
-  if(cGame==="ygo")fygo(q,k);else if(cGame==="pkm")fpkm(q,k);else if(cGame==="mtg")fmtg(q,k);
-}
-function fygo(q,k){fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(d){if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Not found.</div>";return;}var c=d.data[0];var tags=[c.type||""];if(c.attribute)tags.push(c.attribute);if(c.race)tags.push(c.race);if(c.level)tags.push("Level "+c.level);if(c.atk!==undefined)tags.push("ATK:"+c.atk);if(c.def!==undefined)tags.push("DEF:"+c.def);if(c.linkval)tags.push("Link-"+c.linkval);if(c.rank)tags.push("Rank "+c.rank);var card={name:c.name,tags:tags,text:c.desc||"No text."};cCache[k]=card;showCard(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
-function fpkm(q,k){fetch("https://api.pokemontcg.io/v2/cards?q=name:"+encodeURIComponent(q)+"&pageSize=1").then(function(r){return r.json();}).then(function(d){if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Not found.</div>";return;}var c=d.data[0];var tags=[c.supertype||""];if(c.hp)tags.push("HP:"+c.hp);if(c.types)tags.push(c.types.join("/"));var text="";if(c.abilities)c.abilities.forEach(function(a){text+="[Ability] "+a.name+": "+a.text+"\n\n";});if(c.attacks)c.attacks.forEach(function(a){text+=a.name+(a.damage?" - "+a.damage:"")+"\n"+(a.text||"")+"\n\n";});var card={name:c.name,tags:tags,text:text.trim()||"No text."};cCache[k]=card;showCard(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
-function fmtg(q,k){fetch("https://api.scryfall.com/cards/named?fuzzy="+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(c){if(c.object==="error"){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Not found.</div>";return;}var tags=[];if(c.type_line)tags.push(c.type_line);if(c.mana_cost)tags.push(c.mana_cost);if(c.power)tags.push("P/T:"+c.power+"/"+c.toughness);var text=c.oracle_text||"";if(c.card_faces)text=c.card_faces.map(function(f){return f.name+"\n"+f.oracle_text;}).join("\n---\n");var card={name:c.name,tags:tags,text:text||"No text."};cCache[k]=card;showCard(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
-function showCard(card){var th=card.tags.filter(function(t){return t;}).map(function(t){return "<span class='ctag'>"+t+"</span>";}).join("");document.getElementById("cr").innerHTML="<div class='card' style='border-color:rgba(232,216,138,0.2)'><div class='cn'>"+card.name+"</div><div style='display:flex;flex-wrap:wrap;margin-bottom:4px'>"+th+"</div><div class='cx'>"+card.text.replace(/\n/g,"<br>")+"</div></div>";}
-
-// MATCH
-function aw(p){W[p]++;document.getElementById("w"+p).textContent=W[p];addL("mL","P"+p+" wins game "+gNum);}
-function ng(){gNum++;document.getElementById("gn").textContent=gNum;lp[1]=sLP;lp[2]=sLP;turn=1;ul();}
-function rmatch(){W[1]=0;W[2]=0;gNum=1;document.getElementById("w1").textContent=0;document.getElementById("w2").textContent=0;document.getElementById("gn").textContent=1;}
-
-// JUDGE
-function jg(g,el){jGame=g;document.querySelectorAll(".jt").forEach(function(t){t.classList.remove("on");});el.classList.add("on");}
-function rsz(ta){ta.style.height="36px";ta.style.height=Math.min(ta.scrollHeight,76)+"px";}
-function ojk(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sj();}}
-function jmsg(role,text,badge){
-  var msgs=document.getElementById("jm");
-  var div=document.createElement("div");div.className="msg "+(role==="user"?"mu":"ma");
+function jmsg(who,text,label){
+  var el=document.getElementById("jm");
+  var d=document.createElement("div");
+  d.className="msg "+(who==="user"?"mu":"ma");
   var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-  var bh=badge?"<span class='"+(badge==="Official Ruling"?"rbadge":"aibadge")+"'>"+badge+"</span><br>":"";
-  div.innerHTML=bh+"<div class='bub'>"+text+"</div><span class='mt'>"+t+"</span>";
-  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+  d.innerHTML=(label?"<div class='mlbl'>"+label+"</div>":"")+"<div class='bub'>"+text+"</div><div style='font-size:10px;color:var(--text2);padding:2px 4px;"+(who==="user"?"text-align:right":"")+"'>"+t+"</div>";
+  el.appendChild(d);
+  el.scrollTop=el.scrollHeight;
 }
-function sj(){
-  var inp=document.getElementById("ji");
-  var q=inp.value.trim();if(!q)return;
-  inp.value="";inp.style.height="36px";
-  jmsg("user",q);
-  document.getElementById("isb").disabled=true;
-  if(!cardsLoaded){
-    jmsg("ai","Loading rulings database...","");
-    loadCards(function(){answerQ(q);});
-  } else {answerQ(q);}
+
+function ar(el){
+  el.style.height="42px";
+  el.style.height=Math.min(el.scrollHeight,120)+"px";
 }
+
+function ek(e){
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sj();}
+}
+
 function extractCardNames(q){
-  // Split on action words to find card name candidates
   var clean=q.replace(/[\u2018\u2019\u0060]/g,"'").replace(/[^a-zA-Z0-9\-' ]/g," ");
-  var parts=clean.split(/\b(?:activates?|resolves?|uses?|targets?|destroys?|negates?|summons?|tributes?|detaches?|equips?|banishes?|discards?|draws?|attacks?|declares?|chains?|responds?|responds?|its|their|your|my|the|a|an)\b/gi);
+  var parts=clean.split(/\b(?:activates?|resolves?|uses?|targets?|destroys?|negates?|summons?|tributes?|detaches?|equips?|banishes?|discards?|draws?|attacks?|declares?|chains?|its|their|your|my|the|a|an)\b/gi);
   var stop={a:1,i:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,on:1,at:1,be:1,by:1,or:1,so:1,up:1,how:1,can:1,and:1,not:1,for:1,its:1,but:1,yes:1,no:1,any:1,all:1,now:1,then:1,when:1,from:1,with:1,both:1,does:1,once:1,that:1,this:1,what:1,have:1,will:1,turn:1,hand:1,deck:1,field:1,grave:1,effect:1,effects:1,chain:1,cost:1};
   var candidates=[];
   parts.forEach(function(p){
     var trimmed=p.trim().replace(/^(opponents?|opponent's|player's|players?)\s+/i,"").trim();
     var words=trimmed.split(/\s+/).filter(function(w){return w.length>1&&!stop[w.toLowerCase()];});
-    // Try longest match first (up to 6 words), then shorter
     for(var len=Math.min(6,words.length);len>=2;len--){
       var candidate=words.slice(0,len).join(" ");
       if(candidate.length>4)candidates.push(candidate);
     }
   });
-  // Deduplicate
   var seen={};
   return candidates.filter(function(c){var k=c.toLowerCase();if(seen[k])return false;seen[k]=true;return true;});
 }
 
 function fetchCardTexts(q,game,cb){
-  if(game!=="ygo"&&game!=="all"){cb([]);return;}
+  if(game!=="ygo"){cb([]);return;}
   var names=extractCardNames(q);
   if(!names.length){cb([]);return;}
   var results=[],pending=names.length,done=false;
   function finish(){if(done)return;done=true;cb(results);}
-  // Timeout after 4 seconds
   var timer=setTimeout(finish,4000);
   names.forEach(function(name){
     fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(name))
@@ -472,55 +609,92 @@ function fetchCardTexts(q,game,cb){
   });
 }
 
+function sj(){
+  var inp=document.getElementById("ji");
+  var q=inp.value.trim();if(!q)return;
+  inp.value="";inp.style.height="42px";
+  jmsg("user",q);
+  document.getElementById("isb").disabled=true;
+  if(curGame==="ygo"&&!cardsLoaded){
+    jmsg("ai","Loading rulings database...","");
+    loadCards(function(){answerQ(q);});
+  } else {answerQ(q);}
+}
+
 function answerQ(q){
-  var ruling=findRuling(q);
-  if(ruling){jmsg("ai",ruling.a,"Official Ruling");document.getElementById("isb").disabled=false;return;}
+  if(curGame==="ygo"){
+    var ruling=findRuling(q);
+    if(ruling){jmsg("ai",ruling.a,"Official Ruling");document.getElementById("isb").disabled=false;return;}
+  }
   var msgs=document.getElementById("jm");
   var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";
-  tp.innerHTML="<div class='bub' style='color:#505068'>Looking up card texts...</div>";
+  tp.innerHTML="<div class='bub' style='color:var(--text2)'>Looking up card texts...</div>";
   msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
 
-  fetchCardTexts(q,jGame,function(cardTexts){
+  fetchCardTexts(q,curGame,function(cardTexts){
     var t=document.getElementById("tp");
-    if(t)t.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
+    if(t)t.innerHTML="<div class='bub' style='color:var(--text2)'>Thinking...</div>";
 
     var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2;});
     var res=[];
-    var games=jGame==="all"?Object.keys(RULES):[jGame];
-    games.forEach(function(g){(RULES[g]||[]).forEach(function(r){var sc=0;wds.forEach(function(w){if(r.t.toLowerCase().indexOf(w)>=0)sc+=15;if(r.e.toLowerCase().indexOf(w)>=0)sc+=3;});if(sc>5)res.push({r:r,s:sc});});});
+    if(curGame==="ygo")(RULES["ygo"]||[]).forEach(function(r){var sc=0;wds.forEach(function(w){if(r.t.toLowerCase().indexOf(w)>=0)sc+=15;if(r.e.toLowerCase().indexOf(w)>=0)sc+=3;});if(sc>5)res.push({r:r,s:sc});});
     res.sort(function(a,b){return b.s-a.s;});
     var ctx=res.slice(0,5).map(function(x){return x.r.t+": "+x.r.e;}).join("\n\n");
 
-    var gl={all:"Yu-Gi-Oh!, Pokemon, MTG, Digimon, Gundam, One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic: The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
-    var sys="You are a certified "+gl[jGame]+" Head Judge. Give a direct definitive ruling. Use provided card texts for accuracy. If no card text is provided, use your expert knowledge. Plain text only. Under 150 words.\n\nKEY RULES: Costs paid before chain resolves. Chain resolves Last In First Out (LIFO). Effects that have already been activated still resolve even if the card is destroyed. IF triggers never miss timing. WHEN optional triggers can miss timing.";
-    if(cardTexts.length>0)sys+="\n\nEXACT CARD TEXTS (use these only - do not guess effects):\n"+cardTexts.join("\n\n");
+    var gNames={ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic: The Gathering",dig:"Digimon TCG",gundam:"Gundam Card Game",op:"One Piece TCG"};
+    var sys="You are a certified "+gNames[curGame]+" Head Judge. Give a direct, accurate ruling. Use provided card texts for accuracy. If no card text is provided, use your expert knowledge. Plain text only. Under 150 words.";
+    if(cardTexts.length>0)sys+="\n\nCARD TEXTS FOUND (use these for accuracy, use your knowledge for any cards not listed):\n"+cardTexts.join("\n\n");
     if(ctx)sys+="\n\nRELEVANT RULES:\n"+ctx;
 
-    // Embed card texts directly in question so Worker can't ignore them
-    // Nonce goes INTO the question string to bust any Worker-side cache keyed on question
     var nonce="[ref:"+Math.random().toString(36).slice(2,7)+"]";
     var fullQ=q+" "+nonce;
-    if(cardTexts.length>0){
-      fullQ="CARD TEXTS FOUND (use these for accuracy, use your knowledge for any cards not listed):\n"+cardTexts.join("\n\n")+"\n\nQUESTION: "+q+" "+nonce;
-    }
-    // Show which cards were found
-    var tEl=document.getElementById("tp");
-    if(tEl){
-      var label=cardTexts.length>0?"Found card texts: "+cardTexts.map(function(t){return t.split(":")[0];}).join(", "):"Thinking...";
-      tEl.innerHTML="<div class='bub' style='color:#505068'>"+label+"</div>";
-    }
-    fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:fullQ,nonce:Math.random().toString(36).slice(2)})})
+    if(cardTexts.length>0)fullQ="CARD TEXTS:\n"+cardTexts.join("\n\n")+"\n\nQUESTION: "+q+" "+nonce;
+
+    var label=cardTexts.length>0?"Found: "+cardTexts.map(function(t){return t.split(":")[0];}).join(", "):"";
+    if(label&&document.getElementById("tp"))document.getElementById("tp").innerHTML="<div class='bub' style='color:var(--text2)'>"+label+"</div>";
+
+    fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:fullQ})})
     .then(function(r){return r.json();})
-    .then(function(d){var t=document.getElementById("tp");if(t)t.remove();var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");jmsg("ai",ans,"AI Judge");})
+    .then(function(d){
+      var t=document.getElementById("tp");if(t)t.remove();
+      var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
+      jmsg("ai",ans,"AI Judge");
+    })
     .catch(function(){var t=document.getElementById("tp");if(t)t.remove();jmsg("ai","Connection error.","");})
     .finally(function(){document.getElementById("isb").disabled=false;});
   });
 }
 
-// LOG
-function addL(id,msg){var el=document.getElementById(id);if(!el)return;var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});var line=document.createElement("div");line.className="ll";line.innerHTML="<b>"+msg+"</b><span>"+t+"</span>";el.insertBefore(line,el.firstChild);while(el.children.length>10)el.removeChild(el.lastChild);}
+// ALARM
+function playAlarm(){
+  try{
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    function beep(freq,start,dur){
+      var o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.value=freq;o.type='square';
+      g.gain.setValueAtTime(0.3,ctx.currentTime+start);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+start+dur);
+      o.start(ctx.currentTime+start);
+      o.stop(ctx.currentTime+start+dur+0.1);
+    }
+    beep(880,0,0.15);beep(880,0.2,0.15);beep(880,0.4,0.15);beep(1100,0.7,0.4);
+  }catch(e){}
+}
 
-ut();
+// BOOT
+(function(){
+  ut();
+  try{
+    var g=localStorage.getItem("tcgGame");
+    if(g&&GCFG[g]){
+      curGame=g;selGame=g;
+      document.getElementById("S").classList.add("hide");
+      document.getElementById("A").classList.add("show");
+      applyGame(g);
+    }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
