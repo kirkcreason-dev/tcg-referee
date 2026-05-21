@@ -426,7 +426,7 @@ function sj(){
 }
 function extractCardNames(q){
   // Split on action words to find card name candidates
-  var clean=q.replace(/[''']/g,"'").replace(/[^a-zA-Z0-9\-' ]/g," ");
+  var clean=q.replace(/[\u2018\u2019\u0060]/g,"'").replace(/[^a-zA-Z0-9\-' ]/g," ");
   var parts=clean.split(/\b(?:activates?|resolves?|uses?|targets?|destroys?|negates?|summons?|tributes?|detaches?|equips?|banishes?|discards?|draws?|attacks?|declares?|chains?|responds?|responds?|its|their|your|my|the|a|an)\b/gi);
   var stop={a:1,i:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,on:1,at:1,be:1,by:1,or:1,so:1,up:1,how:1,can:1,and:1,not:1,for:1,its:1,but:1,yes:1,no:1,any:1,all:1,now:1,then:1,when:1,from:1,with:1,both:1,does:1,once:1,that:1,this:1,what:1,have:1,will:1,turn:1,hand:1,deck:1,field:1,grave:1,effect:1,effects:1,chain:1,cost:1};
   var candidates=[];
@@ -491,7 +491,7 @@ function answerQ(q){
 
     var gl={all:"Yu-Gi-Oh!, Pokemon, MTG, Digimon, Gundam, One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic: The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
     var sys="You are a certified "+gl[jGame]+" Head Judge. Give a direct definitive ruling based ONLY on the exact card texts provided. Do not invent or assume card effects. Plain text only. Under 200 words.\n\nKEY RULES: Costs paid before chain resolves. Chain resolves Last In First Out (LIFO). Effects that have already been activated still resolve even if the card is destroyed. IF triggers never miss timing. WHEN optional triggers can miss timing.";
-    if(cardTexts.length>0)sys+="\n\nEXACT CARD TEXTS (use these only — do not guess effects):\n"+cardTexts.join("\n\n");
+    if(cardTexts.length>0)sys+="\n\nEXACT CARD TEXTS (use these only - do not guess effects):\n"+cardTexts.join("\n\n");
     if(ctx)sys+="\n\nRELEVANT RULES:\n"+ctx;
 
     // Embed card texts directly in question so Worker can't ignore them
