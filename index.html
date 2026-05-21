@@ -501,7 +501,7 @@ function answerQ(q){
       var label=cardTexts.length>0?"Found card texts: "+cardTexts.map(function(t){return t.split(":")[0];}).join(", "):"Thinking...";
       tEl.innerHTML="<div class='bub' style='color:#505068'>"+label+"</div>";
     }
-    fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:fullQ})})
+    fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:fullQ,nonce:Math.random().toString(36).slice(2)})})
     .then(function(r){return r.json();})
     .then(function(d){var t=document.getElementById("tp");if(t)t.remove();var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");jmsg("ai",ans,"AI Judge");})
     .catch(function(){var t=document.getElementById("tp");if(t)t.remove();jmsg("ai","Connection error.","");})
