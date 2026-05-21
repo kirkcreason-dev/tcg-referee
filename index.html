@@ -740,14 +740,21 @@ function loadSyns(cb){
   s.src=BASE+"rules_syns.js?v=1";
   s.onload=function(){
     if(window.SYNS) SYNS=window.SYNS;
-    // Also load card rulings
-    var s2=document.createElement("script");
-    s2.src=BASE+"rules_cards.js?v=1";
-    s2.onload=function(){
-      window._synsLoaded=true;
-      if(cb)cb();
-    };
-    document.body.appendChild(s2);
+    // Load card rulings in 3 chunks
+    var chunks=["rules_cards_1.js","rules_cards_2.js","rules_cards_3.js"];
+    var loaded=0;
+    chunks.forEach(function(chunk){
+      var sc=document.createElement("script");
+      sc.src=BASE+chunk+"?v=1";
+      sc.onload=function(){
+        loaded++;
+        if(loaded===chunks.length){
+          window._synsLoaded=true;
+          if(cb)cb();
+        }
+      };
+      document.body.appendChild(sc);
+    });
   };
   document.body.appendChild(s);
 }
