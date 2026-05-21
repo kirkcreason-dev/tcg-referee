@@ -421,33 +421,49 @@ function sj(){
   } else {answerQ(q);}
 }
 function extractCardNames(q){
-  var known=["ash blossom","effect veiler","dark law","masked hero","nibiru","droll lock bird",
-    "called by the grave","infinite impermanence","ghost ogre","maxx c","skill drain",
-    "super starslayer","sky striker ace","clockwork night","chimeratech","cyber dragon",
-    "sangan","forbidden droplet","solemn judgment","solemn strike","dark hole","raigeki",
-    "monster reborn","mystical space typhoon","twin twisters","super polymerization",
-    "accesscode talker","apollousa","borrelsword","el shaddoll","tearlaments","kashtira",
-    "rescue rabbit","dimensional fissure","macro cosmos","mirrorjade","lubellion",
-    "baronne de fleur","stardust dragon","blue eyes","red eyes","jinzo","imperial order"];
-  var ql=q.toLowerCase(),names=[];
-  known.forEach(function(c){if(ql.indexOf(c)>=0)names.push(c);});
-  var caps=q.match(/[A-Z][a-z]+(?:\s[A-Z][a-z]+){1,4}/g)||[];
-  caps.forEach(function(m){if(names.indexOf(m.toLowerCase())<0)names.push(m);});
-  return names.slice(0,2);
+  // Split on action words to find card name candidates
+  var clean=q.replace(/[''']/g,"'").replace(/[^a-zA-Z0-9\-' ]/g," ");
+  var parts=clean.split(/\b(?:activates?|resolves?|uses?|targets?|destroys?|negates?|summons?|tributes?|detaches?|equips?|banishes?|discards?|draws?|attacks?|declares?|chains?|responds?|responds?|its|their|your|my|the|a|an)\b/gi);
+  var stop={a:1,i:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,on:1,at:1,be:1,by:1,or:1,so:1,up:1,how:1,can:1,and:1,not:1,for:1,its:1,but:1,yes:1,no:1,any:1,all:1,now:1,then:1,when:1,from:1,with:1,both:1,does:1,once:1,that:1,this:1,what:1,have:1,will:1,turn:1,hand:1,deck:1,field:1,grave:1,effect:1,effects:1,chain:1,cost:1};
+  var candidates=[];
+  parts.forEach(function(p){
+    var trimmed=p.trim().replace(/^(opponents?|opponent's|player's|players?)\s+/i,"").trim();
+    var words=trimmed.split(/\s+/).filter(function(w){return w.length>1&&!stop[w.toLowerCase()];});
+    // Try longest match first (up to 6 words), then shorter
+    for(var len=Math.min(6,words.length);len>=2;len--){
+      var candidate=words.slice(0,len).join(" ");
+      if(candidate.length>4)candidates.push(candidate);
+    }
+  });
+  // Deduplicate
+  var seen={};
+  return candidates.filter(function(c){var k=c.toLowerCase();if(seen[k])return false;seen[k]=true;return true;});
 }
 
-function fetchCardTexts(names,cb){
-  if(!names.length||jGame!=="ygo"&&jGame!=="all"){cb([]);return;}
-  var texts=[],done=0;
+function fetchCardTexts(q,game,cb){
+  if(game!=="ygo"&&game!=="all"){cb([]);return;}
+  var names=extractCardNames(q);
+  if(!names.length){cb([]);return;}
+  var results=[],pending=names.length,done=false;
+  function finish(){if(done)return;done=true;cb(results);}
+  // Timeout after 4 seconds
+  var timer=setTimeout(finish,4000);
   names.forEach(function(name){
     fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(name))
     .then(function(r){return r.json();})
     .then(function(d){
-      if(d.data&&d.data[0])texts.push(d.data[0].name+": "+d.data[0].desc);
-      done++;if(done>=names.length)cb(texts);
-    }).catch(function(){done++;if(done>=names.length)cb(texts);});
+      if(d.data&&d.data.length){
+        var c=d.data[0];
+        var already=results.some(function(r){return r.indexOf(c.name)>=0;});
+        if(!already)results.push(c.name+": "+c.desc);
+      }
+    })
+    .catch(function(){})
+    .finally(function(){
+      pending--;
+      if(pending===0){clearTimeout(timer);finish();}
+    });
   });
-  setTimeout(function(){if(done<names.length)cb(texts);},3000);
 }
 
 function answerQ(q){
@@ -455,27 +471,31 @@ function answerQ(q){
   if(ruling){jmsg("ai",ruling.a,"Official Ruling");document.getElementById("isb").disabled=false;return;}
   var msgs=document.getElementById("jm");
   var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";
-  tp.innerHTML="<div class='bub' style='color:#505068'>Looking up cards...</div>";
+  tp.innerHTML="<div class='bub' style='color:#505068'>Looking up card texts...</div>";
   msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
-  var cardNames=extractCardNames(q);
-  fetchCardTexts(cardNames,function(cardTexts){
-    var t=document.getElementById("tp");if(t)t.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
-  var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2;});
-  var res=[];
-  var games=jGame==="all"?Object.keys(RULES):[jGame];
-  games.forEach(function(g){(RULES[g]||[]).forEach(function(r){var sc=0;wds.forEach(function(w){if(r.t.toLowerCase().indexOf(w)>=0)sc+=15;if(r.e.toLowerCase().indexOf(w)>=0)sc+=3;});if(sc>5)res.push({r:r,s:sc});});});
-  res.sort(function(a,b){return b.s-a.s;});
-  var ctx=res.slice(0,5).map(function(x){return x.r.t+": "+x.r.e;}).join("\n\n");
-  var gl={all:"Yu-Gi-Oh!, Pokemon, MTG, Digimon, Gundam, One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic: The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
-  var sys="You are a certified "+gl[jGame]+" Head Judge. Give a direct definitive ruling. State yes or no first. Plain text only. Under 150 words.\n\nKEY RULES: Costs paid before chain resolves. Skill Drain only negates monsters on field. Normal Spells resolve even if destroyed. Super Polymerization is Speed 2 Quick-Play. IF triggers never miss timing. WHEN optional triggers can miss timing. Use the exact card text provided to determine rulings accurately.";
-  if(cardTexts.length>0)sys+="\n\nEXACT CARD TEXT:\n"+cardTexts.join("\n\n");
-  if(ctx)sys+="\n\nRELEVANT RULES:\n"+ctx;
-  fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:q})})
-  .then(function(r){return r.json();})
-  .then(function(d){var t=document.getElementById("tp");if(t)t.remove();var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");jmsg("ai",ans,"AI Judge");})
-  .catch(function(){var t=document.getElementById("tp");if(t)t.remove();jmsg("ai","Connection error.","");})
-  .finally(function(){document.getElementById("isb").disabled=false;});
-  }); // end fetchCardTexts
+
+  fetchCardTexts(q,jGame,function(cardTexts){
+    var t=document.getElementById("tp");
+    if(t)t.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
+
+    var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2;});
+    var res=[];
+    var games=jGame==="all"?Object.keys(RULES):[jGame];
+    games.forEach(function(g){(RULES[g]||[]).forEach(function(r){var sc=0;wds.forEach(function(w){if(r.t.toLowerCase().indexOf(w)>=0)sc+=15;if(r.e.toLowerCase().indexOf(w)>=0)sc+=3;});if(sc>5)res.push({r:r,s:sc});});});
+    res.sort(function(a,b){return b.s-a.s;});
+    var ctx=res.slice(0,5).map(function(x){return x.r.t+": "+x.r.e;}).join("\n\n");
+
+    var gl={all:"Yu-Gi-Oh!, Pokemon, MTG, Digimon, Gundam, One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic: The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
+    var sys="You are a certified "+gl[jGame]+" Head Judge. Give a direct definitive ruling based ONLY on the exact card texts provided. Do not invent or assume card effects. Plain text only. Under 200 words.\n\nKEY RULES: Costs paid before chain resolves. Chain resolves Last In First Out (LIFO). Effects that have already been activated still resolve even if the card is destroyed. IF triggers never miss timing. WHEN optional triggers can miss timing.";
+    if(cardTexts.length>0)sys+="\n\nEXACT CARD TEXTS (use these only — do not guess effects):\n"+cardTexts.join("\n\n");
+    if(ctx)sys+="\n\nRELEVANT RULES:\n"+ctx;
+
+    fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:q})})
+    .then(function(r){return r.json();})
+    .then(function(d){var t=document.getElementById("tp");if(t)t.remove();var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");jmsg("ai",ans,"AI Judge");})
+    .catch(function(){var t=document.getElementById("tp");if(t)t.remove();jmsg("ai","Connection error.","");})
+    .finally(function(){document.getElementById("isb").disabled=false;});
+  });
 }
 
 // LOG
