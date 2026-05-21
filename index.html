@@ -10,7 +10,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
 .app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;}
 .top{background:#12122a;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,216,138,0.2);flex-shrink:0;}
 .logo{color:#e8d88a;font-size:14px;font-weight:700;}
-.badge{color:#e8d88a;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(232,216,138,0.3);cursor:pointer;}
+.badge{color:#e8d88a;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(232,216,138,0.3);}
 .tabs{display:flex;background:#0d0d18;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
 .tab{flex:1;padding:9px 2px 7px;text-align:center;font-size:9px;color:#505068;cursor:pointer;border-bottom:2px solid transparent;}
 .tab.on{color:#e8d88a;border-bottom-color:#e8d88a;}
@@ -99,7 +99,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
 <div class="setup" id="setupScreen">
   <div class="sh">
     <h1>TCG Referee</h1>
-    <p>Select your game to get started. Switch games anytime from the top bar.</p>
+    <p>Select your game to get started.</p>
   </div>
   <div class="sb2">
     <div class="gc" id="gc-ygo" onclick="pickGame('ygo',this)">
@@ -142,7 +142,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
 <div class="app" id="mainApp" style="display:none">
 <div class="top">
   <span class="logo">TCG Referee</span>
-  <span class="badge" id="ab" onclick="changeGame()">Yu-Gi-Oh! &#9881;</span>
+  <span class="badge" id="ab">Yu-Gi-Oh!</span>
 </div>
 <div class="tabs">
   <div class="tab on" onclick="sw('lp',this)">LP</div>
@@ -181,6 +181,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
 </div>
 <div class="g2"><button class="btn r" onclick="rl()">Reset</button><button class="btn" onclick="hv()">Halve Both</button></div>
 <div class="log" id="lpL"><div class="ll"><b>Game started</b><span></span></div></div>
+<button class="btn" onclick="changeGame()" style="width:100%;margin-top:10px;color:#9090a8;border-color:rgba(144,144,168,0.3);">&#9881; Change Game</button>
 </div>
 
 <!-- TIMER -->
@@ -316,15 +317,13 @@ function finishSetup(){
   applyGame(selGame);
 }
 function changeGame(){
-  if(confirm("Change game? Your current LP and match data will be reset.")){
-    localStorage.removeItem("tcgGame");
-    location.reload();
-  }
+  localStorage.removeItem("tcgGame");
+  location.reload();
 }
 function applyGame(g){
   var cfg=GCFG[g];
   sLP=cfg.lp;lp[1]=cfg.lp;lp[2]=cfg.lp;
-  document.getElementById("ab").textContent=cfg.name+" \u2699";
+  document.getElementById("ab").textContent=cfg.name;
   turn=1;ul();addL("lpL",cfg.name+" started");
   var gmap={ygo:"Yu-Gi-Oh!",pkm:"Pokemon",mtg:"MTG",dig:"Digimon",gundam:"Gundam",op:"One Piece"};
   document.querySelectorAll("#pan-lp .pill").forEach(function(p){p.classList.toggle("on",p.textContent===gmap[g]);});
@@ -718,12 +717,70 @@ function addL(id,msg){
 ut();
 
 // Load rules.js after page renders - with cache busting
-window.addEventListener("load",function(){
+var rulesLoaded={};
+var BASE="https://kirkcreason-dev.github.io/tcg-referee/";
+
+function loadGameRules(game, cb){
+  if(rulesLoaded[game]){if(cb)cb();return;}
   var s=document.createElement("script");
-  s.src="https://kirkcreason-dev.github.io/tcg-referee/rules.js?v=7";
-  s.onload=function(){if(typeof rr==="function")rr();};
-  s.onerror=function(){console.log("Rules failed to load");};
+  s.src=BASE+"rules_"+game+".js?v=1";
+  s.onload=function(){
+    // Merge into RULES object
+    var key="RULES_"+game.toUpperCase();
+    if(window[key]) RULES[game]=window[key];
+    rulesLoaded[game]=true;
+    if(cb)cb();
+  };
   document.body.appendChild(s);
+}
+
+function loadSyns(cb){
+  if(window._synsLoaded){if(cb)cb();return;}
+  var s=document.createElement("script");
+  s.src=BASE+"rules_syns.js?v=1";
+  s.onload=function(){
+    if(window.SYNS) SYNS=window.SYNS;
+    // Also load card rulings
+    var s2=document.createElement("script");
+    s2.src=BASE+"rules_cards.js?v=1";
+    s2.onload=function(){
+      window._synsLoaded=true;
+      if(cb)cb();
+    };
+    document.body.appendChild(s2);
+  };
+  document.body.appendChild(s);
+}
+
+// Override sw to lazy load rules when Rules tab opened
+var _origSw=sw;
+function sw(id,el){
+  _origSw(id,el);
+  if(id==="rules"||id==="judge"){
+    var saved=localStorage.getItem("tcgGame")||"ygo";
+    loadSyns(function(){
+      loadGameRules(saved,function(){
+        if(id==="rules")rr();
+      });
+    });
+  }
+}
+
+// Override srg to load rules for selected game
+var _origSrg=srg;
+function srg(g,el){
+  _origSrg(g,el);
+  loadGameRules(g,function(){rr();});
+}
+
+// Load current game rules in background after 2s
+window.addEventListener("load",function(){
+  setTimeout(function(){
+    var saved=localStorage.getItem("tcgGame")||"ygo";
+    loadSyns(function(){
+      loadGameRules(saved,null);
+    });
+  },2000);
 });
 </script>
 </body>
