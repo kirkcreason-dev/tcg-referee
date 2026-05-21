@@ -1499,4 +1499,4 @@ var CARD_RULINGS_2 = {ygo: [
     q: "What does unaffected by all card effects protect against?",
     a: "Unaffected by all card effects protects against Spell effects, Trap effects, and monster effects. The monster cannot be targeted by effects, its ATK and DEF cannot be changed by effects, and it cannot be destroyed by card effects. Only game mechanics, costs, and battle can interact with it."
   }
-]}};
+]};

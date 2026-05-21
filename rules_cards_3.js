@@ -485,6 +485,11 @@ var CARD_RULINGS_3 = {ygo: [
     a: "No. If a monster leaves the field as an activation cost it is no longer on the field when Skill Drain would try to negate it. Skill Drain only negates effects of face-up monsters currently on the field. Examples: Rescue Rabbit banishes itself, Sky Striker Raye tributes itself, Effect Veiler sends itself to GY."
   },
   {
+    cards: ["super starslayer", "ty", "ultimate tyranno", "sky striker", "zero", "xyz", "chain"],
+    q: "I activate Super Starslayer TY as CL1 and opponent chains Sky Striker Ace Zero as CL2. How do both effects resolve?",
+    a: "Chain resolves Last In First Out. Sky Striker Ace Zero resolves first as CL2. Zero negates the effects of 1 face-up monster on the field until end of turn. Zero can negate TY's effects. Super Starslayer TY does NOT target - it destroys 1 CARD (not just monsters - any card on the field) chosen at resolution, then inflicts damage equal to that card's original ATK. If Zero negated TY's effects TY resolves negated and does nothing. If Zero targeted a different monster TY resolves normally destroying 1 card chosen at resolution and dealing damage equal to its original ATK."
+  },
+  {
     cards: ["rescue rabbit", "skill drain", "banish cost", "resolve"],
     q: "Skill Drain is active. I Normal Summon Rescue Rabbit and activate its effect banishing itself. Does it resolve?",
     a: "Yes. Rescue Rabbit banishes itself as the activation cost. Since Rabbit is no longer on the field when Skill Drain would negate it, Skill Drain cannot apply. The two Normal Monsters are successfully Special Summoned from the Deck."
@@ -1424,4 +1429,4 @@ var CARD_RULINGS_3 = {ygo: [
     q: "Does the Commander Tax apply when cast from hand or graveyard?",
     a: "No. The Commander Tax only increases when casting from the Command Zone. Casting your Commander from hand or graveyard does not increase the tax and does not count as a cast from the Command Zone for tax purposes. The tax accumulates separately only for Command Zone casts."
   }
-]}};
+]};

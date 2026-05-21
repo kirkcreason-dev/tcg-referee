@@ -1499,28 +1499,4 @@ var CARD_RULINGS_1 = {ygo: [
     q: "Reinforcement of the Army searches Level 4 or lower Warrior monsters. Does it check original or current Type?",
     a: "Reinforcement of the Army checks the original printed Type of the monster in the Deck. A monster with Warrior printed on it qualifies regardless of any Type-changing effects. Effects do not change cards in the Deck."
   }
-]}};
-
-// Card ruling search function
-function findCardRuling(question, game) {
-  var q = question.toLowerCase();
-  // Merge all chunks
-  var allRulings = [];
-  for (var ci = 1; ci <= 3; ci++) {
-    var cr = window['CARD_RULINGS_' + ci];
-    if (cr && cr.ygo) allRulings = allRulings.concat(cr.ygo);
-  }
-  var best = null;
-  var bestScore = 0;
-  allRulings.forEach(function(ruling) {
-    var matched = ruling.cards.filter(function(c) {
-      return q.indexOf(c.toLowerCase()) >= 0;
-    }).length;
-    var threshold = Math.max(2, Math.ceil(ruling.cards.length * 0.5));
-    if (matched >= threshold) {
-      var score = matched * 20;
-      if (score > bestScore) { bestScore = score; best = ruling; }
-    }
-  });
-  return bestScore >= 40 ? best : null;
-}
+]};
