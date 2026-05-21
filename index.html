@@ -202,8 +202,10 @@ var GCFG={ygo:{n:"Yu-Gi-Oh!",lp:8000},pkm:{n:"Pokemon",lp:0},mtg:{n:"MTG",lp:20}
 
 // BOOT - check saved game
 (function(){
-  var g=localStorage.getItem("tcgGame");
-  if(g&&GCFG[g]){document.getElementById("S").style.display="none";document.getElementById("A").style.display="flex";applyGame(g);}
+  try{
+    var g=localStorage.getItem("tcgGame");
+    if(g&&GCFG[g]){document.getElementById("S").style.display="none";document.getElementById("A").style.display="flex";applyGame(g);}
+  }catch(e){}
 })();
 
 // SETUP
@@ -215,12 +217,12 @@ function pg(g,el){
 }
 function go(){
   if(!selGame)return;
-  localStorage.setItem("tcgGame",selGame);
+  try{localStorage.setItem("tcgGame",selGame);}catch(e){}
   document.getElementById("S").style.display="none";
   document.getElementById("A").style.display="flex";
   applyGame(selGame);
 }
-function chg(){localStorage.removeItem("tcgGame");location.reload();}
+function chg(){try{localStorage.removeItem("tcgGame");}catch(e){}location.reload();}
 
 function applyGame(g){
   var c=GCFG[g];
@@ -239,7 +241,7 @@ function buildPills(active){
     (function(gg){p.onclick=function(){
       document.querySelectorAll("#lpg .pill").forEach(function(x){x.classList.remove("on");});
       p.classList.add("on");
-      localStorage.setItem("tcgGame",gg);
+      try{localStorage.setItem("tcgGame",gg);}catch(e){}
       document.getElementById("ab").textContent=GCFG[gg].n;
       sLP=GCFG[gg].lp;lp[1]=sLP;lp[2]=sLP;turn=1;ul();curRG=gg;
     };})(g);
