@@ -294,6 +294,101 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'Helvetica
 
 <script>
 var BASE="https://kirkcreason-dev.github.io/tcg-referee/";
+
+// YGO CARD CACHE
+var YGO_CARDS={};  // name.toLowerCase() -> desc
+var ygoCardsReady=false;
+var ygoCardsLoading=false;
+var ygoCardsCallbacks=[];
+
+function loadYgoCardCache(cb){
+  if(ygoCardsReady){cb();return;}
+  ygoCardsCallbacks.push(cb);
+  if(ygoCardsLoading)return;
+  ygoCardsLoading=true;
+
+  // Try localStorage first
+  try{
+    var cached=localStorage.getItem('ygo_cards_v1');
+    var cacheTime=localStorage.getItem('ygo_cards_time');
+    var age=Date.now()-(parseInt(cacheTime)||0);
+    if(cached&&age<30*24*60*60*1000){
+      YGO_CARDS=JSON.parse(cached);
+      ygoCardsReady=true;
+      ygoCardsLoading=false;
+      ygoCardsCallbacks.forEach(function(f){f();});
+      ygoCardsCallbacks=[];
+      return;
+    }
+  }catch(e){}
+
+  // Fetch all cards from YGOPRODeck
+  var allCards={};
+  var offset=0;
+  var batchSize=500;
+  var maxCards=15000;
+
+  function fetchBatch(){
+    fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?num='+batchSize+'&offset='+offset+'&select=name,desc')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.data&&d.data.length){
+        d.data.forEach(function(c){
+          allCards[c.name.toLowerCase()]=c.desc;
+        });
+        offset+=d.data.length;
+        if(d.data.length===batchSize&&offset<maxCards){
+          fetchBatch();
+        } else {
+          finishCache();
+        }
+      } else {
+        finishCache();
+      }
+    })
+    .catch(function(){
+      // Failed - still continue with whatever we have
+      finishCache();
+    });
+  }
+
+  function finishCache(){
+    YGO_CARDS=allCards;
+    ygoCardsReady=true;
+    ygoCardsLoading=false;
+    try{
+      localStorage.setItem('ygo_cards_v1',JSON.stringify(allCards));
+      localStorage.setItem('ygo_cards_time',Date.now().toString());
+    }catch(e){}
+    ygoCardsCallbacks.forEach(function(f){f();});
+    ygoCardsCallbacks=[];
+  }
+
+  fetchBatch();
+}
+
+function lookupCardsInQuestion(q){
+  if(!ygoCardsReady)return[];
+  var ql=q.toLowerCase();
+  var results=[];
+  // Find card names mentioned in the question
+  // Sort by length desc so longer names match first
+  var names=Object.keys(YGO_CARDS).sort(function(a,b){return b.length-a.length;});
+  var found={};
+  for(var i=0;i<names.length;i++){
+    var n=names[i];
+    if(n.length>4&&ql.indexOf(n)>=0&&!found[n]){
+      found[n]=true;
+      results.push(names[i]);
+      if(results.length>=5)break;
+    }
+  }
+  return results.map(function(n){
+    // Find original case name
+    return n+': '+YGO_CARDS[n];
+  });
+}
+
 var GCFG={
   ygo:{n:"Yu-Gi-Oh!",lp:8000,api:"ygo"},
   pkm:{n:"Pokemon TCG",lp:0,api:"pkm"},
@@ -371,7 +466,7 @@ function sw(id,el){
 // RULES
 function loadScript(src,cb){
   var s=document.createElement("script");
-  s.src=src+"?v=6";
+  s.src=src+"?v=7";
   s.onload=function(){if(cb)cb();};
   s.onerror=function(){if(cb)cb();};
   document.body.appendChild(s);
@@ -628,10 +723,18 @@ function answerQ(q){
   }
   var msgs=document.getElementById("jm");
   var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";
-  tp.innerHTML="<div class='bub' style='color:var(--text2)'>Looking up card texts...</div>";
+  tp.innerHTML="<div class='bub' style='color:var(--text2)'>"+(curGame==="ygo"?"Searching card database...":"Looking up card texts...")+'</div>';
   msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
 
-  fetchCardTexts(q,curGame,function(cardTexts){
+  if(curGame==="ygo"){
+    loadYgoCardCache(function(){
+      proceedWithCards(lookupCardsInQuestion(q));
+    });
+  } else {
+    fetchCardTexts(q,curGame,function(ct){proceedWithCards(ct);});
+  }
+
+  function proceedWithCards(cardTexts){
     var t=document.getElementById("tp");
     if(t)t.innerHTML="<div class='bub' style='color:var(--text2)'>Thinking...</div>";
 
@@ -662,7 +765,7 @@ function answerQ(q){
     })
     .catch(function(){var t=document.getElementById("tp");if(t)t.remove();jmsg("ai","Connection error.","");})
     .finally(function(){document.getElementById("isb").disabled=false;});
-  });
+  }
 }
 
 // ALARM
