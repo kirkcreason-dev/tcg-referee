@@ -5,145 +5,111 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>TCG Referee</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;background:#0d0d12;color:#e8e4f0;height:100vh;overflow:hidden;}
-.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;}
-.top{background:#12122a;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,216,138,0.2);flex-shrink:0;}
-.logo{color:#e8d88a;font-size:14px;font-weight:700;}
-.badge{color:#e8d88a;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(232,216,138,0.3);}
-.tabs{display:flex;background:#0d0d18;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
-.tab{flex:1;padding:9px 2px 7px;text-align:center;font-size:9px;color:#505068;cursor:pointer;border-bottom:2px solid transparent;}
-.tab.on{color:#e8d88a;border-bottom-color:#e8d88a;}
-.panel{display:none;flex:1;overflow-y:auto;padding:14px;}
-.panel.on{display:block;}
-.sec{font-size:10px;color:#606070;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
-.card{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;margin-bottom:10px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.btn{padding:10px 8px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:8px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;}
-.btn.r{color:#e05050;border-color:rgba(224,80,80,0.4);}
-.btn.g{color:#40c880;border-color:rgba(64,200,128,0.4);background:rgba(64,200,128,0.06);}
-.btn.y{background:#12122a;border-color:rgba(232,216,138,0.4);color:#e8d88a;}
-.pill{padding:5px 11px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block;}
-.pill.on{background:#12122a;border-color:#e8d88a;color:#e8d88a;}
-.lpg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.pc{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px;text-align:center;}
-.pn{font-size:10px;color:#9090a8;margin-bottom:4px;}
-.plp{font-size:36px;font-weight:700;line-height:1;margin-bottom:8px;}
-.lb4{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
-.lb{padding:7px 4px;font-size:11px;border:1px solid rgba(255,255,255,0.1);border-radius:7px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center;}
-.lb.m{color:#e05050;border-color:rgba(224,80,80,0.3);}
-.lb.p{color:#40c880;border-color:rgba(64,200,128,0.3);}
-.inp{width:100%;padding:8px 10px;font-size:13px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;margin-bottom:8px;}
-.log{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px;max-height:80px;overflow-y:auto;}
-.ll{font-size:11px;color:#9090a8;padding:2px 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04);}
-.ll b{color:#e8e4f0;}
-.tdisp{background:#12122a;border-radius:12px;padding:20px;text-align:center;margin-bottom:12px;border:1px solid rgba(232,216,138,0.15);}
-.tdig{font-size:56px;font-weight:700;color:#e8d88a;line-height:1;font-variant-numeric:tabular-nums;}
-.tdig.u{color:#e8a050;}.tdig.d{color:#e05050;}
-.tlbl{font-size:10px;color:#505068;margin-top:4px;text-transform:uppercase;}
-.tbb{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:10px;overflow:hidden;}
-.tb{height:4px;background:#e8d88a;border-radius:2px;transition:width 1s linear;}
-.rc{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px;text-align:center;margin-bottom:10px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;}
-.pips{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;min-height:40px;align-items:center;margin-bottom:6px;}
-.pip{width:40px;height:40px;background:#1a1a24;border:1px solid rgba(255,255,255,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;}
-.pip.hi{background:rgba(64,200,128,0.12);border-color:rgba(64,200,128,0.4);color:#40c880;}
-.ri{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px 11px;margin-bottom:7px;cursor:pointer;}
-.ri.op .rtt{color:#e8d88a;}
-.rtt{font-size:13px;font-weight:500;margin-bottom:2px;}
-.rss{font-size:11px;color:#9090a8;line-height:1.5;}
-.ree{font-size:11px;color:#9090a8;line-height:1.55;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,0.06);display:none;}
-.ri.op .ree{display:block;}
-.wn{font-size:34px;font-weight:700;margin:5px 0 8px;}
-.jt{padding:5px 11px;font-size:11px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block;}
-.jt.on{background:#12122a;border-color:#e8d88a;color:#e8d88a;}
-.msgs{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:260px;overflow-y:auto;}
-.msg{max-width:92%;display:flex;flex-direction:column;gap:2px;}
-.mu{align-self:flex-end;align-items:flex-end;}
-.ma{align-self:flex-start;}
-.bub{padding:8px 11px;border-radius:12px;font-size:12px;line-height:1.55;}
-.mu .bub{background:#12122a;color:#e8d88a;border:1px solid rgba(232,216,138,0.2);border-bottom-right-radius:3px;}
-.ma .bub{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:3px;}
-.mt{font-size:10px;color:#505068;}
-.ruling-badge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(64,200,128,0.12);color:#40c880;border:1px solid rgba(64,200,128,0.3);margin-bottom:6px;display:inline-block;}
-.ir{display:flex;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);}
-.ir textarea{flex:1;padding:7px 9px;font-size:12px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;resize:none;height:36px;font-family:inherit;}
-.isb{width:36px;height:36px;border:1px solid rgba(232,216,138,0.3);border-radius:8px;background:#12122a;color:#e8d88a;cursor:pointer;font-size:14px;flex-shrink:0;}
-.isb:disabled{opacity:0.4;}
-.ctag{padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(255,255,255,0.06);color:#9090a8;margin:2px;}
-.cx{font-size:12px;color:#e8e4f0;line-height:1.6;background:rgba(0,0,0,0.2);border-radius:8px;padding:10px;margin-top:8px;}
-.cn{font-size:15px;font-weight:700;color:#e8d88a;margin-bottom:6px;}
-/* SETUP */
-.setup{position:fixed;top:0;left:0;right:0;bottom:0;background:#0d0d12;z-index:999;display:flex;flex-direction:column;max-width:480px;margin:0 auto;}
-.sh{background:#12122a;padding:24px 16px 16px;border-bottom:1px solid rgba(232,216,138,0.2);}
-.sh h1{color:#e8d88a;font-size:22px;font-weight:700;margin-bottom:6px;}
-.sh p{color:#9090a8;font-size:12px;line-height:1.5;}
-.sb2{flex:1;overflow-y:auto;padding:16px;}
-.gc{background:#1a1a24;border:2px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;}
-.gc.sel{border-color:#e8d88a;background:#12122a;}
-.gi{font-size:32px;flex-shrink:0;}
-.ginfo{flex:1;}
-.gname{font-size:15px;font-weight:600;color:#e8e4f0;margin-bottom:2px;}
-.gdesc{font-size:11px;color:#9090a8;}
-.gck{width:24px;height:24px;border:2px solid rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:transparent;}
-.gc.sel .gck{background:#e8d88a;border-color:#e8d88a;color:#0d0d12;}
-.sf{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.08);}
-.sf button{width:100%;padding:15px;font-size:15px;font-weight:700;border:none;border-radius:12px;background:#e8d88a;color:#0d0d12;cursor:pointer;}
-.sf button:disabled{opacity:0.35;cursor:not-allowed;}
-::-webkit-scrollbar{width:3px;}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,sans-serif;font-size:14px;background:#0d0d12;color:#e8e4f0;height:100vh;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto}
+.top{background:#12122a;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,216,138,0.2);flex-shrink:0}
+.logo{color:#e8d88a;font-size:14px;font-weight:700}
+.badge{color:#e8d88a;font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid rgba(232,216,138,0.3)}
+.tabs{display:flex;background:#0d0d18;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+.tab{flex:1;padding:9px 2px 7px;text-align:center;font-size:9px;color:#505068;cursor:pointer;border-bottom:2px solid transparent}
+.tab.on{color:#e8d88a;border-bottom-color:#e8d88a}
+.panel{display:none;flex:1;overflow-y:auto;padding:14px}
+.panel.on{display:block}
+.sec{font-size:10px;color:#606070;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.card{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;margin-bottom:10px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.btn{padding:10px 8px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:8px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center}
+.btn.r{color:#e05050;border-color:rgba(224,80,80,0.4)}
+.btn.g{color:#40c880;border-color:rgba(64,200,128,0.4)}
+.btn.y{background:#12122a;border-color:rgba(232,216,138,0.4);color:#e8d88a}
+.pill{padding:5px 11px;font-size:12px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block}
+.pill.on{background:#12122a;border-color:#e8d88a;color:#e8d88a}
+.lpg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.pc{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px;text-align:center}
+.pn{font-size:10px;color:#9090a8;margin-bottom:4px}
+.plp{font-size:36px;font-weight:700;line-height:1;margin-bottom:8px}
+.lb4{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.lb{padding:7px 4px;font-size:11px;border:1px solid rgba(255,255,255,0.1);border-radius:7px;background:#22222e;color:#e8e4f0;cursor:pointer;text-align:center}
+.lb.m{color:#e05050;border-color:rgba(224,80,80,0.3)}
+.lb.p{color:#40c880;border-color:rgba(64,200,128,0.3)}
+.inp{width:100%;padding:8px 10px;font-size:13px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;margin-bottom:8px}
+.log{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px;max-height:80px;overflow-y:auto}
+.ll{font-size:11px;color:#9090a8;padding:2px 0;display:flex;justify-content:space-between}
+.ll b{color:#e8e4f0}
+.tdisp{background:#12122a;border-radius:12px;padding:20px;text-align:center;margin-bottom:12px;border:1px solid rgba(232,216,138,0.15)}
+.tdig{font-size:56px;font-weight:700;color:#e8d88a;line-height:1}
+.tdig.u{color:#e8a050}.tdig.d{color:#e05050}
+.tlbl{font-size:10px;color:#505068;margin-top:4px}
+.tbb{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:10px;overflow:hidden}
+.tb{height:4px;background:#e8d88a;border-radius:2px;transition:width 1s linear}
+.rc{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px;text-align:center;margin-bottom:10px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.pips{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;min-height:40px;align-items:center;margin-bottom:6px}
+.pip{width:40px;height:40px;background:#1a1a24;border:1px solid rgba(255,255,255,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.pip.hi{background:rgba(64,200,128,0.12);border-color:rgba(64,200,128,0.4);color:#40c880}
+.ri{background:#1a1a24;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px 11px;margin-bottom:7px;cursor:pointer}
+.ri.op .rtt{color:#e8d88a}
+.rtt{font-size:13px;font-weight:500;margin-bottom:2px}
+.rss{font-size:11px;color:#9090a8;line-height:1.5}
+.ree{font-size:11px;color:#9090a8;line-height:1.55;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,0.06);display:none}
+.ri.op .ree{display:block}
+.wn{font-size:34px;font-weight:700;margin:5px 0 8px}
+.jt{padding:5px 11px;font-size:11px;border:1px solid rgba(255,255,255,0.14);border-radius:20px;background:#1a1a24;color:#9090a8;cursor:pointer;margin:0 4px 4px 0;display:inline-block}
+.jt.on{background:#12122a;border-color:#e8d88a;color:#e8d88a}
+.msgs{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:300px;overflow-y:auto}
+.msg{max-width:92%;display:flex;flex-direction:column;gap:2px}
+.mu{align-self:flex-end;align-items:flex-end}
+.ma{align-self:flex-start}
+.bub{padding:8px 11px;border-radius:12px;font-size:12px;line-height:1.55}
+.mu .bub{background:#12122a;color:#e8d88a;border:1px solid rgba(232,216,138,0.2);border-bottom-right-radius:3px}
+.ma .bub{background:#1a1a24;border:1px solid rgba(255,255,255,0.08);border-bottom-left-radius:3px}
+.mt{font-size:10px;color:#505068}
+.rbadge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(64,200,128,0.12);color:#40c880;border:1px solid rgba(64,200,128,0.3);margin-bottom:6px;display:inline-block}
+.aibadge{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(80,80,168,0.15);color:#8080e0;border:1px solid rgba(80,80,168,0.3);margin-bottom:6px;display:inline-block}
+.ir{display:flex;gap:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08)}
+.ir textarea{flex:1;padding:7px 9px;font-size:12px;background:#1a1a24;border:1px solid rgba(255,255,255,0.14);border-radius:8px;color:#e8e4f0;resize:none;height:36px;font-family:inherit}
+.isb{width:36px;height:36px;border:1px solid rgba(232,216,138,0.3);border-radius:8px;background:#12122a;color:#e8d88a;cursor:pointer;font-size:14px;flex-shrink:0}
+.isb:disabled{opacity:0.4}
+.ctag{padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(255,255,255,0.06);color:#9090a8;margin:2px}
+.cx{font-size:12px;color:#e8e4f0;line-height:1.6;background:rgba(0,0,0,0.2);border-radius:8px;padding:10px;margin-top:8px}
+.cn{font-size:15px;font-weight:700;color:#e8d88a;margin-bottom:6px}
+.setup{position:fixed;top:0;left:0;right:0;bottom:0;background:#0d0d12;z-index:999;display:flex;flex-direction:column;max-width:480px;margin:0 auto}
+.sh{background:#12122a;padding:24px 16px 16px;border-bottom:1px solid rgba(232,216,138,0.2)}
+.sh h1{color:#e8d88a;font-size:22px;font-weight:700;margin-bottom:6px}
+.sh p{color:#9090a8;font-size:12px;line-height:1.5}
+.sb{flex:1;overflow-y:auto;padding:16px}
+.gc{background:#1a1a24;border:2px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer}
+.gc.sel{border-color:#e8d88a;background:#12122a}
+.gi{font-size:32px;flex-shrink:0}
+.ginfo{flex:1}
+.gname{font-size:15px;font-weight:600;color:#e8e4f0;margin-bottom:2px}
+.gdesc{font-size:11px;color:#9090a8}
+.gck{width:24px;height:24px;border:2px solid rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:transparent}
+.gc.sel .gck{background:#e8d88a;border-color:#e8d88a;color:#0d0d12}
+.sf{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.08)}
+.sf button{width:100%;padding:15px;font-size:15px;font-weight:700;border:none;border-radius:12px;background:#e8d88a;color:#0d0d12;cursor:pointer}
+.sf button:disabled{opacity:0.35}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
 </style>
 </head>
 <body>
 
-<!-- SETUP SCREEN -->
-<div class="setup" id="setupScreen">
-  <div class="sh">
-    <h1>TCG Referee</h1>
-    <p>Select your game to get started.</p>
+<div class="setup" id="S">
+  <div class="sh"><h1>TCG Referee</h1><p>Select your game to get started.</p></div>
+  <div class="sb">
+    <div class="gc" id="g-ygo" onclick="pg('ygo',this)"><div class="gi">&#127183;</div><div class="ginfo"><div class="gname">Yu-Gi-Oh!</div><div class="gdesc">8000 LP &bull; Full rulebook &bull; 885 official rulings</div></div><div class="gck">&#10003;</div></div>
+    <div class="gc" id="g-pkm" onclick="pg('pkm',this)"><div class="gi">&#9889;</div><div class="ginfo"><div class="gname">Pokemon TCG</div><div class="gdesc">Prize cards &bull; Status conditions &bull; All formats</div></div><div class="gck">&#10003;</div></div>
+    <div class="gc" id="g-mtg" onclick="pg('mtg',this)"><div class="gi">&#129497;</div><div class="ginfo"><div class="gname">Magic: The Gathering</div><div class="gdesc">20 life &bull; Stack &bull; Commander &bull; All keywords</div></div><div class="gck">&#10003;</div></div>
+    <div class="gc" id="g-dig" onclick="pg('dig',this)"><div class="gi">&#129422;</div><div class="ginfo"><div class="gname">Digimon TCG</div><div class="gdesc">Memory gauge &bull; Security checks &bull; Digivolving</div></div><div class="gck">&#10003;</div></div>
+    <div class="gc" id="g-gundam" onclick="pg('gundam',this)"><div class="gi">&#129302;</div><div class="ginfo"><div class="gname">Gundam Card Game</div><div class="gdesc">Base HP &bull; Penetrating damage &bull; Flagship</div></div><div class="gck">&#10003;</div></div>
+    <div class="gc" id="g-op" onclick="pg('op',this)"><div class="gi">&#9760;</div><div class="ginfo"><div class="gname">One Piece Card Game</div><div class="gdesc">Life cards &bull; DON!! system &bull; Leader attacks</div></div><div class="gck">&#10003;</div></div>
   </div>
-  <div class="sb2">
-    <div class="gc" id="gc-ygo" onclick="pickGame('ygo',this)">
-      <div class="gi">&#127183;</div>
-      <div class="ginfo"><div class="gname">Yu-Gi-Oh!</div><div class="gdesc">8000 LP &bull; Chain resolution &bull; Full rulebook</div></div>
-      <div class="gck">&#10003;</div>
-    </div>
-    <div class="gc" id="gc-pkm" onclick="pickGame('pkm',this)">
-      <div class="gi">&#9889;</div>
-      <div class="ginfo"><div class="gname">Pokemon TCG</div><div class="gdesc">Prize cards &bull; Status conditions &bull; All formats</div></div>
-      <div class="gck">&#10003;</div>
-    </div>
-    <div class="gc" id="gc-mtg" onclick="pickGame('mtg',this)">
-      <div class="gi">&#129497;</div>
-      <div class="ginfo"><div class="gname">Magic: The Gathering</div><div class="gdesc">20 life &bull; Stack &bull; Commander &bull; All keywords</div></div>
-      <div class="gck">&#10003;</div>
-    </div>
-    <div class="gc" id="gc-dig" onclick="pickGame('dig',this)">
-      <div class="gi">&#129422;</div>
-      <div class="ginfo"><div class="gname">Digimon TCG</div><div class="gdesc">Memory gauge &bull; Security checks &bull; Digivolving</div></div>
-      <div class="gck">&#10003;</div>
-    </div>
-    <div class="gc" id="gc-gundam" onclick="pickGame('gundam',this)">
-      <div class="gi">&#129302;</div>
-      <div class="ginfo"><div class="gname">Gundam Card Game</div><div class="gdesc">Base HP &bull; Penetrating damage &bull; Flagship</div></div>
-      <div class="gck">&#10003;</div>
-    </div>
-    <div class="gc" id="gc-op" onclick="pickGame('op',this)">
-      <div class="gi">&#9760;</div>
-      <div class="ginfo"><div class="gname">One Piece Card Game</div><div class="gdesc">Life cards &bull; DON!! system &bull; Leader attacks</div></div>
-      <div class="gck">&#10003;</div>
-    </div>
-  </div>
-  <div class="sf">
-    <button id="setupBtn" onclick="finishSetup()" disabled>Select a game to continue</button>
-  </div>
+  <div class="sf"><button id="sBtn" onclick="go()" disabled>Select a game to continue</button></div>
 </div>
 
-<!-- MAIN APP -->
-<div class="app" id="mainApp" style="display:none">
-<div class="top">
-  <span class="logo">TCG Referee</span>
-  <span class="badge" id="ab">Yu-Gi-Oh!</span>
-</div>
+<div class="app" id="A" style="display:none">
+<div class="top"><span class="logo">TCG Referee</span><span class="badge" id="ab">Yu-Gi-Oh!</span></div>
 <div class="tabs">
   <div class="tab on" onclick="sw('lp',this)">LP</div>
   <div class="tab" onclick="sw('timer',this)">Timer</div>
@@ -154,17 +120,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
   <div class="tab" onclick="sw('judge',this)">Judge</div>
 </div>
 
-<!-- LP -->
 <div class="panel on" id="pan-lp">
 <div class="sec">Game</div>
-<div style="margin-bottom:12px">
-  <span class="pill on" onclick="sg('Yu-Gi-Oh!',8000,this)">Yu-Gi-Oh!</span>
-  <span class="pill" onclick="sg('Pokemon',0,this)">Pokemon</span>
-  <span class="pill" onclick="sg('MTG',20,this)">MTG</span>
-  <span class="pill" onclick="sg('Digimon',4000,this)">Digimon</span>
-  <span class="pill" onclick="sg('Gundam',10,this)">Gundam</span>
-  <span class="pill" onclick="sg('One Piece',5,this)">One Piece</span>
-</div>
+<div id="lpg" style="margin-bottom:12px"></div>
 <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;margin-bottom:10px">
   <div><div class="sec" style="margin:0 0 2px">Turn</div><div style="font-size:20px;font-weight:700" id="tn">1</div></div>
   <div style="display:flex;gap:6px"><button class="btn" onclick="ct(-1)">-</button><button class="btn" onclick="ct(1)">Next</button></div>
@@ -173,18 +131,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
   <div class="pc"><div class="pn">Player 1</div><div class="plp" id="l1">8000</div><div class="lb4"><button class="lb m" onclick="al(1,-500)">-500</button><button class="lb m" onclick="al(1,-1000)">-1k</button><button class="lb p" onclick="al(1,500)">+500</button><button class="lb p" onclick="al(1,1000)">+1k</button></div></div>
   <div class="pc"><div class="pn">Player 2</div><div class="plp" id="l2">8000</div><div class="lb4"><button class="lb m" onclick="al(2,-500)">-500</button><button class="lb m" onclick="al(2,-1000)">-1k</button><button class="lb p" onclick="al(2,500)">+500</button><button class="lb p" onclick="al(2,1000)">+1k</button></div></div>
 </div>
-<div style="display:flex;gap:6px;margin-bottom:8px">
-  <input class="inp" type="number" id="ca" placeholder="Custom amount" style="margin:0;flex:1">
-  <button class="btn" onclick="ac(1,-1)">P1-</button>
-  <button class="btn" onclick="ac(2,-1)">P2-</button>
-  <button class="btn" onclick="ac(1,1)">P1+</button>
-</div>
+<div style="display:flex;gap:6px;margin-bottom:8px"><input class="inp" type="number" id="ca" placeholder="Custom amount" style="margin:0;flex:1"><button class="btn" onclick="ac(1,-1)">P1-</button><button class="btn" onclick="ac(2,-1)">P2-</button><button class="btn" onclick="ac(1,1)">P1+</button></div>
 <div class="g2"><button class="btn r" onclick="rl()">Reset</button><button class="btn" onclick="hv()">Halve Both</button></div>
-<div class="log" id="lpL"><div class="ll"><b>Game started</b><span></span></div></div>
-<button class="btn" onclick="changeGame()" style="width:100%;margin-top:10px;color:#9090a8;border-color:rgba(144,144,168,0.3);">&#9881; Change Game</button>
+<div class="log" id="lpL" style="margin-top:8px"><div class="ll"><b>Game started</b><span></span></div></div>
+<button class="btn" onclick="chg()" style="width:100%;margin-top:10px;color:#9090a8;border-color:rgba(144,144,168,0.2);font-size:11px">Change Game</button>
 </div>
 
-<!-- TIMER -->
 <div class="panel" id="pan-timer">
 <div class="tdisp"><div class="tdig" id="td">40:00</div><div class="tlbl" id="tl">Round Timer</div><div class="tbb"><div class="tb" id="tb" style="width:100%"></div></div></div>
 <div class="sec">Presets</div>
@@ -195,155 +147,105 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;back
 <div class="g2"><button class="btn" onclick="aT(3)">+3 min</button><button class="btn" onclick="aT(5)">+5 min</button></div>
 </div>
 
-<!-- DICE -->
 <div class="panel" id="pan-dice">
 <div class="sec">Coin Flip</div>
 <div class="rc"><div id="ci" style="font-size:28px;font-weight:700;color:#e8d88a">COIN</div><div id="ct_" style="font-size:13px;color:#9090a8">Tap to flip</div></div>
 <button class="btn y" onclick="fc()" style="width:100%;margin-bottom:14px">Flip Coin</button>
 <div class="sec">Dice Roll</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-  <span style="font-size:12px;color:#9090a8;flex:1">Number of dice</span>
-  <button class="btn" onclick="cq(-1)" style="width:32px;padding:6px">-</button>
-  <span style="font-size:15px;font-weight:700;min-width:20px;text-align:center" id="dq">1</span>
-  <button class="btn" onclick="cq(1)" style="width:32px;padding:6px">+</button>
-</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:#9090a8;flex:1">Number of dice</span><button class="btn" onclick="cq(-1)" style="width:32px;padding:6px">-</button><span style="font-size:15px;font-weight:700;min-width:20px;text-align:center" id="dq">1</span><button class="btn" onclick="cq(1)" style="width:32px;padding:6px">+</button></div>
 <div class="pips" id="pb"><span style="font-size:12px;color:#505068">Choose a die below</span></div>
-<div id="tr_" style="display:none;justify-content:space-between;padding:6px 0;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:8px">
-  <span style="font-size:12px;color:#9090a8">Total</span><span style="font-size:17px;font-weight:700" id="tv"></span>
-</div>
+<div id="tr_" style="display:none;justify-content:space-between;padding:6px 0;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:8px"><span style="font-size:12px;color:#9090a8">Total</span><span style="font-size:17px;font-weight:700" id="tv"></span></div>
 <div class="g2"><button class="btn" onclick="rd(4)">D4</button><button class="btn" onclick="rd(6)">D6</button><button class="btn" onclick="rd(8)">D8</button><button class="btn" onclick="rd(20)">D20</button></div>
 <div class="log" id="dL" style="margin-top:10px"><div class="ll"><b>No rolls yet</b><span></span></div></div>
 </div>
 
-<!-- RULES -->
 <div class="panel" id="pan-rules">
 <div class="sec">Game</div>
-<div style="margin-bottom:10px" id="rg">
-  <span class="pill on" onclick="srg('ygo',this)">Yu-Gi-Oh!</span>
-  <span class="pill" onclick="srg('pkm',this)">Pokemon</span>
-  <span class="pill" onclick="srg('mtg',this)">MTG</span>
-  <span class="pill" onclick="srg('dig',this)">Digimon</span>
-  <span class="pill" onclick="srg('gundam',this)">Gundam</span>
-  <span class="pill" onclick="srg('op',this)">One Piece</span>
-</div>
+<div style="margin-bottom:10px" id="rg"><span class="pill on" onclick="srg('ygo',this)">Yu-Gi-Oh!</span><span class="pill" onclick="srg('pkm',this)">Pokemon</span><span class="pill" onclick="srg('mtg',this)">MTG</span><span class="pill" onclick="srg('dig',this)">Digimon</span><span class="pill" onclick="srg('gundam',this)">Gundam</span><span class="pill" onclick="srg('op',this)">One Piece</span></div>
 <input class="inp" id="rs" type="text" placeholder="Search rules..." oninput="rr()">
-<div style="font-size:10px;color:#505068;margin-bottom:8px" id="rct">Loading rules...</div>
-<div id="rl"></div>
+<div style="font-size:10px;color:#505068;margin-bottom:8px" id="rct">Tap a game to load rules</div>
+<div id="rl_"></div>
 </div>
 
-<!-- CARDS -->
 <div class="panel" id="pan-cards">
 <div class="sec">Card Lookup</div>
-<div style="margin-bottom:10px">
-  <span class="pill on" onclick="scg('ygo',this)">Yu-Gi-Oh!</span>
-  <span class="pill" onclick="scg('pkm',this)">Pokemon</span>
-  <span class="pill" onclick="scg('mtg',this)">MTG</span>
-</div>
-<div style="display:flex;gap:6px;margin-bottom:10px">
-  <input class="inp" id="cs" type="text" placeholder="Card name..." style="margin:0;flex:1" onkeydown="if(event.key==='Enter')scard()">
-  <button class="btn" onclick="scard()">Search</button>
-</div>
+<div style="margin-bottom:10px"><span class="pill on" onclick="scg('ygo',this)">Yu-Gi-Oh!</span><span class="pill" onclick="scg('pkm',this)">Pokemon</span><span class="pill" onclick="scg('mtg',this)">MTG</span></div>
+<div style="display:flex;gap:6px;margin-bottom:10px"><input class="inp" id="cs" type="text" placeholder="Card name..." style="margin:0;flex:1" onkeydown="if(event.key==='Enter')scard()"><button class="btn" onclick="scard()">Search</button></div>
 <div id="cr"><div style="color:#505068;font-size:12px;padding:16px;text-align:center">Type a card name and press Search</div></div>
 </div>
 
-<!-- MATCH -->
 <div class="panel" id="pan-match">
 <div class="sec">Match Record</div>
-<div class="g2" style="margin-bottom:10px">
-  <div class="card" style="text-align:center"><div class="pn">Player 1</div><div class="wn" id="w1">0</div><button class="btn g" onclick="aw(1)" style="width:100%">+ Win</button></div>
-  <div class="card" style="text-align:center"><div class="pn">Player 2</div><div class="wn" id="w2">0</div><button class="btn g" onclick="aw(2)" style="width:100%">+ Win</button></div>
-</div>
-<div class="card" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-  <div><div class="sec" style="margin:0 0 2px">Game #</div><div style="font-size:20px;font-weight:700" id="gn">1</div></div>
-  <button class="btn" onclick="ng()">Next Game</button>
-</div>
+<div class="g2" style="margin-bottom:10px"><div class="card" style="text-align:center"><div class="pn">Player 1</div><div class="wn" id="w1">0</div><button class="btn g" onclick="aw(1)" style="width:100%">+ Win</button></div><div class="card" style="text-align:center"><div class="pn">Player 2</div><div class="wn" id="w2">0</div><button class="btn g" onclick="aw(2)" style="width:100%">+ Win</button></div></div>
+<div class="card" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div><div class="sec" style="margin:0 0 2px">Game #</div><div style="font-size:20px;font-weight:700" id="gn">1</div></div><button class="btn" onclick="ng()">Next Game</button></div>
 <button class="btn r" style="width:100%;margin-bottom:10px" onclick="rmatch()">Reset Match</button>
 <div class="log" id="mL"><div class="ll"><b>Match started</b><span></span></div></div>
 </div>
 
-<!-- JUDGE -->
 <div class="panel" id="pan-judge">
 <div class="sec">Game Focus</div>
-<div style="margin-bottom:10px">
-  <span class="jt on" onclick="jg('all',this)">All</span>
-  <span class="jt" onclick="jg('ygo',this)">YGO</span>
-  <span class="jt" onclick="jg('pkm',this)">Pokemon</span>
-  <span class="jt" onclick="jg('mtg',this)">MTG</span>
-  <span class="jt" onclick="jg('dig',this)">Digimon</span>
-  <span class="jt" onclick="jg('gundam',this)">Gundam</span>
-  <span class="jt" onclick="jg('op',this)">One Piece</span>
-</div>
-<div class="msgs" id="jm">
-  <div class="msg ma"><div class="bub">Ask any TCG ruling question. I check official card rulings first, then use AI for anything not in the database.</div></div>
-</div>
-<div class="ir">
-  <textarea id="ji" placeholder="Ask a rules question..." onkeydown="ojk(event)" oninput="rsz(this)"></textarea>
-  <button class="isb" id="isb" onclick="sj()">&#10148;</button>
-</div>
+<div style="margin-bottom:10px"><span class="jt on" onclick="jg('all',this)">All</span><span class="jt" onclick="jg('ygo',this)">YGO</span><span class="jt" onclick="jg('pkm',this)">Pokemon</span><span class="jt" onclick="jg('mtg',this)">MTG</span><span class="jt" onclick="jg('dig',this)">Digimon</span><span class="jt" onclick="jg('gundam',this)">Gundam</span><span class="jt" onclick="jg('op',this)">One Piece</span></div>
+<div class="msgs" id="jm"><div class="msg ma"><div class="bub">Ask any TCG ruling question. I check 885 official rulings first, then use AI for anything else.</div></div></div>
+<div class="ir"><textarea id="ji" placeholder="Ask a rules question..." onkeydown="ojk(event)" oninput="rsz(this)"></textarea><button class="isb" id="isb" onclick="sj()">&#10148;</button></div>
 </div>
 </div>
 
 <script>
 var lp=[0,8000,8000],W=[0,0,0],turn=1,gNum=1,sLP=8000,dQ=1;
 var tT=2400,tL=2400,tI=null,tR=false;
-var jGame="all",cGame="ygo",cCache={},curRG="ygo";
+var jGame="all",cGame="ygo",cCache={},curRG="ygo",selGame=null;
 var RULES={ygo:[],pkm:[],mtg:[],dig:[],gundam:[],op:[]};
-var SYNS={};
-var CARD_RULINGS={ygo:[],pkm:[],mtg:[]};
+var SYNS={},CARDS_ALL=[],cardsLoaded=false,rulesLoaded={};
+var BASE="https://kirkcreason-dev.github.io/tcg-referee/";
 
-var GCFG={
-  ygo:{name:"Yu-Gi-Oh!",lp:8000,rk:"ygo",jk:"ygo"},
-  pkm:{name:"Pokemon",lp:0,rk:"pkm",jk:"pkm"},
-  mtg:{name:"MTG",lp:20,rk:"mtg",jk:"mtg"},
-  dig:{name:"Digimon",lp:4000,rk:"dig",jk:"dig"},
-  gundam:{name:"Gundam",lp:10,rk:"gundam",jk:"gundam"},
-  op:{name:"One Piece",lp:5,rk:"op",jk:"op"}
-};
+var GCFG={ygo:{n:"Yu-Gi-Oh!",lp:8000},pkm:{n:"Pokemon",lp:0},mtg:{n:"MTG",lp:20},dig:{n:"Digimon",lp:4000},gundam:{n:"Gundam",lp:10},op:{n:"One Piece",lp:5}};
+
+// BOOT - check saved game
+(function(){
+  var g=localStorage.getItem("tcgGame");
+  if(g&&GCFG[g]){document.getElementById("S").style.display="none";document.getElementById("A").style.display="flex";applyGame(g);}
+})();
 
 // SETUP
-var selGame=null;
-function pickGame(g,el){
+function pg(g,el){
   document.querySelectorAll(".gc").forEach(function(c){c.classList.remove("sel");});
   el.classList.add("sel");selGame=g;
-  var btn=document.getElementById("setupBtn");
-  btn.disabled=false;
-  btn.textContent="Start with "+GCFG[g].name;
+  document.getElementById("sBtn").disabled=false;
+  document.getElementById("sBtn").textContent="Start with "+GCFG[g].n;
 }
-function finishSetup(){
+function go(){
   if(!selGame)return;
   localStorage.setItem("tcgGame",selGame);
-  document.getElementById("setupScreen").style.display="none";
-  document.getElementById("mainApp").style.display="flex";
+  document.getElementById("S").style.display="none";
+  document.getElementById("A").style.display="flex";
   applyGame(selGame);
 }
-function changeGame(){
-  localStorage.removeItem("tcgGame");
-  location.reload();
-}
+function chg(){localStorage.removeItem("tcgGame");location.reload();}
+
 function applyGame(g){
-  var cfg=GCFG[g];
-  sLP=cfg.lp;lp[1]=cfg.lp;lp[2]=cfg.lp;
-  document.getElementById("ab").textContent=cfg.name;
-  turn=1;ul();addL("lpL",cfg.name+" started");
-  var gmap={ygo:"Yu-Gi-Oh!",pkm:"Pokemon",mtg:"MTG",dig:"Digimon",gundam:"Gundam",op:"One Piece"};
-  document.querySelectorAll("#pan-lp .pill").forEach(function(p){p.classList.toggle("on",p.textContent===gmap[g]);});
-  curRG=cfg.rk;
-  var rkeys=["ygo","pkm","mtg","dig","gundam","op"];
-  document.querySelectorAll("#rg .pill").forEach(function(p,i){p.classList.toggle("on",rkeys[i]===cfg.rk);});
-  jGame=cfg.jk;
-  document.querySelectorAll(".jt").forEach(function(t){
-    var match=t.textContent.toLowerCase()===cfg.jk||(t.textContent==="YGO"&&cfg.jk==="ygo");
-    t.classList.toggle("on",match);
+  var c=GCFG[g];
+  sLP=c.lp;lp[1]=c.lp;lp[2]=c.lp;turn=1;
+  document.getElementById("ab").textContent=c.n;
+  curRG=g;
+  buildPills(g);ul();
+}
+
+function buildPills(active){
+  var el=document.getElementById("lpg");el.innerHTML="";
+  Object.keys(GCFG).forEach(function(g){
+    var p=document.createElement("span");
+    p.className="pill"+(g===active?" on":"");
+    p.textContent=GCFG[g].n;
+    (function(gg){p.onclick=function(){
+      document.querySelectorAll("#lpg .pill").forEach(function(x){x.classList.remove("on");});
+      p.classList.add("on");
+      localStorage.setItem("tcgGame",gg);
+      document.getElementById("ab").textContent=GCFG[gg].n;
+      sLP=GCFG[gg].lp;lp[1]=sLP;lp[2]=sLP;turn=1;ul();curRG=gg;
+    };})(g);
+    el.appendChild(p);
   });
 }
-(function(){
-  var saved=localStorage.getItem("tcgGame");
-  if(saved&&GCFG[saved]){
-    document.getElementById("setupScreen").style.display="none";
-    document.getElementById("mainApp").style.display="flex";
-    applyGame(saved);
-  }
-})();
 
 // NAV
 function sw(id,el){
@@ -351,19 +253,59 @@ function sw(id,el){
   document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("on");});
   el.classList.add("on");
   document.getElementById("pan-"+id).classList.add("on");
-  if(id==="rules")rr();
+  if(id==="rules")loadRules(curRG,rr);
+}
+
+// LAZY LOAD
+function loadScript(src,cb){
+  var s=document.createElement("script");
+  s.src=src+"?v=1";
+  s.onload=function(){if(cb)cb();};
+  s.onerror=function(){if(cb)cb();};
+  document.body.appendChild(s);
+}
+
+function loadRules(g,cb){
+  if(rulesLoaded[g]){if(cb)cb();return;}
+  loadScript(BASE+"rules_"+g+".js",function(){
+    var k="RULES_"+g.toUpperCase();
+    if(window[k])RULES[g]=window[k];
+    rulesLoaded[g]=true;
+    if(!SYNS.chain){
+      loadScript(BASE+"rules_syns.js",function(){
+        if(window.SYNS)SYNS=window.SYNS;
+        if(cb)cb();
+      });
+    } else {if(cb)cb();}
+  });
+}
+
+function loadCards(cb){
+  if(cardsLoaded){if(cb)cb();return;}
+  loadScript(BASE+"rules_cards_1.js",function(){
+    if(window.CARD_RULINGS_1)CARDS_ALL=CARDS_ALL.concat(window.CARD_RULINGS_1.ygo||[]);
+    loadScript(BASE+"rules_cards_2.js",function(){
+      if(window.CARD_RULINGS_2)CARDS_ALL=CARDS_ALL.concat(window.CARD_RULINGS_2.ygo||[]);
+      loadScript(BASE+"rules_cards_3.js",function(){
+        if(window.CARD_RULINGS_3)CARDS_ALL=CARDS_ALL.concat(window.CARD_RULINGS_3.ygo||[]);
+        cardsLoaded=true;
+        if(cb)cb();
+      });
+    });
+  });
+}
+
+function findRuling(q){
+  var ql=q.toLowerCase(),best=null,bScore=0;
+  CARDS_ALL.forEach(function(r){
+    var m=r.cards.filter(function(c){return ql.indexOf(c.toLowerCase())>=0;}).length;
+    var thresh=Math.max(2,Math.ceil(r.cards.length*0.5));
+    if(m>=thresh){var sc=m*20;if(sc>bScore){bScore=sc;best=r;}}
+  });
+  return bScore>=40?best:null;
 }
 
 // LP
-function sg(n,s,el){
-  document.querySelectorAll("#pan-lp .pill").forEach(function(p){p.classList.remove("on");});
-  el.classList.add("on");
-  if(s===0&&n==="Pokemon"){sLP=0;lp[1]=0;lp[2]=0;}
-  else if(s===0){var v=parseInt(prompt("Starting LP?","20")||"20");sLP=isNaN(v)?20:v;lp[1]=sLP;lp[2]=sLP;}
-  else{sLP=s;lp[1]=s;lp[2]=s;}
-  document.getElementById("ab").textContent=n+" \u2699";
-  turn=1;ul();addL("lpL",n+" started");
-}
 function ul(){
   for(var i=1;i<=2;i++){
     var e=document.getElementById("l"+i);
@@ -383,10 +325,9 @@ function ct(d){turn=Math.max(1,turn+d);document.getElementById("tn").textContent
 function ft(s){var m=Math.floor(s/60),sc=s%60;return(m<10?"0":"")+m+":"+(sc<10?"0":"")+sc;}
 function ut(){
   var d=document.getElementById("td"),b=document.getElementById("tb");
-  var p=tT>0?Math.round(tL/tT*100):0;
   d.textContent=ft(tL);
   d.className="tdig"+(tL<=0?" d":tL<=60?" u":"");
-  b.style.width=p+"%";
+  b.style.width=(tT>0?Math.round(tL/tT*100):0)+"%";
   b.style.background=tL<=0?"#e05050":tL<=60?"#e8a050":"#e8d88a";
   document.getElementById("tl").textContent=tL<=0?"Time is up!":tR?"Running":"Round Timer";
 }
@@ -400,9 +341,9 @@ function aT(m){tL=Math.min(tL+m*60,9999);tT=Math.max(tT,tL);ut();}
 // DICE
 function fc(){
   var h=Math.random()<0.5;
-  var ic=document.getElementById("ci"),tx=document.getElementById("ct_");
-  ic.textContent=h?"HEADS":"TAILS";ic.style.color=h?"#40c880":"#5090e0";
-  tx.textContent=h?"Heads":"Tails";tx.style.color=h?"#40c880":"#5090e0";
+  document.getElementById("ci").textContent=h?"HEADS":"TAILS";
+  document.getElementById("ci").style.color=h?"#40c880":"#5090e0";
+  document.getElementById("ct_").textContent=h?"Heads":"Tails";
   addL("dL","Coin: "+(h?"Heads":"Tails"));
 }
 function cq(d){dQ=Math.max(1,Math.min(6,dQ+d));document.getElementById("dq").textContent=dQ;}
@@ -410,36 +351,25 @@ function rd(sides){
   var rolls=[],total=0;
   for(var i=0;i<dQ;i++){var r=Math.floor(Math.random()*sides)+1;rolls.push(r);total+=r;}
   var box=document.getElementById("pb");box.innerHTML="";
-  rolls.forEach(function(r){
-    var e=document.createElement("div");
-    e.className="pip"+(r===sides?" hi":"");
-    e.textContent=r;box.appendChild(e);
-  });
+  rolls.forEach(function(r){var e=document.createElement("div");e.className="pip"+(r===sides?" hi":"");e.textContent=r;box.appendChild(e);});
   var tr=document.getElementById("tr_");
-  if(dQ>1){tr.style.display="flex";document.getElementById("tv").textContent=total;}
-  else tr.style.display="none";
+  if(dQ>1){tr.style.display="flex";document.getElementById("tv").textContent=total;}else tr.style.display="none";
   addL("dL","D"+sides+": "+(dQ>1?"["+rolls.join(",")+"] = "+total:rolls[0]));
 }
 
 // RULES
 function srg(g,el){
   document.querySelectorAll("#rg .pill").forEach(function(p){p.classList.remove("on");});
-  el.classList.add("on");curRG=g;rr();
+  el.classList.add("on");curRG=g;
+  loadRules(g,rr);
 }
 function rr(){
-  var q=(document.getElementById("rs")?document.getElementById("rs").value:"").toLowerCase().trim();
-  var list=document.getElementById("rl");list.innerHTML="";
+  var q=(document.getElementById("rs")||{value:""}).value.toLowerCase().trim();
+  var list=document.getElementById("rl_");list.innerHTML="";
   var rct=document.getElementById("rct");
-  if(!RULES[curRG]||!RULES[curRG].length){
-    rct.textContent="Loading rules...";
-    list.innerHTML="<div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'>Rules are loading, please wait a moment then tap Rules again</div>";
-    return;
-  }
-  var all=(RULES[curRG]||[]).filter(function(r){
-    return !q||r.t.toLowerCase().indexOf(q)>=0||r.s.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;
-  });
+  if(!RULES[curRG]||!RULES[curRG].length){rct.textContent="Loading...";return;}
+  var all=RULES[curRG].filter(function(r){return !q||r.t.toLowerCase().indexOf(q)>=0||r.s.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;});
   rct.textContent=all.length+" rule"+(all.length!==1?"s":"");
-  if(!all.length){list.innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>No rules found</div>";return;}
   all.forEach(function(r){
     var d=document.createElement("div");d.className="ri";
     d.innerHTML="<div class='rtt'>"+r.t+"</div><div class='rss'>"+r.s+"</div><div class='ree'>"+r.e+"</div>";
@@ -449,76 +379,23 @@ function rr(){
 }
 
 // CARDS
-function scg(g,el){
-  cGame=g;
-  document.querySelectorAll("#pan-cards .pill").forEach(function(p){p.classList.remove("on");});
-  el.classList.add("on");
-  document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Type a card name and press Search</div>";
-  document.getElementById("cs").value="";
-}
+function scg(g,el){cGame=g;document.querySelectorAll("#pan-cards .pill").forEach(function(p){p.classList.remove("on");});el.classList.add("on");document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Type a card name and press Search</div>";}
 function scard(){
   var q=document.getElementById("cs").value.trim();if(!q)return;
-  var key=cGame+":"+q.toLowerCase();
-  if(cCache[key]){showCard(cCache[key]);return;}
+  var k=cGame+":"+q.toLowerCase();
+  if(cCache[k]){showCard(cCache[k]);return;}
   document.getElementById("cr").innerHTML="<div style='color:#9090a8;font-size:12px;padding:16px;text-align:center'>Searching...</div>";
-  if(cGame==="ygo")fygo(q,key);
-  else if(cGame==="pkm")fpkm(q,key);
-  else if(cGame==="mtg")fmtg(q,key);
+  if(cGame==="ygo")fygo(q,k);else if(cGame==="pkm")fpkm(q,k);else if(cGame==="mtg")fmtg(q,k);
 }
-function fygo(q,k){
-  fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q))
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found. Check spelling.</div>";return;}
-    var c=d.data[0];
-    var tags=[c.type||""];
-    if(c.attribute)tags.push(c.attribute);if(c.race)tags.push(c.race);
-    if(c.level)tags.push("Level "+c.level);if(c.atk!==undefined)tags.push("ATK: "+c.atk);if(c.def!==undefined)tags.push("DEF: "+c.def);
-    if(c.linkval)tags.push("Link-"+c.linkval);if(c.rank)tags.push("Rank "+c.rank);
-    var card={name:c.name,tags:tags,text:c.desc||"No text."};
-    cCache[k]=card;showCard(card);
-  }).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed. Check internet.</div>";});
-}
-function fpkm(q,k){
-  fetch("https://api.pokemontcg.io/v2/cards?q=name:"+encodeURIComponent(q)+"&pageSize=1")
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}
-    var c=d.data[0];
-    var tags=[c.supertype||""];
-    if(c.hp)tags.push("HP: "+c.hp);if(c.types)tags.push(c.types.join("/"));
-    if(c.set&&c.set.name)tags.push(c.set.name);
-    var text="";
-    if(c.abilities)c.abilities.forEach(function(a){text+="[Ability] "+a.name+": "+a.text+"\n\n";});
-    if(c.attacks)c.attacks.forEach(function(a){text+=a.name+(a.damage?" - "+a.damage:"")+"\n"+(a.text||"")+"\n\n";});
-    var card={name:c.name,tags:tags,text:text.trim()||"No text."};
-    cCache[k]=card;showCard(card);
-  }).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});
-}
-function fmtg(q,k){
-  fetch("https://api.scryfall.com/cards/named?fuzzy="+encodeURIComponent(q))
-  .then(function(r){return r.json();})
-  .then(function(c){
-    if(c.object==="error"){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Card not found.</div>";return;}
-    var tags=[];
-    if(c.type_line)tags.push(c.type_line);if(c.mana_cost)tags.push(c.mana_cost);
-    if(c.power)tags.push("P/T: "+c.power+"/"+c.toughness);if(c.loyalty)tags.push("Loyalty: "+c.loyalty);
-    var text=c.oracle_text||"";
-    if(c.card_faces)text=c.card_faces.map(function(f){return f.name+"\n"+f.oracle_text;}).join("\n---\n");
-    var card={name:c.name,tags:tags,text:text||"No text."};
-    cCache[k]=card;showCard(card);
-  }).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});
-}
-function showCard(card){
-  var th=card.tags.filter(function(t){return t;}).map(function(t){return "<span class='ctag'>"+t+"</span>";}).join("");
-  var tx=card.text.replace(/\n/g,"<br>");
-  document.getElementById("cr").innerHTML="<div class='card' style='border-color:rgba(232,216,138,0.2)'><div class='cn'>"+card.name+"</div><div style='display:flex;flex-wrap:wrap;margin-bottom:4px'>"+th+"</div><div class='cx'>"+tx+"</div></div>";
-}
+function fygo(q,k){fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(d){if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Not found.</div>";return;}var c=d.data[0];var tags=[c.type||""];if(c.attribute)tags.push(c.attribute);if(c.race)tags.push(c.race);if(c.level)tags.push("Level "+c.level);if(c.atk!==undefined)tags.push("ATK:"+c.atk);if(c.def!==undefined)tags.push("DEF:"+c.def);if(c.linkval)tags.push("Link-"+c.linkval);if(c.rank)tags.push("Rank "+c.rank);var card={name:c.name,tags:tags,text:c.desc||"No text."};cCache[k]=card;showCard(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
+function fpkm(q,k){fetch("https://api.pokemontcg.io/v2/cards?q=name:"+encodeURIComponent(q)+"&pageSize=1").then(function(r){return r.json();}).then(function(d){if(!d.data||!d.data.length){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Not found.</div>";return;}var c=d.data[0];var tags=[c.supertype||""];if(c.hp)tags.push("HP:"+c.hp);if(c.types)tags.push(c.types.join("/"));var text="";if(c.abilities)c.abilities.forEach(function(a){text+="[Ability] "+a.name+": "+a.text+"\n\n";});if(c.attacks)c.attacks.forEach(function(a){text+=a.name+(a.damage?" - "+a.damage:"")+"\n"+(a.text||"")+"\n\n";});var card={name:c.name,tags:tags,text:text.trim()||"No text."};cCache[k]=card;showCard(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
+function fmtg(q,k){fetch("https://api.scryfall.com/cards/named?fuzzy="+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(c){if(c.object==="error"){document.getElementById("cr").innerHTML="<div style='color:#505068;font-size:12px;padding:16px;text-align:center'>Not found.</div>";return;}var tags=[];if(c.type_line)tags.push(c.type_line);if(c.mana_cost)tags.push(c.mana_cost);if(c.power)tags.push("P/T:"+c.power+"/"+c.toughness);var text=c.oracle_text||"";if(c.card_faces)text=c.card_faces.map(function(f){return f.name+"\n"+f.oracle_text;}).join("\n---\n");var card={name:c.name,tags:tags,text:text||"No text."};cCache[k]=card;showCard(card);}).catch(function(){document.getElementById("cr").innerHTML="<div style='color:#e05050;font-size:12px;padding:16px;text-align:center'>Search failed.</div>";});}
+function showCard(card){var th=card.tags.filter(function(t){return t;}).map(function(t){return "<span class='ctag'>"+t+"</span>";}).join("");document.getElementById("cr").innerHTML="<div class='card' style='border-color:rgba(232,216,138,0.2)'><div class='cn'>"+card.name+"</div><div style='display:flex;flex-wrap:wrap;margin-bottom:4px'>"+th+"</div><div class='cx'>"+card.text.replace(/\n/g,"<br>")+"</div></div>";}
 
 // MATCH
 function aw(p){W[p]++;document.getElementById("w"+p).textContent=W[p];addL("mL","P"+p+" wins game "+gNum);}
-function ng(){gNum++;document.getElementById("gn").textContent=gNum;lp[1]=sLP;lp[2]=sLP;turn=1;ul();addL("mL","Game "+gNum+" started");}
-function rmatch(){W[1]=0;W[2]=0;gNum=1;document.getElementById("w1").textContent=0;document.getElementById("w2").textContent=0;document.getElementById("gn").textContent=1;addL("mL","Match reset");}
+function ng(){gNum++;document.getElementById("gn").textContent=gNum;lp[1]=sLP;lp[2]=sLP;turn=1;ul();}
+function rmatch(){W[1]=0;W[2]=0;gNum=1;document.getElementById("w1").textContent=0;document.getElementById("w2").textContent=0;document.getElementById("gn").textContent=1;}
 
 // JUDGE
 function jg(g,el){jGame=g;document.querySelectorAll(".jt").forEach(function(t){t.classList.remove("on");});el.classList.add("on");}
@@ -526,285 +403,50 @@ function rsz(ta){ta.style.height="36px";ta.style.height=Math.min(ta.scrollHeight
 function ojk(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sj();}}
 function jmsg(role,text,badge){
   var msgs=document.getElementById("jm");
-  var div=document.createElement("div");
-  div.className="msg "+(role==="user"?"mu":"ma");
+  var div=document.createElement("div");div.className="msg "+(role==="user"?"mu":"ma");
   var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-  var badgeHtml=badge?"<span class='ruling-badge'>"+badge+"</span><br>":"";
-  div.innerHTML=badgeHtml+"<div class='bub'>"+text+"</div><span class='mt'>"+t+"</span>";
+  var bh=badge?"<span class='"+(badge==="Official Ruling"?"rbadge":"aibadge")+"'>"+badge+"</span><br>":"";
+  div.innerHTML=bh+"<div class='bub'>"+text+"</div><span class='mt'>"+t+"</span>";
   msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
 }
-
 function sj(){
   var inp=document.getElementById("ji");
   var q=inp.value.trim();if(!q)return;
   inp.value="";inp.style.height="36px";
   jmsg("user",q);
   document.getElementById("isb").disabled=true;
-
-  // STEP 1: Ensure card rulings are loaded then check
-  if(!window._cardRulingsLoaded){
-    loadCardRulings(function(){
-      // Re-run after loading
-      document.getElementById("ji").value=q;
-      sj();
-    });
-    document.getElementById("isb").disabled=false;
-    return;
-  }
-  var cardRuling=findCardRuling(q,jGame);
-  if(cardRuling){
-    jmsg("ai",cardRuling.a,"Official Ruling");
-    document.getElementById("isb").disabled=false;
-    return;
-  }
-
-  // Show thinking indicator
+  if(!cardsLoaded){
+    jmsg("ai","Loading rulings database...","");
+    loadCards(function(){answerQ(q);});
+  } else {answerQ(q);}
+}
+function answerQ(q){
+  var ruling=findRuling(q);
+  if(ruling){jmsg("ai",ruling.a,"Official Ruling");document.getElementById("isb").disabled=false;return;}
   var msgs=document.getElementById("jm");
   var tp=document.createElement("div");tp.className="msg ma";tp.id="tp";
-  tp.innerHTML="<div class='bub' style='color:#505068'>Looking up cards...</div>";
+  tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
   msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
-
-  // STEP 2: Extract potential card names from question
-  // Look for sequences of capitalized words and known card patterns
-  var cardNames = extractCardNames(q);
-  
-  if(cardNames.length > 0 && (jGame==="ygo"||jGame==="all")){
-    // Fetch card texts then answer
-    fetchCardsAndAnswer(q, cardNames);
-  } else {
-    // No card names detected - go straight to AI with rules context
-    answerWithRules(q);
-  }
-}
-
-function extractCardNames(q){
-  var names = [];
-  var text = q;
-  
-  // Common YGO card name patterns - sequences of proper nouns
-  // Look for 2-4 word capitalized sequences
-  var matches = text.match(/[A-Z][a-zA-Z]+([ &-][A-Z][a-zA-Z]+){1,4}/g) || [];
-  matches.forEach(function(m){
-    if(m.length > 4 && !["Player","During","What","When","While","After","Before","Can","Does","Will","This","That","Your","Their","Both","Each"].includes(m.split(" ")[0])){
-      names.push(m);
-    }
-  });
-  
-  // Also check for known partial card names in lowercase
-  var lower = q.toLowerCase();
-  var knownCards = ["ash blossom","effect veiler","dark law","masked hero","nibiru","solemn judgment","solemn strike",
-    "droll lock bird","called by the grave","infinite impermanence","ghost ogre","maxx c","skill drain",
-    "dimensional fissure","macro cosmos","forbidden droplet","lightning storm","pot of desires","pot of extravagance",
-    "monster reborn","dark hole","raigeki","mystical space typhoon","twin twisters","super polymerization",
-    "rescue rabbit","cyber dragon","chimeratech","accesscode talker","apollousa","borrelsword","el shaddoll",
-    "tearlaments","kashtira","branded fusion","mirrorjade","lubellion","sangan","man eater bug",
-    "crimson blader","kycoo","gagaga cowboy","dragonecro","dante","beatrice","eldlich"];
-  
-  knownCards.forEach(function(card){
-    if(lower.indexOf(card) >= 0 && names.indexOf(card) < 0){
-      names.push(card);
-    }
-  });
-  
-  return names.slice(0,3); // Max 3 cards to keep API calls fast
-}
-
-function fetchCardsAndAnswer(question, cardNames){
-  var cardTexts = [];
-  var fetched = 0;
-  var total = cardNames.length;
-  
-  if(total === 0){ answerWithRules(question); return; }
-  
-  cardNames.forEach(function(name){
-    fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(name))
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d.data && d.data.length > 0){
-        var c = d.data[0];
-        cardTexts.push(c.name+": "+c.desc);
-      }
-      fetched++;
-      if(fetched >= total) answerWithCards(question, cardTexts);
-    }).catch(function(){
-      fetched++;
-      if(fetched >= total) answerWithCards(question, cardTexts);
-    });
-  });
-  
-  // Timeout fallback after 3 seconds
-  setTimeout(function(){
-    if(fetched < total) answerWithCards(question, cardTexts);
-  }, 3000);
-}
-
-function answerWithCards(question, cardTexts){
-  var tp=document.getElementById("tp");
-  if(tp) tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
-  
-  // Build rules context
-  var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1};
-  var wds=question.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2&&!stop[w];});
+  var wds=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2;});
   var res=[];
   var games=jGame==="all"?Object.keys(RULES):[jGame];
-  games.forEach(function(g){(RULES[g]||[]).forEach(function(r){var sc=0;wds.forEach(function(w){if(r.t.toLowerCase().indexOf(w)>=0)sc+=10;if(r.s.toLowerCase().indexOf(w)>=0)sc+=5;if(r.e.toLowerCase().indexOf(w)>=0)sc+=2;});if(sc>4)res.push({r:r,s:sc});});});
+  games.forEach(function(g){(RULES[g]||[]).forEach(function(r){var sc=0;wds.forEach(function(w){if(r.t.toLowerCase().indexOf(w)>=0)sc+=15;if(r.e.toLowerCase().indexOf(w)>=0)sc+=3;});if(sc>5)res.push({r:r,s:sc});});});
   res.sort(function(a,b){return b.s-a.s;});
-  var context=res.slice(0,5).map(function(x){return x.r.t+": "+x.r.e;}).join("
-
-");
-
-  var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam, and One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
-  var sys="You are a certified "+gl[jGame]+" Head Judge. You have been given the EXACT card text for the cards mentioned in this question. Use this card text to give a precise ruling.\n\nCRITICAL RULES:\n- Costs are paid at activation before chain resolves\n- Skill Drain only negates face-up monsters ON the field\n- If a monster left the field as cost it cannot be negated by Skill Drain\n- Sangan only searches if sent to GY not if banished\n- Normal Spells resolve even if destroyed after activation\n- Continuous Spells need to remain on field to resolve\n- Super Polymerization is Quick-Play Spell Speed 2\n- Chain resolves Last In First Out\n\nGive a direct definitive ruling. State yes or no first then explain why using the card text provided. Plain text only.";
-  
-  if(cardTexts.length > 0){
-    sys += "\n\nEXACT CARD TEXT:\n" + cardTexts.join("\n\n");
-  }
-  if(context){
-    sys += "\n\nOFFICIAL RULES:\n" + context;
-  }
-
-  fetch("https://tcg-judge.kirkcreason.workers.dev",{
-    method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({system:sys,question:question})
-  }).then(function(r){return r.json();})
-  .then(function(d){
-    var t=document.getElementById("tp");if(t)t.remove();
-    var ans=(d.answer||d.error||"No response.").replace(/
-
-/g,"<br><br>").replace(/
-/g,"<br>");
-    jmsg("ai",ans,"AI Judge");
-  }).catch(function(){
-    var t=document.getElementById("tp");if(t)t.remove();
-    jmsg("ai","Connection error. Check internet.","");
-  }).finally(function(){document.getElementById("isb").disabled=false;});
+  var ctx=res.slice(0,5).map(function(x){return x.r.t+": "+x.r.e;}).join("\n\n");
+  var gl={all:"Yu-Gi-Oh!, Pokemon, MTG, Digimon, Gundam, One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic: The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
+  var sys="You are a certified "+gl[jGame]+" Head Judge. Give a direct definitive ruling. State yes or no first. Plain text only. Under 150 words.\n\nKEY RULES: Costs paid before chain resolves. Skill Drain only negates monsters on field. Normal Spells resolve even if destroyed. Super Polymerization is Speed 2 Quick-Play. IF triggers never miss timing. WHEN optional triggers can miss timing.";
+  if(ctx)sys+="\n\nRELEVANT RULES:\n"+ctx;
+  fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:q})})
+  .then(function(r){return r.json();})
+  .then(function(d){var t=document.getElementById("tp");if(t)t.remove();var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");jmsg("ai",ans,"AI Judge");})
+  .catch(function(){var t=document.getElementById("tp");if(t)t.remove();jmsg("ai","Connection error.","");})
+  .finally(function(){document.getElementById("isb").disabled=false;});
 }
 
-function answerWithRules(question){
-  var tp=document.getElementById("tp");
-  if(tp) tp.innerHTML="<div class='bub' style='color:#505068'>Thinking...</div>";
-  
-  var stop={a:1,i:1,my:1,by:1,to:1,if:1,of:1,it:1,in:1,is:1,do:1,the:1,and:1,what:1,when:1,does:1,can:1,how:1,that:1,this:1,with:1,from:1,your:1,have:1,will:1,its:1,card:1,cards:1,player:1,opponent:1};
-  var wds=question.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(" ").filter(function(w){return w.length>2&&!stop[w];});
-  var exp={};
-  wds.forEach(function(w){exp[w]=true;if(SYNS[w])SYNS[w].split(" ").forEach(function(s){exp[s]=true;});Object.keys(SYNS).forEach(function(k){if(k.indexOf(w)>=0||w.indexOf(k)>=0){exp[k]=true;SYNS[k].split(" ").forEach(function(s){exp[s]=true;});}});});
-  var games=jGame==="all"?Object.keys(RULES):[jGame];
-  var res=[];
-  games.forEach(function(g){(RULES[g]||[]).forEach(function(r){var ti=r.t.toLowerCase(),su=r.s.toLowerCase(),de=r.e.toLowerCase();var sc=0;wds.forEach(function(w){if(ti.indexOf(w)>=0)sc+=15;if(su.indexOf(w)>=0)sc+=8;if(de.indexOf(w)>=0)sc+=3;});Object.keys(exp).forEach(function(w){if(w.length<3)return;if(ti.indexOf(w)>=0)sc+=5;if(su.indexOf(w)>=0)sc+=3;if(de.indexOf(w)>=0)sc+=1;});for(var i=0;i<wds.length-1;i++){var ph=wds[i]+" "+wds[i+1];if(ti.indexOf(ph)>=0)sc+=25;if(su.indexOf(ph)>=0)sc+=12;if(de.indexOf(ph)>=0)sc+=6;}if(sc>5)res.push({r:r,s:sc});});});
-  res.sort(function(a,b){return b.s-a.s;});
-  var context=res.slice(0,8).map(function(x){return "RULE - "+x.r.t+":\n"+x.r.e;}).join("\n\n");
-  var gl={all:"Yu-Gi-Oh!, Pokemon TCG, Magic The Gathering, Digimon TCG, Gundam, and One Piece",ygo:"Yu-Gi-Oh!",pkm:"Pokemon TCG",mtg:"Magic The Gathering",dig:"Digimon TCG",gundam:"Gundam",op:"One Piece"};
-  var sys="You are a certified "+gl[jGame]+" Head Judge. Answer the ruling question directly and definitively. State yes or no first then explain. Plain text only.";
-  if(context)sys+="\n\nOFFICIAL RULES:\n"+context;
-  
-  fetch("https://tcg-judge.kirkcreason.workers.dev",{
-    method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({system:sys,question:question})
-  }).then(function(r){return r.json();})
-  .then(function(d){
-    var t=document.getElementById("tp");if(t)t.remove();
-    var ans=(d.answer||d.error||"No response.").replace(/
-
-/g,"<br><br>").replace(/
-/g,"<br>");
-    jmsg("ai",ans,"AI Judge");
-  }).catch(function(){
-    var t=document.getElementById("tp");if(t)t.remove();
-    jmsg("ai","Connection error.","");
-  }).finally(function(){document.getElementById("isb").disabled=false;});
-}
 // LOG
-function addL(id,msg){
-  var el=document.getElementById(id);if(!el)return;
-  var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-  var line=document.createElement("div");line.className="ll";
-  line.innerHTML="<b>"+msg+"</b><span>"+t+"</span>";
-  el.insertBefore(line,el.firstChild);
-  while(el.children.length>10)el.removeChild(el.lastChild);
-}
+function addL(id,msg){var el=document.getElementById(id);if(!el)return;var t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});var line=document.createElement("div");line.className="ll";line.innerHTML="<b>"+msg+"</b><span>"+t+"</span>";el.insertBefore(line,el.firstChild);while(el.children.length>10)el.removeChild(el.lastChild);}
 
 ut();
-
-// Load rules.js after page renders - with cache busting
-var rulesLoaded={};
-var BASE="https://kirkcreason-dev.github.io/tcg-referee/";
-
-function loadGameRules(game, cb){
-  if(rulesLoaded[game]){if(cb)cb();return;}
-  var s=document.createElement("script");
-  s.src=BASE+"rules_"+game+".js?v=1";
-  s.onload=function(){
-    // Merge into RULES object
-    var key="RULES_"+game.toUpperCase();
-    if(window[key]) RULES[game]=window[key];
-    rulesLoaded[game]=true;
-    if(cb)cb();
-  };
-  document.body.appendChild(s);
-}
-
-function loadSyns(cb){
-  if(window._synsLoaded){if(cb)cb();return;}
-  var s=document.createElement("script");
-  s.src=BASE+"rules_syns.js?v=1";
-  s.onload=function(){
-    if(window.SYNS) SYNS=window.SYNS;
-    window._synsLoaded=true;
-    if(cb)cb();
-  };
-  document.body.appendChild(s);
-}
-
-function loadCardRulings(cb){
-  if(window._cardRulingsLoaded){if(cb)cb();return;}
-  var chunks=["rules_cards_1.js","rules_cards_2.js","rules_cards_3.js"];
-  var loaded=0;
-  // Load one at a time to avoid memory spike
-  function loadNext(i){
-    if(i>=chunks.length){
-      window._cardRulingsLoaded=true;
-      if(cb)cb();
-      return;
-    }
-    var sc=document.createElement("script");
-    sc.src=BASE+chunks[i]+"?v=1";
-    sc.onload=function(){loadNext(i+1);};
-    sc.onerror=function(){loadNext(i+1);};
-    document.body.appendChild(sc);
-  }
-  loadNext(0);
-}
-
-// Override sw to lazy load rules when Rules tab opened
-var _origSw=sw;
-function sw(id,el){
-  _origSw(id,el);
-  if(id==="rules"){
-    var saved=localStorage.getItem("tcgGame")||"ygo";
-    loadSyns(function(){
-      loadGameRules(saved,function(){rr();});
-    });
-  }
-  if(id==="judge"){
-    var saved=localStorage.getItem("tcgGame")||"ygo";
-    loadSyns(function(){
-      loadGameRules(saved,null);
-      loadCardRulings(null);
-    });
-  }
-}
-
-// Override srg to load rules for selected game
-var _origSrg=srg;
-function srg(g,el){
-  _origSrg(g,el);
-  loadGameRules(g,function(){rr();});
-}
-
-// Nothing loads on startup - all loading is on-demand when tabs are tapped
-window.addEventListener("load",function(){
-  // App is ready - rules load only when needed
-});
 </script>
 </body>
 </html>
