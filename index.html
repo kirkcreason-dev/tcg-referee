@@ -801,12 +801,9 @@ function srg(g,el){
   loadGameRules(g,function(){rr();});
 }
 
-// Load only game rules in background after 2s - card rulings load on demand
+// Nothing loads on startup - all loading is on-demand when tabs are tapped
 window.addEventListener("load",function(){
-  setTimeout(function(){
-    var saved=localStorage.getItem("tcgGame")||"ygo";
-    loadGameRules(saved,null);
-  },2000);
+  // App is ready - rules load only when needed
 });
 </script>
 </body>
