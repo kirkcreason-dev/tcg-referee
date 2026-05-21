@@ -443,8 +443,12 @@ function applyGame(g){
   lp[1]=sLP;lp[2]=sLP;turn=1;
   document.getElementById("ab").textContent=c.n;
   ul();
-  // Update LP tab label
   updateLPLabels(g);
+  // Pre-fetch card database in background on game load
+  if(g==="ygo"){
+    loadCards(function(){});  // preload rulings db
+    loadYgoCardCache(function(){});  // preload full card texts
+  }
 }
 
 function updateLPLabels(g){
@@ -466,7 +470,7 @@ function sw(id,el){
 // RULES
 function loadScript(src,cb){
   var s=document.createElement("script");
-  s.src=src+"?v=8";
+  s.src=src+"?v=11";
   s.onload=function(){if(cb)cb();};
   s.onerror=function(){if(cb)cb();};
   document.body.appendChild(s);
@@ -499,7 +503,7 @@ function rr(){
     return;
   }
   var all=RULES[curGame].filter(function(r){
-    return !q||r.t.toLowerCase().indexOf(q)>=0||r.s.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;
+    return !q||r.t.toLowerCase().indexOf(q)>=0||r.e.toLowerCase().indexOf(q)>=0;
   });
   rct.textContent=all.length+" rule"+(all.length!==1?"s":"");
   all.slice(0,80).forEach(function(r){
@@ -519,17 +523,42 @@ function sc(){
   var el=document.getElementById("cr");
   el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Searching...</div>";
   if(curGame==="ygo"){
-    fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q))
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(!d.data||!d.data.length){el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Not found.</div>";return;}
-      var c=d.data[0];
+    function renderCard(c){
       var tags=[c.type||""];
       if(c.attribute)tags.push(c.attribute);
       if(c.level)tags.push("Level "+c.level);
       if(c.atk!==undefined)tags.push("ATK "+c.atk);
       if(c.def!==undefined)tags.push("DEF "+c.def);
       el.innerHTML="<div class='crd'>"+(c.card_images&&c.card_images[0]?"<img src='"+c.card_images[0].image_url_small+"' loading='lazy'>":"")+"<div class='crn'>"+esc(c.name)+"</div><div class='crt'>"+tags.map(function(t){return "<span class='tag'>"+esc(t)+"</span>";}).join("")+"</div><p>"+esc(c.desc)+"</p></div>";
+    }
+    // Try local card cache first (instant)
+    if(ygoCardsReady){
+      var ql=q.toLowerCase();
+      var found=null;
+      // Exact match first
+      if(YGO_CARDS[ql]){found={name:q,desc:YGO_CARDS[ql]};}
+      else {
+        // Partial match
+        var keys=Object.keys(YGO_CARDS);
+        for(var i=0;i<keys.length;i++){
+          if(keys[i].indexOf(ql)>=0){found={name:keys[i],desc:YGO_CARDS[keys[i]]};break;}
+        }
+      }
+      if(found){
+        // Fetch full card data for image
+        fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?name="+encodeURIComponent(found.name))
+        .then(function(r){return r.json();})
+        .then(function(d){if(d.data&&d.data.length)renderCard(d.data[0]);else el.innerHTML="<div class='crd'><div class='crn'>"+esc(found.name)+"</div><p>"+esc(found.desc)+"</p></div>";})
+        .catch(function(){el.innerHTML="<div class='crd'><div class='crn'>"+esc(found.name)+"</div><p>"+esc(found.desc)+"</p></div>";});
+        return;
+      }
+    }
+    // Fallback to API search
+    fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d.data||!d.data.length){el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Not found.</div>";return;}
+      renderCard(d.data[0]);
     })
     .catch(function(){el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Search failed.</div>";});
   } else {
