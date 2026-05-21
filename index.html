@@ -490,7 +490,18 @@ function answerQ(q){
     if(cardTexts.length>0)sys+="\n\nEXACT CARD TEXTS (use these only — do not guess effects):\n"+cardTexts.join("\n\n");
     if(ctx)sys+="\n\nRELEVANT RULES:\n"+ctx;
 
-    fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:q})})
+    // Embed card texts directly in question so Worker can't ignore them
+    var fullQ=q;
+    if(cardTexts.length>0){
+      fullQ="EXACT CARD TEXTS (base your ruling ONLY on these):\n"+cardTexts.join("\n\n")+"\n\nQUESTION: "+q;
+    }
+    // Show which cards were found
+    var tEl=document.getElementById("tp");
+    if(tEl){
+      var label=cardTexts.length>0?"Found card texts: "+cardTexts.map(function(t){return t.split(":")[0];}).join(", "):"Thinking...";
+      tEl.innerHTML="<div class='bub' style='color:#505068'>"+label+"</div>";
+    }
+    fetch("https://tcg-judge.kirkcreason.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,question:fullQ})})
     .then(function(r){return r.json();})
     .then(function(d){var t=document.getElementById("tp");if(t)t.remove();var ans=(d.answer||d.error||"No response.").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");jmsg("ai",ans,"AI Judge");})
     .catch(function(){var t=document.getElementById("tp");if(t)t.remove();jmsg("ai","Connection error.","");})
