@@ -495,9 +495,11 @@ function answerQ(q){
     if(ctx)sys+="\n\nRELEVANT RULES:\n"+ctx;
 
     // Embed card texts directly in question so Worker can't ignore them
-    var fullQ=q;
+    // Nonce goes INTO the question string to bust any Worker-side cache keyed on question
+    var nonce="[ref:"+Math.random().toString(36).slice(2,7)+"]";
+    var fullQ=q+" "+nonce;
     if(cardTexts.length>0){
-      fullQ="EXACT CARD TEXTS (base your ruling ONLY on these):\n"+cardTexts.join("\n\n")+"\n\nQUESTION: "+q;
+      fullQ="EXACT CARD TEXTS (base your ruling ONLY on these):\n"+cardTexts.join("\n\n")+"\n\nQUESTION: "+q+" "+nonce;
     }
     // Show which cards were found
     var tEl=document.getElementById("tp");
