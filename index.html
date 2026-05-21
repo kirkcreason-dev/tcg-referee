@@ -296,13 +296,17 @@ function loadCards(cb){
 }
 
 function findRuling(q){
-  var ql=q.toLowerCase(),best=null,bScore=0;
+  var ql=q.toLowerCase();
+  var generic={effect:1,effects:1,cost:1,tribute:1,tributes:1,chain:1,activate:1,activates:1,resolve:1,resolves:1,detach:1,detaches:1,target:1,targets:1,summon:1,summons:1,negate:1,negates:1,destroy:1,destroys:1,card:1,cards:1,monster:1,spell:1,trap:1,hand:1,deck:1,field:1,grave:1,banish:1};
+  var best=null,bScore=0;
   CARDS_ALL.forEach(function(r){
-    var m=r.cards.filter(function(c){return ql.indexOf(c.toLowerCase())>=0;}).length;
-    var thresh=Math.max(2,Math.ceil(r.cards.length*0.5));
-    if(m>=thresh){var sc=m*20;if(sc>bScore){bScore=sc;best=r;}}
+    var specific=r.cards.filter(function(c){return !generic[c.toLowerCase()]&&c.length>4;});
+    if(specific.length<1)return;
+    var m=specific.filter(function(c){return ql.indexOf(c.toLowerCase())>=0;}).length;
+    var thresh=Math.max(1,Math.ceil(specific.length*0.6));
+    if(m>=thresh){var sc=m*30+(specific.length>2?20:0);if(sc>bScore){bScore=sc;best=r;}}
   });
-  return bScore>=40?best:null;
+  return bScore>=60?best:null;
 }
 
 // LP
