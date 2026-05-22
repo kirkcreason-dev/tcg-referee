@@ -138,11 +138,88 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'Helvetica
 .log-panel{display:flex;flex-direction:column;gap:0;}
 .log-title{font-size:11px;color:var(--text2);margin-bottom:8px;letter-spacing:1px;}
 .loglist{display:flex;flex-direction:column;gap:4px;}
+
+/* SPIN OVERLAY */
+#spinOverlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#1a0a0a 0%,#0a0a1a 50%,#1a0a0a 100%);}
+#spinOverlay.hide{display:none;}
+.spin-stars{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+.spin-star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:0.2;}50%{opacity:1;}}
+.spin-logo{font-size:20px;font-weight:800;text-align:center;background:linear-gradient(135deg,#ff6b35,#ffe66d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;position:relative;z-index:1;}
+.spin-sub{font-size:12px;color:rgba(255,255,255,0.5);text-align:center;margin-bottom:16px;position:relative;z-index:1;}
+.spin-wheel-wrap{position:relative;width:260px;height:260px;flex-shrink:0;z-index:1;}
+.spin-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:22px solid #ffe66d;filter:drop-shadow(0 0 6px #ffe66d);z-index:10;}
+.spin-btn{background:linear-gradient(135deg,#ff6b35,#ffe66d);color:#1a0a0a;border:none;border-radius:50px;padding:14px 44px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(255,107,53,0.5);position:relative;z-index:1;margin-top:16px;}
+.spin-btn:disabled{opacity:0.4;}
+.spin-count-txt{font-size:11px;color:rgba(255,255,255,0.35);margin-top:8px;position:relative;z-index:1;}
+.spin-result{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.4s;z-index:2;}
+.spin-result.show{opacity:1;pointer-events:auto;}
+.spin-result-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px 20px;text-align:center;width:100%;max-width:320px;}
+.spin-win-emoji{font-size:56px;margin-bottom:8px;display:block;}
+.spin-win-title{font-size:26px;font-weight:800;background:linear-gradient(135deg,#ff6b35,#ffe66d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.spin-code-box{background:rgba(255,230,109,0.1);border:2px solid #ffe66d;border-radius:10px;padding:12px;margin:12px 0;}
+.spin-code-lbl{font-size:10px;color:#ffe66d;letter-spacing:2px;}
+.spin-code-val{font-size:26px;font-weight:800;letter-spacing:4px;color:#ffe66d;}
+.spin-game-btns{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px;}
+.spin-game-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:6px 12px;font-size:11px;color:#fff;cursor:pointer;}
+.spin-game-btn.sel{background:rgba(255,230,109,0.2);border-color:#ffe66d;color:#ffe66d;}
+.spin-lose-emoji{font-size:48px;margin-bottom:8px;display:block;}
+.spin-lose-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:6px;}
+.spin-lose-sub{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.5;}
+.spin-close-btn{margin-top:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 28px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;position:relative;z-index:3;}
+.spin-confetti{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+.spin-skip{font-size:11px;color:rgba(255,255,255,0.2);text-decoration:underline;cursor:pointer;margin-top:6px;position:relative;z-index:1;}
 </style>
 </head>
 <body>
 
 <!-- START SCREEN -->
+<!-- SPIN OVERLAY -->
+<div id="spinOverlay" class="hide">
+  <div class="spin-stars" id="spinStars"></div>
+  <canvas class="spin-confetti" id="spinConfetti"></canvas>
+  <div class="spin-logo">🎰 SPIN TO WIN!</div>
+  <div class="spin-sub">Denver Card Show · June 28, 2025<br>Win a FREE TCG card of your choice!</div>
+  <div class="spin-wheel-wrap">
+    <div class="spin-pointer"></div>
+    <canvas id="spinCanvas" width="260" height="260"></canvas>
+    <!-- WIN result -->
+    <div class="spin-result" id="spinWinResult">
+      <div class="spin-result-box">
+        <span class="spin-win-emoji">🎉</span>
+        <div class="spin-win-title">YOU WON!</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:8px;">Bring this code to the TCG Referee booth!</div>
+        <div class="spin-code-box">
+          <div class="spin-code-lbl">CLAIM CODE</div>
+          <div class="spin-code-val" id="spinWinCode">----</div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:8px;">Pick your free card:</div>
+        <div class="spin-game-btns">
+          <button class="spin-game-btn" onclick="selGame(this)">Yu-Gi-Oh!</button>
+          <button class="spin-game-btn" onclick="selGame(this)">Pokemon</button>
+          <button class="spin-game-btn" onclick="selGame(this)">MTG</button>
+          <button class="spin-game-btn" onclick="selGame(this)">One Piece</button>
+          <button class="spin-game-btn" onclick="selGame(this)">Digimon</button>
+        </div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:10px;">Screenshot this to claim!</div>
+      </div>
+      <button class="spin-close-btn" onclick="closeSpin()">Done!</button>
+    </div>
+    <!-- LOSE result -->
+    <div class="spin-result" id="spinLoseResult">
+      <div class="spin-result-box">
+        <span class="spin-lose-emoji">😤</span>
+        <div class="spin-lose-title">Not this time!</div>
+        <div class="spin-lose-sub">Come visit the TCG Referee booth anyway!<br>Denver Card Show · June 28 🃏</div>
+      </div>
+      <button class="spin-close-btn" onclick="closeSpin()">OK</button>
+    </div>
+  </div>
+  <button class="spin-btn" id="spinBtnEl" onclick="doSpin()">SPIN!</button>
+  <div class="spin-count-txt" id="spinCountTxt"></div>
+  <div class="spin-skip" onclick="closeSpin()">Skip</div>
+</div>
+
 <div id="S">
   <div class="sh">
     <h1>TCG Referee</h1>
@@ -464,7 +541,10 @@ function sw(id,el){
   el.classList.add("on");
   document.getElementById("pan-"+id).classList.add("on");
   if(id==="rules")loadRules(curGame,rr);
-  if(id==="cards")document.getElementById("ci").focus();
+  if(id==="cards"){
+    document.getElementById("ci").focus();
+    if(curGame==="ygo"&&!ygoCardsReady)loadYgoCardCache(function(){});
+  }
 }
 
 // RULES
@@ -521,39 +601,43 @@ function sc(){
   var q=(document.getElementById("ci").value||"").trim();
   if(!q)return;
   var el=document.getElementById("cr");
-  el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Searching...</div>";
-  if(curGame==="ygo"){
-    function renderCard(c){
-      var tags=[c.type||""];
-      if(c.attribute)tags.push(c.attribute);
-      if(c.level)tags.push("Level "+c.level);
-      if(c.atk!==undefined)tags.push("ATK "+c.atk);
-      if(c.def!==undefined)tags.push("DEF "+c.def);
-      el.innerHTML="<div class='crd'>"+(c.card_images&&c.card_images[0]?"<img src='"+c.card_images[0].image_url_small+"' loading='lazy'>":"")+"<div class='crn'>"+esc(c.name)+"</div><div class='crt'>"+tags.map(function(t){return "<span class='tag'>"+esc(t)+"</span>";}).join("")+"</div><p>"+esc(c.desc)+"</p></div>";
+  if(curGame!=="ygo"){
+    el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Card search coming soon for "+GCFG[curGame].n+"</div>";
+    return;
+  }
+  function renderCard(c){
+    var tags=[c.type||""];
+    if(c.attribute)tags.push(c.attribute);
+    if(c.level)tags.push("Level "+c.level);
+    if(c.atk!==undefined)tags.push("ATK "+c.atk);
+    if(c.def!==undefined)tags.push("DEF "+c.def);
+    el.innerHTML="<div class='crd'>"+(c.card_images&&c.card_images[0]?"<img src='"+c.card_images[0].image_url_small+"' loading='lazy'>":"")+"<div class='crn'>"+esc(c.name)+"</div><div class='crt'>"+tags.map(function(t){return "<span class='tag'>"+esc(t)+"</span>";}).join("")+"</div><p>"+esc(c.desc)+"</p></div>";
+  }
+  function searchLocal(){
+    var ql=q.toLowerCase();
+    // Exact match
+    if(YGO_CARDS[ql]){
+      fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?name="+encodeURIComponent(ql))
+      .then(function(r){return r.json();})
+      .then(function(d){if(d.data&&d.data.length)renderCard(d.data[0]);else el.innerHTML="<div class='crd'><p>"+esc(YGO_CARDS[ql])+"</p></div>";})
+      .catch(function(){el.innerHTML="<div class='crd'><p>"+esc(YGO_CARDS[ql])+"</p></div>";});
+      return true;
     }
-    // Try local card cache first (instant)
-    if(ygoCardsReady){
-      var ql=q.toLowerCase();
-      var found=null;
-      // Exact match first
-      if(YGO_CARDS[ql]){found={name:q,desc:YGO_CARDS[ql]};}
-      else {
-        // Partial match
-        var keys=Object.keys(YGO_CARDS);
-        for(var i=0;i<keys.length;i++){
-          if(keys[i].indexOf(ql)>=0){found={name:keys[i],desc:YGO_CARDS[keys[i]]};break;}
-        }
-      }
-      if(found){
-        // Fetch full card data for image
-        fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?name="+encodeURIComponent(found.name))
+    // Partial match
+    var keys=Object.keys(YGO_CARDS);
+    for(var i=0;i<keys.length;i++){
+      if(keys[i].indexOf(ql)>=0){
+        var name=keys[i];
+        fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?name="+encodeURIComponent(name))
         .then(function(r){return r.json();})
-        .then(function(d){if(d.data&&d.data.length)renderCard(d.data[0]);else el.innerHTML="<div class='crd'><div class='crn'>"+esc(found.name)+"</div><p>"+esc(found.desc)+"</p></div>";})
-        .catch(function(){el.innerHTML="<div class='crd'><div class='crn'>"+esc(found.name)+"</div><p>"+esc(found.desc)+"</p></div>";});
-        return;
+        .then(function(d){if(d.data&&d.data.length)renderCard(d.data[0]);else el.innerHTML="<div class='crd'><p>"+esc(YGO_CARDS[name])+"</p></div>";})
+        .catch(function(){el.innerHTML="<div class='crd'><p>"+esc(YGO_CARDS[name])+"</p></div>";});
+        return true;
       }
     }
-    // Fallback to API search
+    return false;
+  }
+  function searchApi(){
     fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?fname="+encodeURIComponent(q))
     .then(function(r){return r.json();})
     .then(function(d){
@@ -561,10 +645,18 @@ function sc(){
       renderCard(d.data[0]);
     })
     .catch(function(){el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Search failed.</div>";});
+  }
+  if(ygoCardsReady){
+    el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Searching...</div>";
+    if(!searchLocal())searchApi();
   } else {
-    el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Card search coming soon for "+GCFG[curGame].n+"</div>";
+    el.innerHTML="<div style='color:var(--text2);font-size:13px;text-align:center;padding:32px 0'>Loading card database...</div>";
+    loadYgoCardCache(function(){
+      if(!searchLocal())searchApi();
+    });
   }
 }
+
 
 // LP TRACKER
 function ul(){
@@ -797,6 +889,146 @@ function answerQ(q){
   }
 }
 
+// SPIN WHEEL
+var spinSegs=[
+  {label:'Yu-Gi-Oh!',color:'#8B0000',text:'#FFD700'},
+  {label:'Pokemon',color:'#FFCC00',text:'#1a1a1a'},
+  {label:'MTG',color:'#8B4513',text:'#FFD700'},
+  {label:'One Piece',color:'#FF4500',text:'#fff'},
+  {label:'Digimon',color:'#1565C0',text:'#fff'},
+  {label:'Gundam',color:'#2E7D32',text:'#fff'},
+  {label:'Yu-Gi-Oh!',color:'#4A0080',text:'#FFD700'},
+  {label:'Pokemon',color:'#E53935',text:'#fff'},
+  {label:'MTG',color:'#1B5E20',text:'#fff'},
+  {label:'One Piece',color:'#FF6F00',text:'#fff'},
+  {label:'Digimon',color:'#0D47A1',text:'#fff'},
+  {label:'Gundam',color:'#3E2723',text:'#FFD700'},
+];
+var spinAngle=0,spinRunning=false;
+
+function initSpin(){
+  // Generate stars
+  var st=document.getElementById('spinStars');
+  for(var i=0;i<60;i++){
+    var el=document.createElement('div');
+    el.className='spin-star';
+    el.style.cssText='left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;--d:'+(1+Math.random()*3)+'s;animation-delay:'+(Math.random()*3)+'s;';
+    st.appendChild(el);
+  }
+  drawSpinWheel(0);
+  // Fetch count
+  fetch('https://tcg-judge.kirkcreason.workers.dev/spin?action=count')
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var n=d.count||0;
+    document.getElementById('spinCountTxt').textContent=n+' spins so far';
+  }).catch(function(){});
+}
+
+function drawSpinWheel(angle){
+  var cv=document.getElementById('spinCanvas');
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var cx=130,cy=130,r=126;
+  var slice=2*Math.PI/spinSegs.length;
+  ctx.clearRect(0,0,260,260);
+  // Glow
+  ctx.beginPath();ctx.arc(cx,cy,r+2,0,2*Math.PI);
+  ctx.strokeStyle='rgba(255,230,109,0.4)';ctx.lineWidth=3;ctx.stroke();
+  spinSegs.forEach(function(seg,i){
+    var s=angle+i*slice,e=s+slice;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e);ctx.closePath();
+    ctx.fillStyle=seg.color;ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(s+slice/2);
+    ctx.textAlign='right';ctx.fillStyle=seg.text;
+    ctx.font='bold 10px -apple-system,sans-serif';
+    ctx.fillText(seg.label,r-8,4);ctx.restore();
+  });
+  // Center
+  ctx.beginPath();ctx.arc(cx,cy,24,0,2*Math.PI);
+  var g=ctx.createRadialGradient(cx,cy,0,cx,cy,24);
+  g.addColorStop(0,'#ffe66d');g.addColorStop(1,'#ff6b35');
+  ctx.fillStyle=g;ctx.fill();
+  ctx.fillStyle='#1a0a0a';ctx.font='bold 9px -apple-system,sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('TCG',cx,cy-5);ctx.fillText('REF',cx,cy+5);
+}
+
+function doSpin(){
+  if(spinRunning)return;
+  spinRunning=true;
+  document.getElementById('spinBtnEl').disabled=true;
+  var dur=4500+Math.random()*1500;
+  var target=spinAngle+(5+Math.random()*5)*2*Math.PI+(Math.random()*2*Math.PI);
+  var start=null;
+  function ease(t){return t<0.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1;}
+  function frame(ts){
+    if(!start)start=ts;
+    var p=Math.min((ts-start)/dur,1);
+    drawSpinWheel(spinAngle+(target-spinAngle)*ease(p));
+    if(p<1){requestAnimationFrame(frame);}
+    else{spinAngle=target%(2*Math.PI);spinDone();}
+  }
+  requestAnimationFrame(frame);
+}
+
+function spinDone(){
+  try{localStorage.setItem('tcg_spun_denver','1');}catch(e){}
+  fetch('https://tcg-judge.kirkcreason.workers.dev/spin?action=spin',{method:'POST'})
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.winner){showSpinWin(d.code);}else{showSpinLose();}
+  })
+  .catch(function(){showSpinLose();});
+}
+
+function showSpinWin(code){
+  document.getElementById('spinWinCode').textContent=code||('DCS'+Math.floor(Math.random()*9000+1000));
+  document.getElementById('spinWinResult').classList.add('show');
+  document.getElementById('spinBtnEl').style.display='none';
+  document.getElementById('spinCountTxt').style.display='none';
+  document.querySelector('.spin-skip').style.display='none';
+  startSpinConfetti();
+}
+
+function showSpinLose(){
+  document.getElementById('spinLoseResult').classList.add('show');
+  document.getElementById('spinBtnEl').style.display='none';
+  document.getElementById('spinCountTxt').style.display='none';
+  document.querySelector('.spin-skip').style.display='none';
+}
+
+function closeSpin(){
+  document.getElementById('spinOverlay').classList.add('hide');
+}
+
+function selGame(btn){
+  document.querySelectorAll('.spin-game-btn').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel');
+}
+
+function startSpinConfetti(){
+  var cc=document.getElementById('spinConfetti');
+  cc.width=window.innerWidth;cc.height=window.innerHeight;
+  var ctx=cc.getContext('2d');
+  var pieces=[];
+  var colors=['#ff6b35','#ffe66d','#4ecdc4','#fff','#f7c59f'];
+  for(var i=0;i<100;i++){pieces.push({x:Math.random()*cc.width,y:-20-Math.random()*80,w:5+Math.random()*7,h:7+Math.random()*10,color:colors[Math.floor(Math.random()*colors.length)],a:Math.random()*360,vx:(Math.random()-0.5)*4,vy:2+Math.random()*4,va:(Math.random()-0.5)*5});}
+  function fr(){
+    ctx.clearRect(0,0,cc.width,cc.height);
+    var alive=false;
+    pieces.forEach(function(p){
+      if(p.y<cc.height+20)alive=true;
+      p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a*Math.PI/180);
+      ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();
+    });
+    if(alive)requestAnimationFrame(fr);
+  }
+  requestAnimationFrame(fr);
+}
+
 // ALARM
 function playAlarm(){
   try{
@@ -817,6 +1049,14 @@ function playAlarm(){
 // BOOT
 (function(){
   ut();
+  // Show spin overlay once ever
+  try{
+    var spun=localStorage.getItem('tcg_spun_denver');
+    if(!spun){
+      document.getElementById('spinOverlay').classList.remove('hide');
+      initSpin();
+    }
+  }catch(e){}
   try{
     var g=localStorage.getItem("tcgGame");
     if(g&&GCFG[g]){
