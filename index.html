@@ -1074,7 +1074,7 @@ function loadTournaments(){
   .then(function(data){
     if(!data.length){el.innerHTML='<div class="tourn-empty">No tournaments open yet.<br>Check back soon!</div>';return;}
     el.innerHTML='';
-    data.filter(function(t){return t.status==='open';}).forEach(function(t){
+    data.filter(function(t){return t.name!=='__test__'&&(t.status==='open'||!t.status);}).forEach(function(t){
       var spots=t.maxPlayers-t.players.length;
       var spotsClass=spots===0?'full':spots<=10?'low':'';
       var spotsText=spots===0?'FULL':spots+' spots left';
