@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>TCG Referee</title>
+<script src="https://js.stripe.com/v3/"></script>
 <style>
 :root{
   --bg:#0a0a14;
@@ -140,6 +141,57 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'Helvetica
 .log-title{font-size:11px;color:var(--text2);margin-bottom:8px;letter-spacing:1px;}
 .loglist{display:flex;flex-direction:column;gap:4px;}
 
+
+/* ACCOUNT */
+.acct-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.acct-info{display:flex;align-items:center;gap:10px;}
+.acct-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;}
+.acct-name{font-size:14px;font-weight:600;color:var(--text);}
+.acct-email{font-size:11px;color:var(--text2);}
+.acct-signout{font-size:11px;color:var(--text2);background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;}
+.signin-prompt{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px;}
+.signin-prompt p{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5;}
+.signin-btns{display:flex;flex-direction:column;gap:8px;}
+.signin-apple{background:#fff;color:#000;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.signin-google{background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.my-tourneys{margin-top:16px;}
+.my-tourneys-title{font-size:12px;color:var(--text2);letter-spacing:1px;margin-bottom:10px;font-weight:600;}
+.my-tourn-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;}
+.my-tourn-name{font-size:13px;font-weight:600;color:var(--accent2);}
+.my-tourn-meta{font-size:11px;color:var(--text2);margin-top:2px;}
+/* TOURNAMENT */
+.tourn-list{display:flex;flex-direction:column;gap:12px;flex:1;overflow-y:auto;}
+.tourn-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.tourn-name{font-size:15px;font-weight:700;color:var(--accent2);margin-bottom:4px;}
+.tourn-meta{font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.6;}
+.tourn-spots{font-size:12px;color:var(--green);font-weight:600;margin-bottom:10px;}
+.tourn-spots.low{color:var(--orange);}
+.tourn-spots.full{color:var(--red);}
+.tourn-prize{font-size:13px;font-weight:700;color:#ffe66d;margin-bottom:10px;}
+.tourn-reg-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;width:100%;}
+.tourn-reg-btn:disabled{opacity:0.4;}
+.tourn-empty{color:var(--text2);font-size:13px;text-align:center;padding:40px 0;}
+
+/* REGISTRATION MODAL */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
+.modal-overlay.hide{display:none;}
+.modal-sheet{background:var(--bg2);border-radius:20px 20px 0 0;padding:24px 20px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
+.modal-title{font-size:17px;font-weight:700;color:var(--accent2);margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--text2);margin-bottom:20px;}
+.modal-field{margin-bottom:14px;}
+.modal-field label{font-size:12px;color:var(--text2);display:block;margin-bottom:6px;}
+.modal-field input,.modal-field select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;}
+.modal-total{background:var(--bg3);border-radius:8px;padding:12px;margin:16px 0;display:flex;justify-content:space-between;align-items:center;}
+.modal-total span{font-size:13px;color:var(--text2);}
+.modal-total b{font-size:18px;color:#ffe66d;font-weight:800;}
+.modal-pay-btn{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:10px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;width:100%;margin-top:4px;}
+.modal-pay-btn:disabled{opacity:0.4;}
+.modal-cancel{background:none;border:none;color:var(--text2);font-size:14px;cursor:pointer;width:100%;padding:12px;margin-top:4px;}
+.modal-msg{font-size:13px;text-align:center;padding:8px;border-radius:8px;margin-top:8px;}
+.modal-msg.err{background:rgba(224,80,80,0.1);color:var(--red);}
+.modal-msg.ok{background:rgba(80,200,120,0.1);color:var(--green);}
+#stripe-card-el{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;}
+
 /* SPIN OVERLAY */
 #spinOverlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#1a0a0a 0%,#0a0a1a 50%,#1a0a0a 100%);}
 #spinOverlay.hide{display:none;}
@@ -275,6 +327,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'Helvetica
     <button class="tab" id="tab-judge" onclick="sw('judge',this)">JUDGE</button>
     
     <button class="tab" id="tab-cards" onclick="sw('cards',this)">CARDS</button>
+    <button class="tab" id="tab-tourn" onclick="sw('tourn',this)">TOURNAMENT</button>
     <button class="tab on" id="tab-lp" onclick="sw('lp',this)">LP</button>
     
   </div>
@@ -367,6 +420,84 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'Helvetica
       </div>
     </div>
 
+  </div>
+
+    <!-- TOURNAMENT -->
+    <div class="panel" id="pan-tourn">
+      <!-- Account bar (shown when signed in) -->
+      <div id="acctBar" style="display:none;">
+        <div class="acct-bar">
+          <div class="acct-info">
+            <div class="acct-avatar" id="acctAvatar">?</div>
+            <div>
+              <div class="acct-name" id="acctName"></div>
+              <div class="acct-email" id="acctEmail"></div>
+            </div>
+          </div>
+          <button class="acct-signout" onclick="signOut()">Sign Out</button>
+        </div>
+        <div class="my-tourneys" id="myTourneys" style="display:none;">
+          <div class="my-tourneys-title">MY TOURNAMENTS</div>
+          <div id="myTournList"></div>
+        </div>
+      </div>
+      <!-- Sign in prompt (shown when not signed in) -->
+      <div id="signinPrompt">
+        <div class="signin-prompt">
+          <p>Sign in to register for tournaments, track your results, and receive prize payouts.</p>
+          <div class="signin-btns">
+            <button class="signin-apple" onclick="window.nativeSignIn&&window.nativeSignIn('apple')">
+              🍎 Sign in with Apple
+            </button>
+            <button class="signin-google" onclick="window.nativeSignIn&&window.nativeSignIn('google')">
+              G&nbsp; Sign in with Google
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="tourn-list" id="tournList">
+        <div class="tourn-empty">Loading tournaments...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay hide" id="regModal">
+  <div class="modal-sheet">
+    <div class="modal-title" id="regTitle">Register</div>
+    <div class="modal-sub">$50 entry · $600 prize pool · 50 players max</div>
+    <div class="modal-field">
+      <label>Your Name</label>
+      <input id="regName" type="text" placeholder="Full name">
+    </div>
+    <div class="modal-field">
+      <label>Email</label>
+      <input id="regEmail" type="email" placeholder="email@example.com">
+    </div>
+    <div class="modal-field">
+      <label>Game</label>
+      <select id="regGame">
+        <option>Yu-Gi-Oh!</option>
+        <option>Pokemon TCG</option>
+        <option>Magic: The Gathering</option>
+        <option>One Piece TCG</option>
+        <option>Digimon TCG</option>
+        <option>Gundam Card Game</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Card Details</label>
+      <div id="stripe-card-el"></div>
+    </div>
+    <div class="modal-total">
+      <span>Entry Fee</span>
+      <b>$50.00</b>
+    </div>
+    <div id="regMsg"></div>
+    <button class="modal-pay-btn" id="regPayBtn" onclick="submitReg()">Pay $50 & Register</button>
+    <button class="modal-cancel" onclick="closeReg()">Cancel</button>
   </div>
 </div>
 
@@ -546,6 +677,7 @@ function sw(id,el){
     document.getElementById("ci").focus();
     if(curGame==="ygo"&&!ygoCardsReady)loadYgoCardCache(function(){});
   }
+  if(id==="tourn")loadTournaments();
 }
 
 // RULES
@@ -888,6 +1020,141 @@ function answerQ(q){
     .catch(function(){var t=document.getElementById("tp");if(t)t.remove();jmsg("ai","Connection error.","");})
     .finally(function(){document.getElementById("isb").disabled=false;});
   }
+}
+
+// ACCOUNT
+var tcgUser = null;
+
+function onUserSignedIn(u){
+  tcgUser = u;
+  document.getElementById('signinPrompt').style.display = 'none';
+  document.getElementById('acctBar').style.display = 'block';
+  var initials = (u.name||'?').split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+  document.getElementById('acctAvatar').textContent = initials;
+  document.getElementById('acctName').textContent = u.name || 'User';
+  document.getElementById('acctEmail').textContent = u.email || '';
+  loadMyTournaments(u);
+}
+
+function signOut(){
+  tcgUser = null;
+  document.getElementById('signinPrompt').style.display = 'block';
+  document.getElementById('acctBar').style.display = 'none';
+  document.getElementById('myTourneys').style.display = 'none';
+  window.nativeSignOut && window.nativeSignOut();
+}
+
+function loadMyTournaments(u){
+  if(!u)return;
+  fetch('https://tcg-judge.kirkcreason.workers.dev/tournament?action=myTournaments&userId='+encodeURIComponent(u.id)+'&provider='+encodeURIComponent(u.provider))
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(!data.length)return;
+    var el = document.getElementById('myTournList');
+    el.innerHTML = '';
+    data.forEach(function(t){
+      var d = document.createElement('div');
+      d.className = 'my-tourn-item';
+      d.innerHTML = '<div class="my-tourn-name">'+esc(t.tournamentName)+'</div><div class="my-tourn-meta">'+esc(t.date)+'</div>';
+      el.appendChild(d);
+    });
+    document.getElementById('myTourneys').style.display = 'block';
+  }).catch(function(){});
+}
+
+// TOURNAMENT
+var STRIPE_PK='pk_live_51Ta6Zf3oZ3CdYqpAsNUZtLphPSYzNAa4XKtu0BGiNeGLlGZzyNRCVvG2owByuSFhXR1xsmXE9URJu45T7kpD1J6300NIe2kmdu';
+var stripeObj=null,stripeCard=null,activeTournId=null;
+
+function loadTournaments(){
+  var el=document.getElementById('tournList');
+  el.innerHTML='<div class="tourn-empty">Loading tournaments...</div>';
+  fetch('https://tcg-judge.kirkcreason.workers.dev/tournament?action=list')
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(!data.length){el.innerHTML='<div class="tourn-empty">No tournaments open yet.<br>Check back soon!</div>';return;}
+    el.innerHTML='';
+    data.filter(function(t){return t.status==='open';}).forEach(function(t){
+      var spots=t.maxPlayers-t.players.length;
+      var spotsClass=spots===0?'full':spots<=10?'low':'';
+      var spotsText=spots===0?'FULL':spots+' spots left';
+      var div=document.createElement('div');
+      div.className='tourn-card';
+      div.innerHTML='<div class="tourn-name">'+esc(t.name)+'</div>'
+        +'<div class="tourn-meta">📅 '+esc(t.date)+'<br>📍 '+esc(t.location)+'<br>🎮 '+esc(t.game)+'</div>'
+        +'<div class="tourn-prize">🏆 $'+t.prize+' Prize Pool</div>'
+        +'<div class="tourn-spots '+spotsClass+'">'+spotsText+' · '+t.players.length+'/'+t.maxPlayers+' registered</div>'
+        +(spots>0?'<button class="tourn-reg-btn" onclick="openReg(\"'+t.id+'\",\"'+t.name+'\")">Register — $'+t.entryFee+'</button>':'<button class="tourn-reg-btn" disabled>Tournament Full</button>');
+      el.appendChild(div);
+    });
+  })
+  .catch(function(){el.innerHTML='<div class="tourn-empty">Could not load tournaments.</div>';});
+}
+
+function openReg(id,name){
+  activeTournId=id;
+  document.getElementById('regTitle').textContent='Register: '+name;
+  document.getElementById('regModal').classList.remove('hide');
+  document.getElementById('regMsg').innerHTML='';
+  document.getElementById('regName').value=tcgUser?tcgUser.name:'';
+  document.getElementById('regEmail').value=tcgUser?tcgUser.email:'';
+  // Init Stripe
+  if(!stripeObj){
+    stripeObj=Stripe(STRIPE_PK);
+    var els=stripeObj.elements();
+    stripeCard=els.create('card',{style:{base:{color:'#e8e4f0',fontSize:'16px','::placeholder':{color:'#6060a0'}},invalid:{color:'#e05050'}}});
+    stripeCard.mount('#stripe-card-el');
+  }
+}
+
+function closeReg(){
+  document.getElementById('regModal').classList.add('hide');
+  activeTournId=null;
+}
+
+function submitReg(){
+  var name=document.getElementById('regName').value.trim();
+  var email=document.getElementById('regEmail').value.trim();
+  var game=document.getElementById('regGame').value;
+  var msgEl=document.getElementById('regMsg');
+  var btn=document.getElementById('regPayBtn');
+
+  if(!name||!email){msgEl.innerHTML='<div class="modal-msg err">Please fill in all fields.</div>';return;}
+  if(!email.includes('@')){msgEl.innerHTML='<div class="modal-msg err">Please enter a valid email.</div>';return;}
+
+  btn.disabled=true;
+  btn.textContent='Processing...';
+  msgEl.innerHTML='';
+
+  stripeObj.createPaymentMethod({type:'card',card:stripeCard,billing_details:{name:name,email:email}})
+  .then(function(result){
+    if(result.error){
+      msgEl.innerHTML='<div class="modal-msg err">'+result.error.message+'</div>';
+      btn.disabled=false;btn.textContent='Pay $50 & Register';return;
+    }
+    return fetch('https://tcg-judge.kirkcreason.workers.dev/tournament?action=register',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({tournamentId:activeTournId,name:name,email:email,game:game,paymentMethodId:result.paymentMethod.id,userId:tcgUser?tcgUser.id:null,userProvider:tcgUser?tcgUser.provider:null})
+    });
+  })
+  .then(function(r){if(r)return r.json();})
+  .then(function(d){
+    if(!d)return;
+    if(d.error){
+      msgEl.innerHTML='<div class="modal-msg err">'+d.error+'</div>';
+      btn.disabled=false;btn.textContent='Pay $50 & Register';
+    } else {
+      msgEl.innerHTML='<div class="modal-msg ok">✓ Registered! Check your email for confirmation.</div>';
+      btn.textContent='Registered!';
+      loadTournaments();
+      setTimeout(closeReg,2500);
+    }
+  })
+  .catch(function(){
+    msgEl.innerHTML='<div class="modal-msg err">Something went wrong. Please try again.</div>';
+    btn.disabled=false;btn.textContent='Pay $50 & Register';
+  });
 }
 
 // SPIN WHEEL
