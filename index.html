@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>TCG Referee</title>
 <script src="https://js.stripe.com/v3/"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{
   --bg:#0a0a14;
@@ -446,11 +447,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'Helvetica
         <div class="signin-prompt">
           <p>Sign in to register for tournaments, track your results, and receive prize payouts.</p>
           <div class="signin-btns">
-            <button class="signin-apple" onclick="window.nativeSignIn&&window.nativeSignIn('apple')">
+            <button class="signin-apple" onclick="signInAppleWeb()">
               🍎 Sign in with Apple
             </button>
-            <button class="signin-google" onclick="window.nativeSignIn&&window.nativeSignIn('google')">
-              G&nbsp; Sign in with Google
+            <button class="signin-google" onclick="signInGoogleWeb()">
+              <span style="font-weight:800;font-size:15px;">G</span>&nbsp; Sign in with Google
             </button>
           </div>
         </div>
@@ -1024,6 +1025,96 @@ function answerQ(q){
 
 // ACCOUNT
 var tcgUser = null;
+var GOOGLE_CLIENT_ID = '36286060220-kaj02nf6bm12m2ejt8h9h4cma9jjan0f.apps.googleusercontent.com'; // replace in Google Cloud Console
+
+function initGoogleSignIn(){
+  if(typeof google === 'undefined') return;
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential,
+    auto_select: false,
+    cancel_on_tap_outside: true,
+  });
+}
+
+function handleGoogleCredential(response){
+  // Decode JWT id_token
+  try {
+    var parts = response.credential.split('.');
+    var payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+    var u = { name: payload.name, email: payload.email, provider: 'google', id: payload.sub };
+    onUserSignedIn(u);
+    saveUserToWorker(u);
+  } catch(e) { console.error('Google credential error', e); }
+}
+
+function signInGoogleWeb(){
+  // Use OAuth2 popup flow - more reliable than One Tap
+  var clientId='36286060220-kaj02nf6bm12m2ejt8h9h4cma9jjan0f.apps.googleusercontent.com';
+  var redirectUri=encodeURIComponent(window.location.origin+window.location.pathname);
+  var scope=encodeURIComponent('openid email profile');
+  var url='https://accounts.google.com/o/oauth2/v2/auth'
+    +'?client_id='+clientId
+    +'&redirect_uri='+redirectUri
+    +'&response_type=token'
+    +'&scope='+scope
+    +'&prompt=select_account';
+  var popup=window.open(url,'googleSignIn','width=500,height=600,left='+((screen.width-500)/2)+',top='+((screen.height-600)/2));
+  var timer=setInterval(function(){
+    try{
+      if(popup.closed){clearInterval(timer);return;}
+      var hash=popup.location.hash;
+      if(hash&&hash.includes('access_token')){
+        clearInterval(timer);
+        popup.close();
+        var params=new URLSearchParams(hash.slice(1));
+        var token=params.get('access_token');
+        if(token) fetchGoogleUserFromToken(token);
+      }
+    }catch(e){}
+  },500);
+}
+
+function fetchGoogleUserFromToken(token){
+  fetch('https://www.googleapis.com/oauth2/v3/userinfo',{
+    headers:{Authorization:'Bearer '+token}
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var u={name:d.name,email:d.email,provider:'google',id:d.sub};
+    onUserSignedIn(u);
+    saveUserToWorker(u);
+  })
+  .catch(function(){showEmailSignIn();});
+}
+
+function signInAppleWeb(){
+  // Apple web sign in requires Apple Developer Services ID
+  // Falls back to email sign in until Apple Developer account is set up
+  if(typeof AppleID !== 'undefined'){
+    AppleID.auth.signIn();
+  } else {
+    showEmailSignIn();
+  }
+}
+
+function showEmailSignIn(){
+  var email = prompt('Enter your email to continue:');
+  if(!email || !email.includes('@')) return;
+  var name = prompt('Enter your name:');
+  if(!name) return;
+  var u = { name: name.trim(), email: email.trim().toLowerCase(), provider: 'email', id: email.trim().toLowerCase() };
+  onUserSignedIn(u);
+  saveUserToWorker(u);
+}
+
+function saveUserToWorker(u){
+  fetch('https://tcg-judge.kirkcreason.workers.dev/auth?action=upsert', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(u)
+  }).catch(function(){});
+}
 
 function onUserSignedIn(u){
   tcgUser = u;
@@ -1317,6 +1408,8 @@ function playAlarm(){
 // BOOT
 (function(){
   ut();
+  // Init Google Sign In
+  setTimeout(function(){ try{ initGoogleSignIn(); }catch(e){} }, 1000);
   // Show spin overlay once ever
   try{
     var spun=localStorage.getItem('tcg_spun_denver');
