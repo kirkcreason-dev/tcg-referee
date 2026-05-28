@@ -2424,15 +2424,16 @@ function showMtgFormats(el){
 
 function pickMtgFmt(fmt){
   selGame=fmt;
+  // Hide the format dropdown
+  var inline=document.getElementById('mtgFormatsInline');
+  if(inline)inline.style.display='none';
+  // Update button
   var btn=document.getElementById('sBtn');
   btn.classList.add('ready');
   btn.textContent='Start '+GCFG[fmt].n;
-  // Highlight format buttons
-  document.querySelectorAll('#mtgFormatsInline button').forEach(function(b){
-    b.style.background=b.getAttribute('onclick').includes(fmt)?'rgba(26,95,200,0.15)':'#fff';
-    b.style.borderColor=b.getAttribute('onclick').includes(fmt)?'var(--accent)':'var(--border)';
-    b.style.color=b.getAttribute('onclick').includes(fmt)?'var(--accent)':'';
-  });
+  // Update MTG card description
+  var desc=document.querySelector('#g-mtg .gdesc');
+  if(desc)desc.textContent=GCFG[fmt].n+' • '+GCFG[fmt].lp+' life';
 }
 
 function selectMtgFormat(fmt){
