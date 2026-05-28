@@ -141,41 +141,48 @@ var adminKey = '';
 
 function unlock(){
   var k = document.getElementById('adminKeyInput').value.trim();
-  if(!k){return;}
+  if(!k){
+    var m=document.getElementById('lockMsg');
+    m.textContent='Please enter your password.';m.className='msg err';m.style.display='block';
+    return;
+  }
   var btn=document.querySelector('#lockScreen .btn');
-  if(btn){btn.disabled=true;btn.textContent='Checking...';}
-  // Validate by posting a test feed check
-  fetch(WORKER+'/feed?action=post', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','X-Admin-Key':k},
-    body:JSON.stringify({title:'__ping__',text:'__ping__',type:'announcement',game:'all'})
+  btn.disabled=true;btn.textContent='Checking...';
+  fetch(WORKER+'/tournament?action=list')
+  .then(function(r){return r.json();})
+  .then(function(){
+    // Simple check - just verify ADMIN_KEY locally by trying a known admin action
+    return fetch(WORKER+'/feed?action=post',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Key':k},
+      body:JSON.stringify({title:'_auth_test_',text:'_test_',type:'announcement',game:'all'})
+    });
   })
   .then(function(r){
-    if(btn){btn.disabled=false;btn.textContent='Enter';}
+    btn.disabled=false;btn.textContent='Enter';
     if(r.status===401){
       var m=document.getElementById('lockMsg');
-      m.textContent='Wrong password.';m.className='msg err';m.style.display='block';
-    } else {
-      // Delete the ping post immediately
-      r.json().then(function(d){
-        if(d.id){
-          fetch(WORKER+'/feed?action=delete',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':k},body:JSON.stringify({id:d.id})});
-        }
-      });
-      adminKey=k;
-      document.getElementById('lockScreen').style.display='none';
-      document.getElementById('adminPanel').style.display='block';
-      loadAdminTournaments();
-      loadFeedPosts();
+      m.textContent='Incorrect password.';m.className='msg err';m.style.display='block';
+      return;
     }
-  })
-  .catch(function(){
-    if(btn){btn.disabled=false;btn.textContent='Enter';}
-    // Network error - let them in anyway
+    // Clean up test post
+    r.json().then(function(d){
+      if(d&&d.id) fetch(WORKER+'/feed?action=delete',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':k},body:JSON.stringify({id:d.id})});
+    });
     adminKey=k;
     document.getElementById('lockScreen').style.display='none';
     document.getElementById('adminPanel').style.display='block';
     loadAdminTournaments();
+    setTimeout(loadFeedPosts,300);
+  })
+  .catch(function(){
+    btn.disabled=false;btn.textContent='Enter';
+    // On network error, trust the key and proceed
+    adminKey=k;
+    document.getElementById('lockScreen').style.display='none';
+    document.getElementById('adminPanel').style.display='block';
+    loadAdminTournaments();
+    setTimeout(loadFeedPosts,300);
   });
 }
 
@@ -288,12 +295,16 @@ function loadFeedPosts(){
       div.className='tourn-item';
       div.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;">'+
         '<div class="tourn-item-name">'+p.title+'</div>'+
-        '<button onclick="deletePost(''+p.id+'')" style="background:rgba(220,80,80,0.15);border:1px solid rgba(220,80,80,0.3);border-radius:6px;padding:3px 10px;color:#f87171;font-size:11px;cursor:pointer;">Delete</button>'+
+        '<button data-delid="'+p.id+'" style="background:rgba(220,80,80,0.15);border:1px solid rgba(220,80,80,0.3);border-radius:6px;padding:3px 10px;color:#f87171;font-size:11px;cursor:pointer;">Delete</button>'+
       '</div>'+
       '<div class="tourn-item-meta">'+p.type.toUpperCase()+' · '+(p.game||'all').toUpperCase()+' · '+new Date(p.createdAt).toLocaleDateString()+'</div>'+
       '<div style="font-size:12px;color:#9090c0;margin-top:4px;">'+p.text.slice(0,100)+(p.text.length>100?'...':'')+'</div>';
       el.appendChild(div);
     });
+  el.onclick=function(e){
+      var btn=e.target.closest('[data-delid]');
+      if(btn)deletePost(btn.dataset.delid);
+    };
   }).catch(function(){el.innerHTML='<div style="color:#f87171;font-size:13px;">Failed to load.</div>';});
 }
 
