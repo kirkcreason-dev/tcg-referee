@@ -663,9 +663,9 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;colo
         <div class="signin-prompt">
           <p>Sign in to register for tournaments, track results, and receive prize payouts.</p>
           <div class="signin-btns">
-            <button class="signin-apple" onclick="signInAppleWeb()">🍎 Sign in with Apple</button>
-            <button class="signin-google" onclick="signInGoogleWeb()"><span style="font-weight:800;font-size:15px;">G</span>&nbsp; Sign in with Google</button>
-            <button class="signin-email" onclick="showEmailLogin()">✉️ Sign in with Email</button>
+            <button class="signin-email" onclick="showEmailLogin()" style="background:linear-gradient(135deg,#1a5fc8,#c0182c);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">✉️ Sign in with Email</button>
+            <button class="signin-apple" onclick="signInAppleWeb()" style="background:#f1f0f5;color:#080810;border:1px solid var(--border);border-radius:12px;padding:12px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">🍎 Sign in with Apple</button>
+            <button class="signin-google" onclick="signInGoogleWeb()" style="background:#fff;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;"><span style="font-weight:800;">G</span>&nbsp; Sign in with Google</button>
           </div>
         </div>
       </div>
@@ -1456,30 +1456,11 @@ function handleGoogleCredential(response){
 }
 
 function signInGoogleWeb(){
-  // Use OAuth2 popup flow - more reliable than One Tap
-  var clientId='36286060220-kaj02nf6bm12m2ejt8h9h4cma9jjan0f.apps.googleusercontent.com';
-  var redirectUri=encodeURIComponent(window.location.origin+window.location.pathname);
-  var scope=encodeURIComponent('openid email profile');
-  var url='https://accounts.google.com/o/oauth2/v2/auth'
-    +'?client_id='+clientId
-    +'&redirect_uri='+redirectUri
-    +'&response_type=token'
-    +'&scope='+scope
-    +'&prompt=select_account';
-  var popup=window.open(url,'googleSignIn','width=500,height=600,left='+((screen.width-500)/2)+',top='+((screen.height-600)/2));
-  var timer=setInterval(function(){
-    try{
-      if(popup.closed){clearInterval(timer);return;}
-      var hash=popup.location.hash;
-      if(hash&&hash.includes('access_token')){
-        clearInterval(timer);
-        popup.close();
-        var params=new URLSearchParams(hash.slice(1));
-        var token=params.get('access_token');
-        if(token) fetchGoogleUserFromToken(token);
-      }
-    }catch(e){}
-  },500);
+  if(window.nativeSignIn){
+    window.nativeSignIn('google');
+  } else {
+    showEmailLogin();
+  }
 }
 
 function fetchGoogleUserFromToken(token){
@@ -1781,19 +1762,22 @@ function loadTournaments(){
 }
 
 function openReg(id,name){
+  if(!tcgUser){
+    // Must be signed in first
+    document.getElementById('signinPrompt').style.display='block';
+    document.getElementById('acctBar').style.display='none';
+    swTourn('events',document.querySelectorAll('.tourn-tab')[0]);
+    showToast('Please sign in to register for a tournament.');
+    return;
+  }
   activeTournId=id;
   document.getElementById('regTitle').textContent='Register: '+name;
   document.getElementById('regModal').classList.remove('hide');
   document.getElementById('regMsg').innerHTML='';
-  document.getElementById('regName').value=tcgUser?tcgUser.name:'';
-  document.getElementById('regEmail').value=tcgUser?tcgUser.email:'';
-  // Init Stripe
-  if(!stripeObj){
-    stripeObj=Stripe(STRIPE_PK);
-    var els=stripeObj.elements();
-    stripeCard=els.create('card',{style:{base:{color:'#0a0a1a',fontSize:'15px',fontFamily:'-apple-system,sans-serif','::placeholder':{color:'#9090b0'}},invalid:{color:'#c0182c'}}});
-    stripeCard.mount('#stripe-card-el');
-  }
+  document.getElementById('regName').value=tcgUser.name||'';
+  document.getElementById('regEmail').value=tcgUser.email||'';
+  var btn=document.getElementById('regPayBtn');
+  if(btn){btn.disabled=false;btn.textContent='Continue to Payment';}
 }
 
 function closeReg(){
