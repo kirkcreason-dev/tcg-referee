@@ -142,25 +142,36 @@ var adminKey = '';
 function unlock(){
   var k = document.getElementById('adminKeyInput').value.trim();
   if(!k){return;}
-  // Test key against worker
-  fetch(WORKER+'/tournament?action=create', {
+  var btn=document.querySelector('#lockScreen .btn');
+  if(btn){btn.disabled=true;btn.textContent='Checking...';}
+  // Validate by posting a test feed check
+  fetch(WORKER+'/feed?action=post', {
     method:'POST',
     headers:{'Content-Type':'application/json','X-Admin-Key':k},
-    body:JSON.stringify({name:'__test__',game:'test',date:'test',location:'test'})
+    body:JSON.stringify({title:'__ping__',text:'__ping__',type:'announcement',game:'all'})
   })
   .then(function(r){
+    if(btn){btn.disabled=false;btn.textContent='Enter';}
     if(r.status===401){
       var m=document.getElementById('lockMsg');
       m.textContent='Wrong password.';m.className='msg err';m.style.display='block';
     } else {
+      // Delete the ping post immediately
+      r.json().then(function(d){
+        if(d.id){
+          fetch(WORKER+'/feed?action=delete',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':k},body:JSON.stringify({id:d.id})});
+        }
+      });
       adminKey=k;
       document.getElementById('lockScreen').style.display='none';
       document.getElementById('adminPanel').style.display='block';
       loadAdminTournaments();
+      loadFeedPosts();
     }
   })
   .catch(function(){
-    // If network error just let them in with key stored
+    if(btn){btn.disabled=false;btn.textContent='Enter';}
+    // Network error - let them in anyway
     adminKey=k;
     document.getElementById('lockScreen').style.display='none';
     document.getElementById('adminPanel').style.display='block';
@@ -295,12 +306,7 @@ function deletePost(id){
   }).then(function(){loadFeedPosts();showToast&&showToast('Deleted');});
 }
 
-// Load feed posts after login
-var origUnlock=unlock;
-unlock=function(){
-  origUnlock();
-  setTimeout(loadFeedPosts,500);
-};
+
 </script>
 </body>
 </html>
