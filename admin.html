@@ -146,44 +146,12 @@ function unlock(){
     m.textContent='Please enter your password.';m.className='msg err';m.style.display='block';
     return;
   }
-  var btn=document.querySelector('#lockScreen .btn');
-  btn.disabled=true;btn.textContent='Checking...';
-  fetch(WORKER+'/tournament?action=list')
-  .then(function(r){return r.json();})
-  .then(function(){
-    // Simple check - just verify ADMIN_KEY locally by trying a known admin action
-    return fetch(WORKER+'/feed?action=post',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','X-Admin-Key':k},
-      body:JSON.stringify({title:'_auth_test_',text:'_test_',type:'announcement',game:'all'})
-    });
-  })
-  .then(function(r){
-    btn.disabled=false;btn.textContent='Enter';
-    if(r.status===401){
-      var m=document.getElementById('lockMsg');
-      m.textContent='Incorrect password.';m.className='msg err';m.style.display='block';
-      return;
-    }
-    // Clean up test post
-    r.json().then(function(d){
-      if(d&&d.id) fetch(WORKER+'/feed?action=delete',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':k},body:JSON.stringify({id:d.id})});
-    });
-    adminKey=k;
-    document.getElementById('lockScreen').style.display='none';
-    document.getElementById('adminPanel').style.display='block';
-    loadAdminTournaments();
-    setTimeout(loadFeedPosts,300);
-  })
-  .catch(function(){
-    btn.disabled=false;btn.textContent='Enter';
-    // On network error, trust the key and proceed
-    adminKey=k;
-    document.getElementById('lockScreen').style.display='none';
-    document.getElementById('adminPanel').style.display='block';
-    loadAdminTournaments();
-    setTimeout(loadFeedPosts,300);
-  });
+  // Store key and enter - validate on first admin action
+  adminKey=k;
+  document.getElementById('lockScreen').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
+  loadAdminTournaments();
+  setTimeout(loadFeedPosts,300);
 }
 
 function createTournament(){
