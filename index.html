@@ -855,6 +855,20 @@ function applyGame(g){
   document.getElementById("ab").textContent=c.n;
   var ci=document.getElementById("ci");
   if(ci)ci.placeholder="Search "+c.n+" card...";
+  // Show/hide Cards tab based on game support
+  var hasCards=["ygo","pkm","mtg","mtg_cmd","mtg_mod","mtg_leg","mtg_vin","mtg_dft","mtg_pnr"];
+  var cardTab=document.getElementById("tab-cards");
+  if(cardTab){
+    if(hasCards.indexOf(g)>=0){
+      cardTab.style.display="";
+    } else {
+      cardTab.style.display="none";
+      // If currently on cards tab, switch to judge
+      if(document.getElementById("pan-cards")&&document.getElementById("pan-cards").classList.contains("on")){
+        sw("judge",document.getElementById("tab-judge"));
+      }
+    }
+  }
 
   ul();
   updateLPLabels(g);
