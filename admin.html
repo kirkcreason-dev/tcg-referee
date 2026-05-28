@@ -15,14 +15,13 @@ label{font-size:12px;color:#9090c0;display:block;margin-bottom:6px;}
 input,select{width:100%;background:#0d0d1a;border:1px solid #2a2a4a;border-radius:8px;padding:10px 12px;color:#e8e4f0;font-size:14px;margin-bottom:14px;}
 input:focus,select:focus{outline:none;border-color:#a78bfa;}
 .btn{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;border:none;border-radius:8px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;width:100%;}
-.btn:hover{opacity:0.9;}
 .btn:disabled{opacity:0.4;}
 .msg{font-size:13px;padding:10px 12px;border-radius:8px;margin-top:12px;display:none;}
 .msg.ok{background:rgba(80,200,120,0.1);color:#4ade80;}
 .msg.err{background:rgba(220,80,80,0.1);color:#f87171;}
 .lock{max-width:320px;margin:80px auto;text-align:center;}
 .lock h2{font-size:18px;margin-bottom:20px;color:#c4b5fd;}
-.lock input{text-align:center;}
+.lock input{text-align:center;margin-bottom:10px;}
 .tourn-item{border:1px solid #2a2a4a;border-radius:8px;padding:12px;margin-bottom:10px;}
 .tourn-item-name{font-size:14px;font-weight:600;color:#c4b5fd;}
 .tourn-item-meta{font-size:12px;color:#6060a0;margin-top:4px;}
@@ -30,28 +29,28 @@ input:focus,select:focus{outline:none;border-color:#a78bfa;}
 .badge.open{background:rgba(80,200,120,0.15);color:#4ade80;}
 .badge.closed{background:rgba(220,80,80,0.15);color:#f87171;}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.start-btn{margin-top:10px;background:linear-gradient(135deg,#1a5fc8,#c0182c);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;width:100%;}
+.active-badge{margin-top:8px;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.3);border-radius:6px;padding:8px;font-size:12px;color:#4ade80;font-weight:700;text-align:center;}
 </style>
 </head>
 <body>
 
-<!-- Lock screen -->
 <div class="lock" id="lockScreen">
   <h2>🔐 TCG Referee Admin</h2>
   <input type="password" id="adminKeyInput" placeholder="Admin password" onkeydown="if(event.key==='Enter')unlock()">
-  <button class="btn" onclick="unlock()" style="margin-top:8px;">Enter</button>
+  <button class="btn" onclick="unlock()">Enter</button>
   <div class="msg" id="lockMsg"></div>
 </div>
 
-<!-- Admin panel -->
 <div id="adminPanel" style="display:none;max-width:600px;margin:0 auto;">
   <h1>TCG Referee Admin</h1>
   <div class="sub">Tournament management</div>
 
-  <!-- Post to Feed -->
+  <!-- Post Announcement -->
   <div class="card">
     <h2>📢 Post Announcement</h2>
     <label>Message</label>
-    <input id="feedMsg" placeholder="e.g. Round 3 starting now! Table assignments posted.">
+    <input id="feedMsg" placeholder="e.g. Round 3 starting now!">
     <button class="btn" onclick="postAnnouncement()">Post to Feed</button>
     <div class="msg" id="feedMsgResult"></div>
   </div>
@@ -78,17 +77,11 @@ input:focus,select:focus{outline:none;border-color:#a78bfa;}
         <input id="tDate" type="date">
       </div>
     </div>
-    <label>Location (venue name)</label>
+    <label>Location</label>
     <input id="tLocation" placeholder="e.g. Denver Convention Center">
     <div class="row">
-      <div>
-        <label>City</label>
-        <input id="tCity" placeholder="Denver">
-      </div>
-      <div>
-        <label>State</label>
-        <input id="tState" placeholder="CO">
-      </div>
+      <div><label>City</label><input id="tCity" placeholder="Denver"></div>
+      <div><label>State</label><input id="tState" placeholder="CO"></div>
     </div>
     <button class="btn" id="createBtn" onclick="createTournament()">Create Tournament</button>
     <div class="msg" id="createMsg"></div>
@@ -100,57 +93,21 @@ input:focus,select:focus{outline:none;border-color:#a78bfa;}
     <div id="adminTournList"><div style="color:#6060a0;font-size:13px;">Loading...</div></div>
     <button class="btn" onclick="loadAdminTournaments()" style="margin-top:12px;background:#1a1a2e;border:1px solid #2a2a4a;">↻ Refresh</button>
   </div>
-
-  <!-- FEED MANAGER -->
-  <div class="card">
-    <h2>📣 Post to Feed</h2>
-    <label>Title</label>
-    <input id="fTitle" placeholder="e.g. Round 3 Starting Now!">
-    <label>Message</label>
-    <textarea id="fText" style="width:100%;background:#0d0d1a;border:1px solid #2a2a4a;border-radius:8px;padding:10px 12px;color:#e8e4f0;font-size:14px;height:80px;resize:none;margin-bottom:14px;" placeholder="Write your announcement..."></textarea>
-    <div class="row">
-      <div>
-        <label>Type</label>
-        <select id="fType">
-          <option value="announcement">Announcement</option>
-          <option value="tournament">Tournament</option>
-          <option value="ruling">Ruling Update</option>
-          <option value="news">News</option>
-        </select>
-      </div>
-      <div>
-        <label>Game</label>
-        <select id="fGame">
-          <option value="all">All Games</option>
-          <option value="ygo">Yu-Gi-Oh!</option>
-          <option value="pkm">Pokemon</option>
-          <option value="mtg">MTG</option>
-          <option value="dig">Digimon</option>
-          <option value="op">One Piece</option>
-          <option value="gundam">Gundam</option>
-        </select>
-      </div>
-    </div>
-    <button class="btn" id="postBtn" onclick="submitFeedPost()">Publish Post</button>
-    <div class="msg" id="postMsg"></div>
-  </div>
-
-  <!-- EXISTING POSTS -->
-  <div class="card">
-    <h2>📋 Feed Posts</h2>
-    <div id="feedPostsList"><div style="color:#6060a0;font-size:13px;">Loading...</div></div>
-    <button class="btn" onclick="loadFeedPosts()" style="margin-top:12px;background:#1a1a2e;border:1px solid #2a2a4a;">↻ Refresh</button>
-  </div>
-
 </div>
 
 <script>
-var WORKER = 'https://tcg-judge.kirkcreason.workers.dev';
-var adminKey = '';
+var WORKER='https://tcg-judge.kirkcreason.workers.dev';
+var adminKey='';
 
 function unlock(){
   var k=document.getElementById('adminKeyInput').value.trim();
-  if(!k)return;
+  if(!k){
+    var m=document.getElementById('lockMsg');
+    m.textContent='Enter your admin password.';
+    m.className='msg err';
+    m.style.display='block';
+    return;
+  }
   adminKey=k;
   document.getElementById('lockScreen').style.display='none';
   document.getElementById('adminPanel').style.display='block';
@@ -168,7 +125,7 @@ function postAnnouncement(){
   })
   .then(function(r){return r.json();})
   .then(function(){
-    res.textContent='✓ Posted to feed!';res.className='msg ok';res.style.display='block';
+    res.textContent='Posted!';res.className='msg ok';res.style.display='block';
     document.getElementById('feedMsg').value='';
   })
   .catch(function(){res.textContent='Failed.';res.className='msg err';res.style.display='block';});
@@ -183,24 +140,21 @@ function createTournament(){
   var state=document.getElementById('tState').value.trim();
   var msg=document.getElementById('createMsg');
   var btn=document.getElementById('createBtn');
-
   if(!name||!date||!location){
-    msg.textContent='Please fill in name, date, and location.';
-    msg.className='msg err';msg.style.display='block';return;
+    msg.textContent='Fill in name, date, and location.';msg.className='msg err';msg.style.display='block';return;
   }
-
   btn.disabled=true;btn.textContent='Creating...';
   fetch(WORKER+'/tournament?action=create',{
     method:'POST',
     headers:{'Content-Type':'application/json','X-Admin-Key':adminKey},
-    body:JSON.stringify({name,game,date,location,city,state})
+    body:JSON.stringify({name:name,game:game,date:date,location:location,city:city,state:state})
   })
   .then(function(r){return r.json();})
   .then(function(d){
     if(d.error){
       msg.textContent=d.error;msg.className='msg err';
     } else {
-      msg.textContent='✓ Tournament created: '+d.name;msg.className='msg ok';
+      msg.textContent='Created: '+d.name;msg.className='msg ok';
       document.getElementById('tName').value='';
       document.getElementById('tDate').value='';
       document.getElementById('tLocation').value='';
@@ -218,7 +172,7 @@ function createTournament(){
 }
 
 function startTournament(tid){
-  if(!confirm('Start this tournament? This will lock registration and generate Round 1 pairings.')) return;
+  if(!confirm('Start this tournament? This locks registration and generates Round 1 pairings.'))return;
   fetch(WORKER+'/tournament?action=start',{
     method:'POST',
     headers:{'Content-Type':'application/json','X-Admin-Key':adminKey},
@@ -227,10 +181,7 @@ function startTournament(tid){
   .then(function(r){return r.json();})
   .then(function(d){
     if(d.error){alert('Error: '+d.error);}
-    else{
-      alert('Tournament started! Round 1 pairings generated. Feed post sent to all players.');
-      loadAdminTournaments();
-    }
+    else{alert('Tournament started! Round 1 pairings generated.');loadAdminTournaments();}
   })
   .catch(function(){alert('Network error.');});
 }
@@ -241,90 +192,46 @@ function loadAdminTournaments(){
   fetch(WORKER+'/tournament?action=list')
   .then(function(r){return r.json();})
   .then(function(data){
-    if(!data.length){el.innerHTML='<div style="color:#6060a0;font-size:13px;">No tournaments yet.</div>';return;}
+    var valid=data.filter(function(t){return t.name!=='__test__';});
+    if(!valid.length){el.innerHTML='<div style="color:#6060a0;font-size:13px;">No tournaments yet.</div>';return;}
     el.innerHTML='';
-    // Filter out test entries
-    data.filter(function(t){return t.name!=='__test__';}).forEach(function(t){
+    valid.forEach(function(t){
       var spots=t.maxPlayers-t.players.length;
       var div=document.createElement('div');
       div.className='tourn-item';
-      div.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">'
-        +'<div class="tourn-item-name">'+t.name+'</div>'
-        +'<span class="badge '+(spots>0?'open':'closed')+'">'+(spots>0?'OPEN':'FULL')+'</span>'
-        +'</div>'
-        +'<div class="tourn-item-meta">'+t.game+' · '+t.date+' · '+t.location+'</div>'
-        +'<div class="tourn-item-meta" style="margin-top:4px;">👥 '+t.players.length+'/'+t.maxPlayers+' registered · 💰 $'+t.prize+' prize</div>'
-        +(t.players.length?'<details style="margin-top:8px;"><summary style="font-size:12px;color:#9090c0;cursor:pointer;">Players ('+t.players.length+')</summary><div style="margin-top:8px;">'
-          +t.players.map(function(p){return '<div style="font-size:12px;color:#c4b5fd;padding:4px 0;border-bottom:1px solid #2a2a4a;">'+p.name+' · '+p.email+' · '+p.game+'</div>';}).join('')
-          +'</div></details>':'')+
-        (t.status!=='active'&&t.players.length>=2?'<button data-startid="'+t.id+'" style="margin-top:10px;background:linear-gradient(135deg,#1a5fc8,#c0182c);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;width:100%;">Start Tournament</button>':
-        t.status==='active'?'<div style="margin-top:8px;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.3);border-radius:6px;padding:8px;font-size:12px;color:#4ade80;font-weight:700;text-align:center;">✓ TOURNAMENT ACTIVE — Round '+( t.currentRound||1)+'</div>':'');
+      var playersHtml='';
+      if(t.players.length){
+        playersHtml='<details style="margin-top:8px;"><summary style="font-size:12px;color:#9090c0;cursor:pointer;">Players ('+t.players.length+')</summary><div style="margin-top:8px;">';
+        t.players.forEach(function(p){
+          playersHtml+='<div style="font-size:12px;color:#c4b5fd;padding:4px 0;border-bottom:1px solid #2a2a4a;">'+p.name+' &bull; '+p.email+' &bull; '+p.game+'</div>';
+        });
+        playersHtml+='</div></details>';
+      }
+      var actionHtml='';
+      if(t.status==='active'){
+        actionHtml='<div class="active-badge">TOURNAMENT ACTIVE &mdash; Round '+(t.currentRound||1)+'</div>';
+      } else if(t.players.length>=2){
+        actionHtml='<button class="start-btn" data-tid="'+t.id+'">Start Tournament</button>';
+      }
+      div.innerHTML=
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">'+
+        '<div class="tourn-item-name">'+t.name+'</div>'+
+        '<span class="badge '+(spots>0?'open':'closed')+'">'+(spots>0?'OPEN':'FULL')+'</span>'+
+        '</div>'+
+        '<div class="tourn-item-meta">'+t.game+' &bull; '+t.date+' &bull; '+t.location+'</div>'+
+        '<div class="tourn-item-meta" style="margin-top:4px;">'+t.players.length+'/'+t.maxPlayers+' registered &bull; $'+t.prize+' prize</div>'+
+        playersHtml+actionHtml;
       el.appendChild(div);
     });
-  })
-  .catch(function(){el.innerHTML='<div style="color:#f87171;font-size:13px;">Could not load tournaments.</div>';});
-}
-
-// Set today's date as default
-document.getElementById('tDate').valueAsDate = new Date();
-
-function submitFeedPost(){
-  var title=document.getElementById('fTitle').value.trim();
-  var text=document.getElementById('fText').value.trim();
-  var type=document.getElementById('fType').value;
-  var game=document.getElementById('fGame').value;
-  var msg=document.getElementById('postMsg');
-  var btn=document.getElementById('postBtn');
-  if(!title||!text){msg.textContent='Fill in title and message.';msg.className='msg err';msg.style.display='block';return;}
-  btn.disabled=true;btn.textContent='Publishing...';
-  fetch(WORKER+'/feed?action=post',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','X-Admin-Key':adminKey},
-    body:JSON.stringify({title,text,type,game})
-  })
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(d.error){msg.textContent=d.error;msg.className='msg err';}
-    else{msg.textContent='✓ Post published!';msg.className='msg ok';document.getElementById('fTitle').value='';document.getElementById('fText').value='';loadFeedPosts();}
-    msg.style.display='block';btn.disabled=false;btn.textContent='Publish Post';
-  }).catch(function(){msg.textContent='Failed.';msg.className='msg err';msg.style.display='block';btn.disabled=false;btn.textContent='Publish Post';});
-}
-
-function loadFeedPosts(){
-  var el=document.getElementById('feedPostsList');
-  el.innerHTML='<div style="color:#6060a0;font-size:13px;">Loading...</div>';
-  fetch(WORKER+'/tournament?action=feed')
-  .then(function(r){return r.json();})
-  .then(function(data){
-    if(!data.length){el.innerHTML='<div style="color:#6060a0;font-size:13px;">No posts yet.</div>';return;}
-    el.innerHTML='';
-    data.forEach(function(p){
-      var div=document.createElement('div');
-      div.className='tourn-item';
-      div.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;">'+
-        '<div class="tourn-item-name">'+(p.admin?'[ADMIN] ':'')+p.author+'</div>'+
-        '<span style="font-size:11px;color:#6060a0;">'+p.date+' '+p.time+'</span>'+
-      '</div>'+
-      '<div style="font-size:12px;color:#9090c0;margin-top:4px;">'+p.text.slice(0,150)+(p.text.length>150?'...':'')+'</div>';
-      el.appendChild(div);
-    });
-  el.onclick=function(e){
-      var btn=e.target.closest('[data-delid]');
-      if(btn)deletePost(btn.dataset.delid);
+    el.onclick=function(e){
+      var btn=e.target.closest('[data-tid]');
+      if(btn)startTournament(btn.dataset.tid);
     };
-  }).catch(function(){el.innerHTML='<div style="color:#f87171;font-size:13px;">Failed to load.</div>';});
+  })
+  .catch(function(){el.innerHTML='<div style="color:#f87171;font-size:13px;">Could not load.</div>';});
 }
 
-function deletePost(id){
-  if(!confirm('Delete this post?'))return;
-  fetch(WORKER+'/feed?action=delete',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','X-Admin-Key':adminKey},
-    body:JSON.stringify({id})
-  }).then(function(){loadFeedPosts();showToast&&showToast('Deleted');});
-}
-
-
+document.getElementById('tDate').valueAsDate=new Date();
 </script>
 </body>
 </html>
