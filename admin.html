@@ -223,6 +223,24 @@ function createTournament(){
   });
 }
 
+function startTournament(tid){
+  if(!confirm('Start this tournament? This will lock registration and generate Round 1 pairings.')) return;
+  fetch(WORKER+'/tournament?action=start',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Admin-Key':adminKey},
+    body:JSON.stringify({tournamentId:tid})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.error){alert('Error: '+d.error);}
+    else{
+      alert('Tournament started! Round 1 pairings generated. Feed post sent to all players.');
+      loadAdminTournaments();
+    }
+  })
+  .catch(function(){alert('Network error.');});
+}
+
 function loadAdminTournaments(){
   var el=document.getElementById('adminTournList');
   el.innerHTML='<div style="color:#6060a0;font-size:13px;">Loading...</div>';
@@ -244,7 +262,9 @@ function loadAdminTournaments(){
         +'<div class="tourn-item-meta" style="margin-top:4px;">👥 '+t.players.length+'/'+t.maxPlayers+' registered · 💰 $'+t.prize+' prize</div>'
         +(t.players.length?'<details style="margin-top:8px;"><summary style="font-size:12px;color:#9090c0;cursor:pointer;">Players ('+t.players.length+')</summary><div style="margin-top:8px;">'
           +t.players.map(function(p){return '<div style="font-size:12px;color:#c4b5fd;padding:4px 0;border-bottom:1px solid #2a2a4a;">'+p.name+' · '+p.email+' · '+p.game+'</div>';}).join('')
-          +'</div></details>':'');
+          +'</div></details>':'')+
+        (t.status!=='active'&&t.players.length>=2?'<button onclick="startTournament(''+t.id+'')" style="margin-top:10px;background:linear-gradient(135deg,#1a5fc8,#c0182c);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;width:100%;">🏁 Start Tournament</button>':
+        t.status==='active'?'<div style="margin-top:8px;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.3);border-radius:6px;padding:8px;font-size:12px;color:#4ade80;font-weight:700;text-align:center;">✓ TOURNAMENT ACTIVE — Round '+( t.currentRound||1)+'</div>':'');
       el.appendChild(div);
     });
   })
