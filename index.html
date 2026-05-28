@@ -171,7 +171,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;colo
 .my-tourn-meta{font-size:11px;color:var(--text2);margin-top:2px;}
 
 /* MODAL */
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:800;display:flex;align-items:flex-end;justify-content:center;}
 .modal-overlay.hide{display:none;}
 .modal-sheet{background:#fff;border:1px solid var(--border);border-radius:24px 24px 0 0;padding:24px 20px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
 .modal-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px;}
@@ -189,7 +189,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;colo
 .modal-msg{font-size:13px;text-align:center;padding:10px;border-radius:10px;margin-top:8px;}
 .modal-msg.err{background:#fff0f0;color:var(--red);}
 .modal-msg.ok{background:#f0fff4;color:var(--green);}
-#stripe-card-el{background:#f8f8fc;border:1px solid var(--border);border-radius:10px;padding:13px;}
+#stripe-card-el{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:14px;}
 
 /* SPIN OVERLAY */
 #spinOverlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#0a1a3a 0%,#1a0a10 100%);}
@@ -1785,7 +1785,7 @@ function openReg(id,name){
   if(!stripeObj){
     stripeObj=Stripe(STRIPE_PK);
     var els=stripeObj.elements();
-    stripeCard=els.create('card',{style:{base:{color:'#e8e4f0',fontSize:'16px','::placeholder':{color:'#6060a0'}},invalid:{color:'#e05050'}}});
+    stripeCard=els.create('card',{style:{base:{color:'#0a0a1a',fontSize:'15px',fontFamily:'-apple-system,sans-serif','::placeholder':{color:'#9090b0'}},invalid:{color:'#c0182c'}}});
     stripeCard.mount('#stripe-card-el');
   }
 }
