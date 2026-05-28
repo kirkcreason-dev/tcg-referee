@@ -47,6 +47,15 @@ input:focus,select:focus{outline:none;border-color:#a78bfa;}
   <h1>TCG Referee Admin</h1>
   <div class="sub">Tournament management</div>
 
+  <!-- Post to Feed -->
+  <div class="card">
+    <h2>📢 Post Announcement</h2>
+    <label>Message</label>
+    <input id="feedMsg" placeholder="e.g. Round 3 starting now! Table assignments posted.">
+    <button class="btn" onclick="postAnnouncement()">Post to Feed</button>
+    <div class="msg" id="feedMsgResult"></div>
+  </div>
+
   <!-- Create Tournament -->
   <div class="card">
     <h2>➕ Create Tournament</h2>
@@ -152,6 +161,23 @@ function unlock(){
   document.getElementById('adminPanel').style.display='block';
   loadAdminTournaments();
   setTimeout(loadFeedPosts,300);
+}
+
+function postAnnouncement(){
+  var msg=document.getElementById('feedMsg').value.trim();
+  var res=document.getElementById('feedMsgResult');
+  if(!msg){res.textContent='Enter a message.';res.className='msg err';res.style.display='block';return;}
+  fetch(WORKER+'/tournament?action=postFeed',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Admin-Key':adminKey},
+    body:JSON.stringify({text:msg,author:'TCG Referee Admin',isAdmin:true})
+  })
+  .then(function(r){return r.json();})
+  .then(function(){
+    res.textContent='✓ Posted to feed!';res.className='msg ok';res.style.display='block';
+    document.getElementById('feedMsg').value='';
+  })
+  .catch(function(){res.textContent='Failed.';res.className='msg err';res.style.display='block';});
 }
 
 function createTournament(){

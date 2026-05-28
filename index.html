@@ -1560,36 +1560,53 @@ function loadMyTournaments(u){
 var feedPosts = [];
 
 function loadFeed(){
-  try{
-    var stored=localStorage.getItem('tcg_feed');
-    if(stored)feedPosts=JSON.parse(stored);
-  }catch(e){feedPosts=[];}
-  renderFeed();
-}
-
-function saveFeed(){
-  try{localStorage.setItem('tcg_feed',JSON.stringify(feedPosts.slice(0,50)));}catch(e){}
+  var el=document.getElementById('feedList');
+  if(el)el.innerHTML='<div class="tourn-empty">Loading feed...</div>';
+  fetch('https://tcg-judge.kirkcreason.workers.dev/tournament?action=feed')
+  .then(function(r){return r.json();})
+  .then(function(data){
+    feedPosts=data||[];
+    renderFeed();
+  })
+  .catch(function(){
+    // Fallback to localStorage
+    try{
+      var stored=localStorage.getItem('tcg_feed');
+      if(stored)feedPosts=JSON.parse(stored);
+    }catch(e){feedPosts=[];}
+    renderFeed();
+  });
 }
 
 function postFeed(){
   var input=document.getElementById('feedInput');
   var text=(input.value||'').trim();
   if(!text)return;
-  var isAdmin=false;
   var name=tcgUser?tcgUser.name:'Anonymous';
-  var initials=name.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase()||'?';
-  feedPosts.unshift({
-    id:Date.now(),
-    author:name,
-    initials:initials,
-    text:text,
-    time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
-    date:new Date().toLocaleDateString([],{month:'short',day:'numeric'}),
-    admin:isAdmin
+  var btn=input.nextElementSibling;
+  if(btn)btn.disabled=true;
+  fetch('https://tcg-judge.kirkcreason.workers.dev/tournament?action=postFeed',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({text:text,author:name})
+  })
+  .then(function(r){return r.json();})
+  .then(function(){
+    input.value='';
+    if(btn)btn.disabled=false;
+    loadFeed();
+  })
+  .catch(function(){
+    // Fallback - local only
+    var initials=name.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase()||'?';
+    feedPosts.unshift({id:Date.now(),author:name,initials:initials,text:text,
+      time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+      date:new Date().toLocaleDateString([],{month:'short',day:'numeric'}),admin:false});
+    try{localStorage.setItem('tcg_feed',JSON.stringify(feedPosts.slice(0,50)));}catch(e){}
+    renderFeed();
+    input.value='';
+    if(btn)btn.disabled=false;
   });
-  saveFeed();
-  renderFeed();
-  input.value='';
 }
 
 function renderFeed(){
