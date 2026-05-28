@@ -160,7 +160,6 @@ function unlock(){
   document.getElementById('lockScreen').style.display='none';
   document.getElementById('adminPanel').style.display='block';
   loadAdminTournaments();
-  setTimeout(loadFeedPosts,300);
 }
 
 function postAnnouncement(){
@@ -299,7 +298,7 @@ function submitFeedPost(){
 function loadFeedPosts(){
   var el=document.getElementById('feedPostsList');
   el.innerHTML='<div style="color:#6060a0;font-size:13px;">Loading...</div>';
-  fetch(WORKER+'/feed?action=list')
+  fetch(WORKER+'/tournament?action=feed')
   .then(function(r){return r.json();})
   .then(function(data){
     if(!data.length){el.innerHTML='<div style="color:#6060a0;font-size:13px;">No posts yet.</div>';return;}
@@ -308,11 +307,10 @@ function loadFeedPosts(){
       var div=document.createElement('div');
       div.className='tourn-item';
       div.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;">'+
-        '<div class="tourn-item-name">'+p.title+'</div>'+
-        '<button data-delid="'+p.id+'" style="background:rgba(220,80,80,0.15);border:1px solid rgba(220,80,80,0.3);border-radius:6px;padding:3px 10px;color:#f87171;font-size:11px;cursor:pointer;">Delete</button>'+
+        '<div class="tourn-item-name">'+(p.admin?'[ADMIN] ':'')+p.author+'</div>'+
+        '<span style="font-size:11px;color:#6060a0;">'+p.date+' '+p.time+'</span>'+
       '</div>'+
-      '<div class="tourn-item-meta">'+p.type.toUpperCase()+' · '+(p.game||'all').toUpperCase()+' · '+new Date(p.createdAt).toLocaleDateString()+'</div>'+
-      '<div style="font-size:12px;color:#9090c0;margin-top:4px;">'+p.text.slice(0,100)+(p.text.length>100?'...':'')+'</div>';
+      '<div style="font-size:12px;color:#9090c0;margin-top:4px;">'+p.text.slice(0,150)+(p.text.length>150?'...':'')+'</div>';
       el.appendChild(div);
     });
   el.onclick=function(e){
