@@ -441,19 +441,32 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;colo
     </div>
     <div class="gc" id="g-mtg" onclick="showMtgFormats(this)">
       <div class="gi">&#9956;</div>
-      <div class="ginfo"><div class="gname">Magic: The Gathering</div><div class="gdesc">7 formats &bull; AI judge</div></div>
-      <div class="gck">&#10003;</div>
+      <div class="ginfo">
+        <div class="gname">Magic: The Gathering</div>
+        <div class="gdesc" id="mtgDesc">Tap to select format</div>
+      </div>
+      <div class="gck" id="mtgChk" style="display:none;">&#10003;</div>
+      <div style="margin-left:auto;color:var(--text2);font-size:18px;" id="mtgArrow">&#8964;</div>
+    </div>
+    <div id="mtgFormatsInline" style="display:none;flex-direction:column;gap:6px;padding-left:8px;">
+      <div class="gc" onclick="pickMtgFmt('mtg')"><div class="gi" style="font-size:16px;">&#9956;</div><div class="ginfo"><div class="gname" style="font-size:13px;">Standard</div><div class="gdesc">20 life</div></div><div class="gck">&#10003;</div></div>
+      <div class="gc" onclick="pickMtgFmt('mtg_cmd')"><div class="gi" style="font-size:16px;">&#9956;</div><div class="ginfo"><div class="gname" style="font-size:13px;">Commander</div><div class="gdesc">40 life</div></div><div class="gck">&#10003;</div></div>
+      <div class="gc" onclick="pickMtgFmt('mtg_mod')"><div class="gi" style="font-size:16px;">&#9956;</div><div class="ginfo"><div class="gname" style="font-size:13px;">Modern</div><div class="gdesc">20 life</div></div><div class="gck">&#10003;</div></div>
+      <div class="gc" onclick="pickMtgFmt('mtg_leg')"><div class="gi" style="font-size:16px;">&#9956;</div><div class="ginfo"><div class="gname" style="font-size:13px;">Legacy</div><div class="gdesc">20 life</div></div><div class="gck">&#10003;</div></div>
+      <div class="gc" onclick="pickMtgFmt('mtg_vin')"><div class="gi" style="font-size:16px;">&#9956;</div><div class="ginfo"><div class="gname" style="font-size:13px;">Vintage</div><div class="gdesc">20 life</div></div><div class="gck">&#10003;</div></div>
+      <div class="gc" onclick="pickMtgFmt('mtg_dft')"><div class="gi" style="font-size:16px;">&#9956;</div><div class="ginfo"><div class="gname" style="font-size:13px;">Draft</div><div class="gdesc">20 life</div></div><div class="gck">&#10003;</div></div>
+      <div class="gc" onclick="pickMtgFmt('mtg_pnr')"><div class="gi" style="font-size:16px;">&#9956;</div><div class="ginfo"><div class="gname" style="font-size:13px;">Pioneer</div><div class="gdesc">20 life</div></div><div class="gck">&#10003;</div></div>
     </div>
     <div id="mtgFormatsInline" style="display:none;background:rgba(26,95,200,0.08);border:1px solid rgba(26,95,200,0.3);border-radius:12px;padding:10px;margin-top:-4px;">
       <div style="font-size:10px;letter-spacing:1.5px;color:var(--accent);font-weight:700;margin-bottom:8px;text-transform:uppercase;">Select Format</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-        <button onclick="pickMtgFmt('mtg');this.closest('#mtgFormatsInline').style.display='none';" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Standard <span style="color:var(--text2);font-size:11px;">20</span></button>
-        <button onclick="pickMtgFmt('mtg_cmd');this.closest('#mtgFormatsInline').style.display='none';" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Commander <span style="color:var(--text2);font-size:11px;">40</span></button>
-        <button onclick="pickMtgFmt('mtg_mod');this.closest('#mtgFormatsInline').style.display='none';" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Modern <span style="color:var(--text2);font-size:11px;">20</span></button>
-        <button onclick="pickMtgFmt('mtg_leg');this.closest('#mtgFormatsInline').style.display='none';" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Legacy <span style="color:var(--text2);font-size:11px;">20</span></button>
-        <button onclick="pickMtgFmt('mtg_vin');this.closest('#mtgFormatsInline').style.display='none';" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Vintage <span style="color:var(--text2);font-size:11px;">20</span></button>
-        <button onclick="pickMtgFmt('mtg_dft');this.closest('#mtgFormatsInline').style.display='none';" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Draft <span style="color:var(--text2);font-size:11px;">20</span></button>
-        <button onclick="pickMtgFmt('mtg_pnr');this.closest('#mtgFormatsInline').style.display='none';" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Pioneer <span style="color:var(--text2);font-size:11px;">20</span></button>
+        <button onclick=\"pickMtgFmt('mtg')\" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Standard <span style="color:var(--text2);font-size:11px;">20</span></button>
+        <button onclick=\"pickMtgFmt('mtg_cmd')\" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Commander <span style="color:var(--text2);font-size:11px;">40</span></button>
+        <button onclick=\"pickMtgFmt('mtg_mod')\" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Modern <span style="color:var(--text2);font-size:11px;">20</span></button>
+        <button onclick=\"pickMtgFmt('mtg_leg')\" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Legacy <span style="color:var(--text2);font-size:11px;">20</span></button>
+        <button onclick=\"pickMtgFmt('mtg_vin')\" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Vintage <span style="color:var(--text2);font-size:11px;">20</span></button>
+        <button onclick=\"pickMtgFmt('mtg_dft')\" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Draft <span style="color:var(--text2);font-size:11px;">20</span></button>
+        <button onclick=\"pickMtgFmt('mtg_pnr')\" style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;">Pioneer <span style="color:var(--text2);font-size:11px;">20</span></button>
       </div>
     </div>
     <div class="gc" id="g-dig" onclick="pg('dig',this)">
@@ -912,9 +925,7 @@ function pg(g,el){
   var btn=document.getElementById("sBtn");
   btn.textContent="Start "+GCFG[g].n;
   btn.classList.add("ready");
-  // Hide MTG inline formats
-  var inline=document.getElementById('mtgFormatsInline');
-  if(inline)inline.style.display='none';
+
 }
 
 function go(){
@@ -2411,29 +2422,38 @@ function submitEmailLogin(){
   saveUserToWorker(u);
 }
 function showMtgFormats(el){
-  document.querySelectorAll('.gc').forEach(function(g){g.classList.remove('sel');});
-  el.classList.add('sel');
-  var inline = document.getElementById('mtgFormatsInline');
-  if(inline) inline.style.display = inline.style.display==='none' ? 'block' : 'none';
-  // Reset sBtn
-  var btn=document.getElementById('sBtn');
-  btn.classList.remove('ready');
-  btn.textContent='Select a game';
-  selGame=null;
+  var inline=document.getElementById('mtgFormatsInline');
+  var arrow=document.getElementById('mtgArrow');
+  var open=inline.style.display==='flex';
+  inline.style.display=open?'none':'flex';
+  if(arrow)arrow.innerHTML=open?'&#8964;':'&#8963;';
+  if(!open){
+    document.querySelectorAll('.gc').forEach(function(g){g.classList.remove('sel');});
+    el.classList.add('sel');
+  }
 }
 
 function pickMtgFmt(fmt){
+  if(!fmt)return;
   selGame=fmt;
-  // Hide the format dropdown
+  // Close the list
   var inline=document.getElementById('mtgFormatsInline');
   if(inline)inline.style.display='none';
-  // Update button
+  var arrow=document.getElementById('mtgArrow');
+  if(arrow)arrow.innerHTML='&#8964;';
+  // Show checkmark on MTG card
+  var chk=document.getElementById('mtgChk');
+  if(chk)chk.style.display='';
+  // Update desc
+  var desc=document.getElementById('mtgDesc');
+  if(desc)desc.textContent=GCFG[fmt].n+' selected';
+  // Highlight sub-cards
+  var subcards=document.querySelectorAll('#mtgFormatsInline .gc');
+  subcards.forEach(function(c){c.classList.remove('sel');});
+  // Start button
   var btn=document.getElementById('sBtn');
   btn.classList.add('ready');
   btn.textContent='Start '+GCFG[fmt].n;
-  // Update MTG card description
-  var desc=document.querySelector('#g-mtg .gdesc');
-  if(desc)desc.textContent=GCFG[fmt].n+' • '+GCFG[fmt].lp+' life';
 }
 
 function selectMtgFormat(fmt){
