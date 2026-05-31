@@ -1510,16 +1510,49 @@ function doSpin() {
     }
     h.push('</div>');
     inner.innerHTML = h.join('');
-  }).catch(function() {
-    try { localStorage.setItem('tcg_spun_denver','1'); } catch(e) {}
-    closeSpin();
-  });
+  }).catch(function() { try { localStorage.setItem('tcg_spun_denver','1'); } catch(e) {} closeSpin(); });
 }
 
 function closeSpin() {
   try { localStorage.setItem('tcg_spun_denver','1'); } catch(e) {}
   $('spinOverlay').classList.add('hide');
 }
+
+// ============================================================
+// BOOT
+// ============================================================
+(function() {
+  // Connectivity
+  checkOnline();
+  setTimeout(pingWorker, 2000);
+  setInterval(pingWorker, 30000);
+
+  // Restore session
+  try {
+    var savedUser = localStorage.getItem('tcgUser');
+    if (savedUser) {
+      var u = JSON.parse(savedUser);
+      if (u && u.email) onUserSignedIn(u);
+    }
+  } catch(e) {}
+
+  // Restore last game
+  try {
+    var savedGame = localStorage.getItem('tcgGame');
+    if (savedGame && GCFG[savedGame]) {
+      startGame(savedGame);
+      return;
+    }
+  } catch(e) {}
+
+  // Show spin if not already spun
+  try {
+    if (!localStorage.getItem('tcg_spun_denver')) {
+      $('spinOverlay').classList.remove('hide');
+      initSpin();
+    }
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
