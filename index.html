@@ -1183,16 +1183,10 @@ function searchCard() {
   var el = document.getElementById('cardResult');
   el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Searching...</div>';
 
-  function fmt(p) {
-    var n = parseFloat(p);
-    return (p && n > 0) ? '$' + n.toFixed(2) : null;
-  }
+  function fmt(p) { var n = parseFloat(p); return (p && n > 0) ? '$' + n.toFixed(2) : null; }
 
   function renderResults(cards) {
-    if (!cards || !cards.length) {
-      el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">No cards found.</div>';
-      return;
-    }
+    if (!cards || !cards.length) { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">No cards found.</div>'; return; }
     el.innerHTML = cards.map(function(c) {
       var img = c.img ? '<img src="' + c.img + '" loading="lazy" style="width:80px;border-radius:6px;flex-shrink:0;cursor:pointer;" onclick="toggleCardImg(this)">' : '';
       var tags = (c.tags||[]).map(function(t) { return '<span class="ctag">' + esc(t) + '</span>'; }).join('');
@@ -1202,74 +1196,82 @@ function searchCard() {
     }).join('');
   }
 
-  function notFound() { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Card not found.</div>'; }
-  function failed(e) { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Search failed. Check connection.</div>'; }
+  function notFound() { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">No cards found for "' + esc(q) + '".</div>'; }
+  function failed() { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Search failed. Check connection.</div>'; }
+
+  function mapYgo(c) {
+    var tags = [];
+    if (c.type) tags.push(c.type);
+    if (c.attribute) tags.push(c.attribute);
+    if (c.level) tags.push('Lv ' + c.level);
+    if (c.race) tags.push(c.race);
+    if (c.atk != null) tags.push('ATK ' + c.atk);
+    if (c.def != null) tags.push('DEF ' + c.def);
+    var prices = [];
+    if (c.card_prices && c.card_prices[0]) {
+      var p = c.card_prices[0];
+      if (fmt(p.tcgplayer_price)) prices.push('TCG: ' + fmt(p.tcgplayer_price));
+      if (fmt(p.ebay_price)) prices.push('eBay: ' + fmt(p.ebay_price));
+      if (fmt(p.cardmarket_price)) prices.push('CM: ' + fmt(p.cardmarket_price));
+    }
+    return { name: c.name, img: c.card_images && c.card_images[0] ? c.card_images[0].image_url_small : '', tags: tags, prices: prices, desc: c.desc };
+  }
 
   // YU-GI-OH
   if (curGame === 'ygo') {
-    var ygoQ = q.trim();
-    function doYgoSearch(searchQ) {
-      fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(searchQ) + '&num=20&offset=0')
-        .then(function(r) { return r.json(); })
-        .then(function(d) {
-          if (!d || d.error || !d.data || !d.data.length) {
-            // Try with hyphens replacing spaces
-            var hyphenQ = searchQ.replace(/\s+/g, '-');
-            if (hyphenQ !== searchQ) {
-              doYgoSearch(hyphenQ);
-            } else {
-              notFound();
-            }
-            return;
-          }
-          renderResults(d.data.slice(0, 20).map(function(c) {
-            var tags = [];
-            if (c.type) tags.push(c.type);
-            if (c.attribute) tags.push(c.attribute);
-            if (c.level) tags.push('Lv ' + c.level);
-            if (c.race) tags.push(c.race);
-            if (c.atk != null) tags.push('ATK ' + c.atk);
-            if (c.def != null) tags.push('DEF ' + c.def);
-            var prices = [];
-            if (c.card_prices && c.card_prices[0]) {
-              var p = c.card_prices[0];
-              if (fmt(p.tcgplayer_price)) prices.push('TCG: ' + fmt(p.tcgplayer_price));
-              if (fmt(p.ebay_price)) prices.push('eBay: ' + fmt(p.ebay_price));
-              if (fmt(p.cardmarket_price)) prices.push('CM: ' + fmt(p.cardmarket_price));
-            }
-            return { name: c.name, img: c.card_images && c.card_images[0] ? c.card_images[0].image_url_small : '', tags: tags, prices: prices, desc: c.desc };
-          }));
-        })
-        .catch(failed);
-    }
-    doYgoSearch(ygoQ);
+    var ygoQ = q.trim()
+      .replace(/blue\s*-?\s*eyes/gi, 'Blue-Eyes')
+      .replace(/red\s*-?\s*eyes/gi, 'Red-Eyes')
+      .replace(/black\s*-?\s*luster/gi, 'Black Luster')
+      .replace(/wind\s*-?\s*up/gi, 'Wind-Up')
+      .replace(/number\s+(\d+)/gi, 'Number $1')
+      .replace(/el\s+shaddoll/gi, 'El Shaddoll')
+      .replace(/abc\s*-?\s*/gi, 'ABC-');
+
+    fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(ygoQ) + '&num=20&offset=0')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d && d.data && d.data.length) { renderResults(d.data.map(mapYgo)); return; }
+        // Fallback: try exact name search
+        return fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?name=' + encodeURIComponent(q.trim()))
+          .then(function(r2) { return r2.json(); })
+          .then(function(d2) {
+            if (d2 && d2.data && d2.data.length) { renderResults(d2.data.map(mapYgo)); return; }
+            notFound();
+          });
+      })
+      .catch(failed);
     return;
   }
 
   // POKEMON
   if (curGame === 'pkm') {
-    fetch('https://api.pokemontcg.io/v2/cards?q=name:' + encodeURIComponent(q) + '*&pageSize=20&orderBy=-set.releaseDate')
+    var pkmQ = q.trim();
+    fetch('https://api.pokemontcg.io/v2/cards?q=name:' + encodeURIComponent(pkmQ) + '*&pageSize=20&orderBy=-set.releaseDate')
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (!d || d.error || !d.data || !d.data.length) { notFound(); return; }
-        renderResults(d.data.map(function(c) {
-          var tags = [];
-          if (c.supertype) tags.push(c.supertype);
-          if (c.subtypes) tags = tags.concat(c.subtypes);
-          if (c.hp) tags.push('HP ' + c.hp);
-          if (c.set && c.set.name) tags.push(c.set.name);
-          var prices = [];
-          if (c.tcgplayer && c.tcgplayer.prices) {
-            var pp = c.tcgplayer.prices;
-            var norm = pp.holofoil || pp.normal || pp['1stEditionHolofoil'] || pp.unlimited || pp.reverseHolofoil;
-            if (norm) {
-              if (fmt(norm.market || norm.mid)) prices.push('Mid: ' + fmt(norm.market || norm.mid));
-              if (fmt(norm.low)) prices.push('Low: ' + fmt(norm.low));
-              if (fmt(norm.high)) prices.push('High: ' + fmt(norm.high));
+        if (d && d.data && d.data.length) {
+          renderResults(d.data.map(function(c) {
+            var tags = [];
+            if (c.supertype) tags.push(c.supertype);
+            if (c.subtypes) tags = tags.concat(c.subtypes);
+            if (c.hp) tags.push('HP ' + c.hp);
+            if (c.set && c.set.name) tags.push(c.set.name);
+            var prices = [];
+            if (c.tcgplayer && c.tcgplayer.prices) {
+              var pp = c.tcgplayer.prices;
+              var norm = pp.holofoil || pp.normal || pp['1stEditionHolofoil'] || pp.unlimited || pp.reverseHolofoil;
+              if (norm) {
+                if (fmt(norm.market || norm.mid)) prices.push('Mid: ' + fmt(norm.market || norm.mid));
+                if (fmt(norm.low)) prices.push('Low: ' + fmt(norm.low));
+                if (fmt(norm.high)) prices.push('High: ' + fmt(norm.high));
+              }
             }
-          }
-          return { name: c.name, img: c.images ? c.images.small : '', tags: tags, prices: prices, desc: c.flavorText || (c.attacks ? c.attacks.map(function(a){ return a.name + ': ' + (a.text||''); }).join(' | ') : '') };
-        }));
+            return { name: c.name, img: c.images ? c.images.small : '', tags: tags, prices: prices, desc: c.flavorText || (c.attacks ? c.attacks.map(function(a){ return a.name + ': ' + (a.text||''); }).join(' | ') : '') };
+          }));
+          return;
+        }
+        notFound();
       })
       .catch(failed);
     return;
@@ -1280,14 +1282,12 @@ function searchCard() {
     fetch('https://api.scryfall.com/cards/search?q=name:' + encodeURIComponent(q) + '&order=released&unique=prints')
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (!d || !d.data || !d.data.length) {
-          return fetch('https://api.scryfall.com/cards/search?q=' + encodeURIComponent(q) + '&order=edhrec&unique=cards')
-            .then(function(r2) { return r2.json(); });
-        }
-        return d;
+        if (d && d.data && d.data.length) { return d; }
+        return fetch('https://api.scryfall.com/cards/search?q=' + encodeURIComponent(q) + '&order=edhrec&unique=cards')
+          .then(function(r2) { return r2.json(); });
       })
       .then(function(d) {
-        if (!d || d.error || !d.data || !d.data.length) { notFound(); return; }
+        if (!d || !d.data || !d.data.length) { notFound(); return; }
         renderResults(d.data.slice(0, 20).map(function(c) {
           var tags = [];
           if (c.type_line) tags.push(c.type_line);
