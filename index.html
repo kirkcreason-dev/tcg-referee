@@ -1165,6 +1165,13 @@ document.getElementById('cardSearchBtn').addEventListener('click', searchCard);
 document.getElementById('cardInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') searchCard();
 });
+var cardSearchTimer = null;
+document.getElementById('cardInput').addEventListener('input', function() {
+  clearTimeout(cardSearchTimer);
+  var q = this.value.trim();
+  if (q.length < 3) return;
+  cardSearchTimer = setTimeout(searchCard, 600);
+});
 
 function toggleCardImg(el) {
   el.style.width = el.style.width === '200px' ? '80px' : '200px';
@@ -1196,16 +1203,14 @@ function searchCard() {
   }
 
   function notFound() { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Card not found.</div>'; }
-  function failed(e) { el.innerHTML = '<div style="color:var(--red,#c0182c);font-size:13px;text-align:center;padding:32px 0;">Search failed: ' + (e && e.message ? esc(e.message) : 'network error') + '</div>'; console.error('Card search error:', e); }
+  function failed(e) { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Search failed. Check connection.</div>'; }
 
   // YU-GI-OH
   if (curGame === 'ygo') {
-    var ygoUrl = 'https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(q) + '&num=20&offset=0';
-    console.log('YGO search:', ygoUrl);
-    fetch(ygoUrl)
+    fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(q) + '&num=20')
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (!d || !d.data || !d.data.length) { notFound(); return; }
+        if (!d || d.error || !d.data || !d.data.length) { notFound(); return; }
         renderResults(d.data.slice(0, 20).map(function(c) {
           var tags = [];
           if (c.type) tags.push(c.type);
@@ -1230,12 +1235,10 @@ function searchCard() {
 
   // POKEMON
   if (curGame === 'pkm') {
-    var pkmUrl = 'https://api.pokemontcg.io/v2/cards?q=name:' + encodeURIComponent(q) + '*&pageSize=20&orderBy=-set.releaseDate';
-    console.log('PKM search:', pkmUrl);
-    fetch(pkmUrl)
+    fetch('https://api.pokemontcg.io/v2/cards?q=name:' + encodeURIComponent(q) + '*&pageSize=20&orderBy=-set.releaseDate')
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (!d || !d.data || !d.data.length) { notFound(); return; }
+        if (!d || d.error || !d.data || !d.data.length) { notFound(); return; }
         renderResults(d.data.map(function(c) {
           var tags = [];
           if (c.supertype) tags.push(c.supertype);
@@ -1261,17 +1264,17 @@ function searchCard() {
 
   // MAGIC: THE GATHERING
   if (curGame.indexOf('mtg') === 0) {
-    fetch('https://api.scryfall.com/cards/search?q=' + encodeURIComponent(q) + '&order=released&unique=prints')
+    fetch('https://api.scryfall.com/cards/search?q=name:' + encodeURIComponent(q) + '&order=released&unique=prints')
       .then(function(r) { return r.json(); })
       .then(function(d) {
         if (!d || !d.data || !d.data.length) {
-          return fetch('https://api.scryfall.com/cards/search?q=name:' + encodeURIComponent(q) + '&order=edhrec&unique=cards')
+          return fetch('https://api.scryfall.com/cards/search?q=' + encodeURIComponent(q) + '&order=edhrec&unique=cards')
             .then(function(r2) { return r2.json(); });
         }
         return d;
       })
       .then(function(d) {
-        if (!d || !d.data || !d.data.length) { notFound(); return; }
+        if (!d || d.error || !d.data || !d.data.length) { notFound(); return; }
         renderResults(d.data.slice(0, 20).map(function(c) {
           var tags = [];
           if (c.type_line) tags.push(c.type_line);
