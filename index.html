@@ -267,7 +267,7 @@ body::before{content:'';position:fixed;inset:0;border:4px solid transparent;bord
     <!-- LP -->
     <div class="panel" data-panel="lp" style="padding:10px;">
       <div class="lp-wrap">
-        <div class="lp-players">
+        <div class="lp-players" id="lpPlayers">
           <div class="lp-card p1">
             <div class="lp-label">Player 1</div>
             <div class="lp-val" id="lp1">8000</div>
@@ -279,6 +279,18 @@ body::before{content:'';position:fixed;inset:0;border:4px solid transparent;bord
             <div class="lp-val" id="lp2">8000</div>
             <div class="lp-bar-wrap"><div class="lp-bar" id="bar2" style="width:100%;"></div></div>
             <div class="lp-btns" id="lpbtns2"></div>
+          </div>
+          <div class="lp-card p3" id="lpCard3" style="display:none;">
+            <div class="lp-label">Player 3</div>
+            <div class="lp-val" id="lp3">40</div>
+            <div class="lp-bar-wrap"><div class="lp-bar" id="bar3" style="width:100%;"></div></div>
+            <div class="lp-btns" id="lpbtns3"></div>
+          </div>
+          <div class="lp-card p4" id="lpCard4" style="display:none;">
+            <div class="lp-label">Player 4</div>
+            <div class="lp-val" id="lp4">40</div>
+            <div class="lp-bar-wrap"><div class="lp-bar" id="bar4" style="width:100%;"></div></div>
+            <div class="lp-btns" id="lpbtns4"></div>
           </div>
         </div>
         <!-- Poison Counter Tracker (MTG infect/toxic) -->
