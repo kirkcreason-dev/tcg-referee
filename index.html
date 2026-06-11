@@ -139,71 +139,6 @@ body::before{content:'';position:fixed;inset:0;border:4px solid transparent;bord
 .timer-display{font-size:32px;font-weight:900;color:var(--text);text-align:center;letter-spacing:2px;}
 .timer-display.warn{color:var(--red);}
 
-/* ===== TOURNAMENT ===== */
-.tourn-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px;gap:0;flex-shrink:0;}
-.tourn-tab{flex:1;background:none;border:none;padding:9px 2px;font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text2);cursor:pointer;text-transform:uppercase;position:relative;touch-action:manipulation;}
-.tourn-tab.on{color:var(--blue);}
-.tourn-tab.on::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--blue),var(--red));}
-.tv{display:none;flex-direction:column;gap:0;}
-.tv.on{display:flex;}
-.tourn-empty{color:var(--text2);font-size:13px;text-align:center;padding:40px 20px;}
-/* Event cards */
-.ev-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);cursor:pointer;touch-action:manipulation;}
-.ev-card:active{opacity:0.8;}
-.ev-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px;}
-.ev-meta{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px;}
-.prize-row{display:flex;gap:6px;margin-bottom:10px;}
-.prize-box{flex:1;border-radius:8px;padding:8px 4px;text-align:center;border:1px solid;}
-.prize-box.g{background:#fff8e0;border-color:#d4a800;}
-.prize-box.s{background:#f4f4f8;border-color:#9090a8;}
-.prize-box.b{background:#fff4f0;border-color:#c06030;}
-.prize-place{font-size:14px;margin-bottom:1px;}
-.prize-amt{font-size:15px;font-weight:900;}
-.prize-box.g .prize-amt{color:var(--gold);}
-.prize-box.s .prize-amt{color:#606070;}
-.prize-box.b .prize-amt{color:#a05030;}
-.ev-spots{font-size:12px;font-weight:700;padding:4px 0;margin-bottom:8px;}
-.ev-spots.open{color:var(--green);}
-.ev-spots.low{color:#e07000;}
-.ev-spots.full{color:var(--red);}
-.reg-btn{background:linear-gradient(135deg,var(--blue),var(--red));color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:800;width:100%;cursor:pointer;touch-action:manipulation;margin-bottom:8px;}
-.reg-btn:disabled{opacity:0.4;cursor:default;}
-.ev-sub-btns{display:flex;gap:6px;}
-.ev-sub-btn{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 4px;font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;touch-action:manipulation;}
-/* Standings */
-.stand-row{display:flex;align-items:center;padding:8px;border-bottom:1px solid var(--border);gap:10px;}
-.stand-rank{font-size:16px;font-weight:900;width:28px;color:var(--text2);}
-.stand-rank.g{color:#b87800;}
-.stand-rank.s{color:#808090;}
-.stand-rank.b{color:#a05030;}
-.stand-name{font-weight:700;color:var(--text);flex:1;font-size:13px;}
-.stand-rec{font-size:11px;color:var(--text2);}
-.stand-pts{font-weight:900;color:var(--blue);font-size:15px;}
-/* Bracket */
-.bracket-match{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:6px;}
-.bracket-p{padding:7px 10px;font-size:13px;font-weight:600;color:var(--text);border-bottom:1px solid var(--border);}
-.bracket-p:last-child{border-bottom:none;}
-.bracket-p.bye{color:var(--text2);font-style:italic;}
-.bracket-label{font-size:10px;letter-spacing:1.5px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:8px;}
-/* Tables */
-.table-row{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
-.table-num{background:linear-gradient(135deg,var(--blue),var(--red));color:#fff;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;flex-shrink:0;}
-.table-vs{flex:1;font-size:13px;color:var(--text);}
-.table-vs span{font-weight:700;}
-/* Feed */
-.feed-post{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;}
-.feed-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-.feed-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--red));color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.feed-author{font-size:13px;font-weight:700;color:var(--text);flex:1;}
-.feed-time{font-size:10px;color:var(--text2);}
-.feed-body{font-size:13px;color:var(--text);line-height:1.6;}
-.feed-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:20px;margin-bottom:6px;text-transform:uppercase;}
-.feed-badge.admin{background:rgba(192,24,44,0.08);border:1px solid rgba(192,24,44,0.2);color:var(--red);}
-.feed-badge.player{background:rgba(26,95,200,0.08);border:1px solid rgba(26,95,200,0.2);color:var(--blue);}
-.feed-input-row{display:flex;gap:8px;margin-bottom:12px;flex-shrink:0;}
-.feed-input-row input{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-size:13px;outline:none;}
-.feed-input-row button{background:linear-gradient(135deg,var(--blue),var(--red));color:#fff;border:none;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;}
-
 /* ===== SIGN IN ===== */
 .signin-wrap{padding:20px;}
 .signin-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px;}
@@ -247,6 +182,9 @@ body::before{content:'';position:fixed;inset:0;border:4px solid transparent;bord
 
 .suggest-chip{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;color:var(--blue);cursor:pointer;white-space:nowrap;touch-action:manipulation;flex-shrink:0;}
 .suggest-chip:active{background:#f0f4ff;}
+
+#lpPlayers.four-player { grid-template-columns: 1fr 1fr; }
+.lp-card.p3, .lp-card.p4 { background: linear-gradient(135deg, #1a1a3a, #0d1425); }
 </style>
 </head>
 <body>
@@ -298,7 +236,6 @@ body::before{content:'';position:fixed;inset:0;border:4px solid transparent;bord
     <button class="tab on" data-tab="judge">JUDGE</button>
     <button class="tab" id="tab-cards" data-tab="cards">CARDS</button>
     <button class="tab" data-tab="lp">LP</button>
-    <button class="tab" data-tab="tourn">TOURNAMENT</button>
   </div>
 
   <!-- PANELS -->
@@ -437,98 +374,16 @@ body::before{content:'';position:fixed;inset:0;border:4px solid transparent;bord
     </div>
 
     <!-- TOURNAMENT -->
-    <div class="panel" data-panel="tourn">
-      <!-- Account bar -->
-      <div id="acctBar" style="display:none;">
-        <div class="acct-bar">
-          <div class="acct-avatar" id="acctAvatar">?</div>
-          <div>
-            <div class="acct-name" id="acctName"></div>
-            <div class="acct-email" id="acctEmail"></div>
-          </div>
-          <button class="signout-btn" id="signOutBtn">Sign Out</button>
-        </div>
-      </div>
-      <!-- Sign in prompt -->
-      <div id="signinSection">
-        <div class="signin-wrap">
-          <div class="signin-title">Tournament Sign In</div>
-          <div class="signin-sub">Sign in to register for tournaments and track your results.</div>
-          <div class="signin-btns">
-            <button class="signin-primary" id="emailSignInBtn">&#9993; Sign In / Create Account</button>
-            <button class="signin-secondary" id="appleSignInBtn">&#63743; Sign in with Apple</button>
-            <button class="signin-secondary" id="googleSignInBtn">G&nbsp;&nbsp;Sign in with Google</button>
-          </div>
-        </div>
-      </div>
-      <!-- Sub tabs -->
-      <div class="tourn-tabs" id="tournTabs">
-        <button class="tourn-tab on" data-ttab="events">EVENTS</button>
-        <button class="tourn-tab" data-ttab="standings">STANDINGS</button>
-        <button class="tourn-tab" data-ttab="bracket">BRACKET</button>
-        <button class="tourn-tab" data-ttab="tables">TABLES</button>
-        <button class="tourn-tab" data-ttab="feed">FEED</button>
-      </div>
-      <!-- Tournament views -->
-      <div class="tv on" id="tv-events"><div id="eventsList"></div></div>
-      <div class="tv" id="tv-standings"><div id="standingsList"><div class="tourn-empty">Select an event to view standings.</div></div></div>
-      <div class="tv" id="tv-bracket"><div id="bracketList"><div class="tourn-empty">Select an event to view bracket.</div></div></div>
-      <div class="tv" id="tv-tables"><div id="tablesList"><div class="tourn-empty">Select an event to view tables.</div></div></div>
-      <div class="tv" id="tv-feed">
-        <div class="feed-input-row">
-          <input type="text" id="feedInput" placeholder="Post an update...">
-          <button id="feedPostBtn">Post</button>
-        </div>
-        <div id="feedList"><div class="tourn-empty">No posts yet.</div></div>
-      </div>
-    </div>
+    
 
   </div><!-- /panels -->
 </div><!-- /A -->
 
 <!-- ===== REGISTER MODAL ===== -->
-<div class="modal-overlay hide" id="regModal">
-  <div class="modal-sheet">
-    <div class="modal-title" id="regTitle">Register</div>
-    <div class="modal-field">
-      <label>Name</label>
-      <input type="text" id="regName" placeholder="Your name">
-    </div>
-    <div class="modal-field">
-      <label>Email</label>
-      <input type="email" id="regEmail" placeholder="your@email.com">
-    </div>
-    <div class="modal-field">
-      <label>Game you are playing</label>
-      <input type="text" id="regGame" placeholder="e.g. Yu-Gi-Oh!">
-    </div>
-    <div id="regMsg"></div>
-    <button class="modal-btn" id="regSubmitBtn">Continue to Payment</button>
-    <button class="modal-cancel" id="regCancelBtn">Cancel</button>
-  </div>
-</div>
+
 
 <!-- ===== EMAIL AUTH MODAL ===== -->
-<div class="modal-overlay hide" id="authModal">
-  <div class="modal-sheet">
-    <div class="auth-tabs">
-      <button class="auth-tab on" id="authTabSignIn" data-auth="signin">Sign In</button>
-      <button class="auth-tab" id="authTabCreate" data-auth="create">Create Account</button>
-    </div>
-    <div id="authSubtitle" style="font-size:13px;color:var(--text2);margin-bottom:12px;">Welcome back! Enter your details.</div>
-    <div class="modal-field">
-      <label>Name</label>
-      <input type="text" id="authName" placeholder="Your name">
-    </div>
-    <div class="modal-field">
-      <label>Email</label>
-      <input type="email" id="authEmail" placeholder="your@email.com">
-    </div>
-    <div id="authMsg"></div>
-    <button class="modal-btn" id="authSubmitBtn">Continue</button>
-    <button class="modal-cancel" id="authCancelBtn">Cancel</button>
-  </div>
-</div>
+
 
 <!-- TOAST -->
 <div id="toast"></div>
@@ -589,15 +444,14 @@ var GCFG = {
 // ============================================================
 var curGame = null;
 var selGame = null;
-var lp = [0, 0];
+var lp = [0, 0, 0, 0];
+var numPlayers = 2;
 var startLP = 8000;
 var turn = 1;
 var tokens = {1:[], 2:[]};
 var battleLog = [];
 var diceHistory = [];
 var tcgUser = null;
-var activeTournId = null;
-var tournData = [];
 var timerInterval = null;
 var timerSeconds = 0;
 var timerRunning = false;
@@ -696,7 +550,6 @@ function switchTab(name) {
   document.querySelectorAll('.panel').forEach(function(p) {
     p.classList.toggle('on', p.dataset.panel === name);
   });
-  if (name === 'tourn') loadTournaments();
 };
 
 document.querySelectorAll('.tab').forEach(function(t) {
@@ -709,7 +562,17 @@ document.querySelectorAll('.tab').forEach(function(t) {
 function applyGame(g) {
   var c = GCFG[g];
   startLP = c.lp > 0 ? c.lp : 20;
-  lp[0] = lp[1] = startLP;
+  // Commander gets 4 players
+  numPlayers = g === 'mtg_cmd' ? 4 : 2;
+  for (var i = 0; i < numPlayers; i++) lp[i] = startLP;
+  // Show/hide player 3 & 4 cards
+  var c3 = document.getElementById('lpCard3');
+  var c4 = document.getElementById('lpCard4');
+  if (c3) c3.style.display = g === 'mtg_cmd' ? '' : 'none';
+  if (c4) c4.style.display = g === 'mtg_cmd' ? '' : 'none';
+  // Make LP grid 2x2 for commander
+  var lpGrid = document.getElementById('lpPlayers');
+  if (lpGrid) lpGrid.style.gridTemplateColumns = g === 'mtg_cmd' ? '1fr 1fr' : '1fr 1fr';
   turn = 1;
   battleLog = [];
   renderLP();
@@ -740,7 +603,7 @@ function applyGame(g) {
 // LP TRACKER
 // ============================================================
 function renderLP() {
-  for (var p = 0; p < 2; p++) {
+  for (var p = 0; p < numPlayers; p++) {
     var el = document.getElementById('lp' + (p+1));
     if (el) el.textContent = lp[p].toLocaleString();
     var bar = document.getElementById('bar' + (p+1));
@@ -772,7 +635,10 @@ function renderBattleLog() {
 function buildLPButtons(g) {
   var c = GCFG[g];
   var btns = c.btns || [-1,-2,-5,1,2,5];
-  [1,2].forEach(function(p) {
+  var playerCount = (typeof numPlayers !== 'undefined') ? numPlayers : 2;
+  var playerArr = [];
+  for(var pi=1;pi<=playerCount;pi++) playerArr.push(pi);
+  playerArr.forEach(function(p) {
     var grid = document.getElementById('lpbtns' + p);
     if (!grid) return;
     var cols = btns.length / 2;
@@ -1017,7 +883,10 @@ function buildTokens(g) {
 }
 
 function renderTokens() {
-  [1,2].forEach(function(p) {
+  var playerCount = (typeof numPlayers !== 'undefined') ? numPlayers : 2;
+  var playerArr = [];
+  for(var pi=1;pi<=playerCount;pi++) playerArr.push(pi);
+  playerArr.forEach(function(p) {
     var el = document.getElementById('tokP' + p);
     if (!el) return;
     var col = p === 1 ? '26,95,200' : '192,24,44';
@@ -1046,7 +915,10 @@ function adjToken(p, i, d) {
 }
 
 $('resetTokBtn').addEventListener('click', function() {
-  [1,2].forEach(function(p) { tokens[p].forEach(function(t) { t.count = 0; }); });
+  var playerCount = (typeof numPlayers !== 'undefined') ? numPlayers : 2;
+  var playerArr = [];
+  for(var pi=1;pi<=playerCount;pi++) playerArr.push(pi);
+  playerArr.forEach(function(p) { tokens[p].forEach(function(t) { t.count = 0; }); });
   renderTokens();
 });
 
@@ -1275,16 +1147,38 @@ document.getElementById('cardInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') searchCard();
 });
 
+function toggleCardImg(el) { el.style.width = el.style.width === "200px" ? "80px" : "200px"; }
+
 function searchCard() {
   var q = document.getElementById('cardInput').value.trim();
   if (!q || !curGame) return;
   var el = document.getElementById('cardResult');
   el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Searching...</div>';
 
-  function renderCard(name, img, tags, desc) {
-    var imgHtml = img ? '<img src="' + img + '" loading="lazy">' : '';
-    var tagsHtml = tags.map(function(t) { return '<span class="ctag">' + esc(t) + '</span>'; }).join('');
-    el.innerHTML = '<div class="crd"><div class="crd-top">' + imgHtml + '<div class="crd-info"><div class="crn">' + esc(name) + '</div><div class="crt">' + tagsHtml + '</div></div></div><div class="crd-desc">' + esc(desc || '') + '</div></div>';
+  function formatPrice(p) {
+    if (!p || p <= 0) return null;
+    return '$' + parseFloat(p).toFixed(2);
+  }
+
+  function renderResults(cards) {
+    if (!cards.length) { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">No cards found.</div>'; return; }
+    el.innerHTML = cards.map(function(c) {
+      var imgHtml = c.img ? '<img src="' + c.img + '" loading="lazy" style="width:80px;border-radius:6px;flex-shrink:0;cursor:pointer;" onclick="toggleCardImg(this)">' : '';
+      var tagsHtml = c.tags.map(function(t) { return '<span class="ctag">' + esc(t) + '</span>'; }).join('');
+      var priceHtml = '';
+      if (c.prices && c.prices.length) {
+        priceHtml = '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">' +
+          c.prices.map(function(p) {
+            return '<span style="background:var(--blue);color:#fff;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700;">' + esc(p) + '</span>';
+          }).join('') + '</div>';
+      }
+      return '<div class="crd" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">' +
+        imgHtml +
+        '<div style="flex:1;min-width:0;"><div class="crn">' + esc(c.name) + '</div>' +
+        '<div class="crt">' + tagsHtml + '</div>' +
+        priceHtml +
+        '<div class="crd-desc" style="font-size:12px;margin-top:4px;">' + esc(c.desc || '') + '</div></div></div>';
+    }).join('');
   }
 
   function notFound() { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Card not found.</div>'; }
@@ -1296,466 +1190,120 @@ function searchCard() {
     .then(function(r) { return r.json(); })
     .then(function(d) {
       if (!d.data || !d.data.length) { notFound(); return; }
-      var c = d.data[0];
-      var tags = [];
-      if (c.type) tags.push(c.type);
-      if (c.attribute) tags.push(c.attribute);
-      if (c.level) tags.push('Level ' + c.level);
-      if (c.race) tags.push(c.race);
-      if (c.atk !== undefined && c.atk !== null) tags.push('ATK ' + c.atk);
-      if (c.def !== undefined && c.def !== null) tags.push('DEF ' + c.def);
-      var img = c.card_images && c.card_images[0] ? c.card_images[0].image_url_small : '';
-      renderCard(c.name, img, tags, c.desc);
+      var cards = d.data.slice(0, 20).map(function(c) {
+        var tags = [];
+        if (c.type) tags.push(c.type);
+        if (c.attribute) tags.push(c.attribute);
+        if (c.level) tags.push('Level ' + c.level);
+        if (c.race) tags.push(c.race);
+        if (c.atk !== undefined && c.atk !== null) tags.push('ATK ' + c.atk);
+        if (c.def !== undefined && c.def !== null) tags.push('DEF ' + c.def);
+        var prices = [];
+        if (c.card_prices && c.card_prices[0]) {
+          var p = c.card_prices[0];
+          var tcp = formatPrice(p.tcgplayer_price);
+          var ebay = formatPrice(p.ebay_price);
+          var cm = formatPrice(p.cardmarket_price);
+          if (tcp) prices.push('TCG: ' + tcp);
+          if (ebay) prices.push('eBay: ' + ebay);
+          if (cm) prices.push('CM: ' + cm);
+        }
+        return {
+          name: c.name,
+          img: c.card_images && c.card_images[0] ? c.card_images[0].image_url_small : '',
+          tags: tags,
+          prices: prices,
+          desc: c.desc
+        };
+      });
+      renderResults(cards);
     }).catch(failed);
     return;
   }
 
   if (curGame === 'pkm') {
-    fetch('https://api.pokemontcg.io/v2/cards?q=name:"' + encodeURIComponent(q) + '"&pageSize=1')
+    fetch('https://api.pokemontcg.io/v2/cards?q=name:"' + encodeURIComponent(q) + '*"&pageSize=20&orderBy=-set.releaseDate')
     .then(function(r) { return r.json(); })
     .then(function(d) {
       if (!d.data || !d.data.length) { notFound(); return; }
-      var c = d.data[0];
-      var tags = [];
-      if (c.supertype) tags.push(c.supertype);
-      if (c.subtypes) tags = tags.concat(c.subtypes);
-      if (c.hp) tags.push('HP ' + c.hp);
-      if (c.types) tags = tags.concat(c.types);
-      if (c.set && c.set.name) tags.push(c.set.name);
-      var desc = '';
-      if (c.attacks && c.attacks.length) desc = c.attacks.map(function(a) { return a.name + (a.damage ? ' — ' + a.damage : '') + (a.text ? ' — ' + a.text : ''); }).join(' | ');
-      renderCard(c.name, c.images && c.images.small ? c.images.small : '', tags, desc);
+      var cards = d.data.map(function(c) {
+        var tags = [];
+        if (c.supertype) tags.push(c.supertype);
+        if (c.subtypes) tags = tags.concat(c.subtypes);
+        if (c.hp) tags.push('HP ' + c.hp);
+        if (c.set && c.set.name) tags.push(c.set.name);
+        var prices = [];
+        if (c.tcgplayer && c.tcgplayer.prices) {
+          var pp = c.tcgplayer.prices;
+          var norm = pp.normal || pp.holofoil || pp['1stEditionHolofoil'] || pp.unlimited || pp.reverseHolofoil;
+          if (norm) {
+            var mid = formatPrice(norm.mid || norm.market);
+            var low = formatPrice(norm.low);
+            var high = formatPrice(norm.high);
+            if (mid) prices.push('Mid: ' + mid);
+            if (low) prices.push('Low: ' + low);
+            if (high) prices.push('High: ' + high);
+          }
+        }
+        return {
+          name: c.name,
+          img: c.images ? c.images.small : '',
+          tags: tags,
+          prices: prices,
+          desc: c.flavorText || (c.attacks ? c.attacks.map(function(a){return a.name+': '+a.text;}).join(' | ') : '')
+        };
+      });
+      renderResults(cards);
     }).catch(failed);
     return;
   }
 
   if (curGame.indexOf('mtg') === 0) {
-    // Try fuzzy name match first, fall back to full text search
-    function scryfallSearch(query) {
-      return fetch('https://api.scryfall.com/cards/named?fuzzy=' + encodeURIComponent(query))
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (d.object === 'error') {
-          // Fall back to search endpoint which is more flexible
-          return fetch('https://api.scryfall.com/cards/search?q=name:' + encodeURIComponent(query) + '&order=edhrec&unique=cards')
-          .then(function(r2) { return r2.json(); })
-          .then(function(d2) {
-            if (d2.data && d2.data.length) return d2.data[0];
-            return null;
-          });
-        }
-        return d;
-      });
-    }
-    scryfallSearch(q)
+    fetch('https://api.scryfall.com/cards/search?q=name:/' + encodeURIComponent(q) + '/&order=released&unique=prints&limit=20')
+    .then(function(r) { return r.json(); })
     .then(function(d) {
-      if (!d || d.object === 'error') { notFound(); return; }
-      var tags = [];
-      if (d.type_line) tags.push(d.type_line);
-      if (d.mana_cost) tags.push(d.mana_cost);
-      if (d.power !== undefined) tags.push(d.power + '/' + d.toughness);
-      if (d.loyalty) tags.push('Loyalty ' + d.loyalty);
-      if (d.set_name) tags.push(d.set_name);
-      var img = d.image_uris && d.image_uris.small ? d.image_uris.small : (d.card_faces && d.card_faces[0] && d.card_faces[0].image_uris ? d.card_faces[0].image_uris.small : '');
-      var desc = d.oracle_text || (d.card_faces && d.card_faces[0] ? d.card_faces[0].oracle_text : '');
-      renderCard(d.name, img, tags, desc);
+      if (!d.data || !d.data.length) {
+        return fetch('https://api.scryfall.com/cards/search?q=' + encodeURIComponent(q) + '&order=edhrec&unique=cards&limit=20')
+          .then(function(r2) { return r2.json(); });
+      }
+      return d;
+    })
+    .then(function(d) {
+      if (!d.data || !d.data.length) { notFound(); return; }
+      var cards = d.data.slice(0,20).map(function(c) {
+        var tags = [];
+        if (c.type_line) tags.push(c.type_line);
+        if (c.mana_cost) tags.push(c.mana_cost);
+        if (c.power) tags.push(c.power + '/' + c.toughness);
+        if (c.set_name) tags.push(c.set_name);
+        var prices = [];
+        if (c.prices) {
+          var tcp = formatPrice(c.prices.usd);
+          var tcpF = formatPrice(c.prices.usd_foil);
+          var cm = formatPrice(c.prices.eur);
+          if (tcp) prices.push('TCG: $' + parseFloat(c.prices.usd).toFixed(2));
+          if (tcpF) prices.push('Foil: $' + parseFloat(c.prices.usd_foil).toFixed(2));
+          if (cm) prices.push('EUR: €' + parseFloat(c.prices.eur).toFixed(2));
+        }
+        return {
+          name: c.name,
+          img: c.image_uris ? c.image_uris.small : (c.card_faces && c.card_faces[0].image_uris ? c.card_faces[0].image_uris.small : ''),
+          tags: tags,
+          prices: prices,
+          desc: c.oracle_text || ''
+        };
+      });
+      renderResults(cards);
     }).catch(failed);
     return;
   }
 
-  el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Card search not available for ' + esc(GCFG[curGame].n) + '.</div>';
+  notFound();
 }
-
-// ============================================================
-// AUTHENTICATION
-// ============================================================
-function showAuthModal(mode) {
-  document.getElementById('authModal').classList.remove('hide');
-  setAuthMode(mode || 'signin');
-  document.getElementById('authName').value = '';
-  document.getElementById('authEmail').value = '';
-  document.getElementById('authMsg').innerHTML = '';
-}
-
-function setAuthMode(mode) {
-  var si = document.getElementById('authTabSignIn');
-  var cr = document.getElementById('authTabCreate');
-  var sub = document.getElementById('authSubtitle');
-  si.classList.toggle('on', mode === 'signin');
-  cr.classList.toggle('on', mode === 'create');
-  if (mode === 'signin') {
-    sub.textContent = 'Welcome back! Enter your email to sign in.';
-    document.getElementById('authName').parentElement.style.display = 'none';
-  } else {
-    sub.textContent = 'Create your free account.';
-    document.getElementById('authName').parentElement.style.display = '';
-  }
-  si.dataset.active = mode === 'signin' ? '1' : '';
-  cr.dataset.active = mode === 'create' ? '1' : '';
-}
-
-document.querySelectorAll('.auth-tab').forEach(function(t) {
-  t.addEventListener('click', function() { setAuthMode(t.dataset.auth); });
-});
-
-document.getElementById('authSubmitBtn').addEventListener('click', function() {
-  var name = document.getElementById('authName').value.trim();
-  var email = document.getElementById('authEmail').value.trim();
-  var msg = document.getElementById('authMsg');
-  var isCreate = document.getElementById('authTabCreate').classList.contains('on');
-
-  if (!email || !email.includes('@')) {
-    msg.innerHTML = '<div class="modal-msg err">Please enter a valid email address.</div>';
-    return;
-  }
-  if (isCreate && !name) {
-    msg.innerHTML = '<div class="modal-msg err">Please enter your name.</div>';
-    return;
-  }
-
-  var user = {
-    id: email.toLowerCase(),
-    email: email.toLowerCase(),
-    name: name || email.split('@')[0],
-    provider: 'email'
-  };
-
-  document.getElementById('authModal').classList.add('hide');
-  onUserSignedIn(user);
-});
-
-document.getElementById('authCancelBtn').addEventListener('click', function() {
-  document.getElementById('authModal').classList.add('hide');
-});
-
-function onUserSignedIn(user) {
-  tcgUser = user;
-  try { localStorage.setItem('tcgUser', JSON.stringify(user)); } catch(e) {}
-  // Update UI
-  var initials = user.name.split(' ').map(function(w) { return w[0] || ''; }).join('').slice(0,2).toUpperCase() || '?';
-  document.getElementById('acctAvatar').textContent = initials;
-  document.getElementById('acctName').textContent = user.name;
-  document.getElementById('acctEmail').textContent = user.email;
-  document.getElementById('acctBar').style.display = '';
-  document.getElementById('signinSection').style.display = 'none';
-  // Save to worker
-  fetch(WORKER + '/auth?action=upsert', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(user)
-  }).catch(function() {});
-  loadTournaments();
-}
-
-function signOut() {
-  tcgUser = null;
-  try { localStorage.removeItem('tcgUser'); } catch(e) {}
-  document.getElementById('acctBar').style.display = 'none';
-  document.getElementById('signinSection').style.display = '';
-}
-
-$('signOutBtn').addEventListener('click', signOut);
-$('emailSignInBtn').addEventListener('click', function() { showAuthModal('signin'); });
-$('appleSignInBtn').addEventListener('click', function() {
-  if (window.nativeSignIn) { window.nativeSignIn('apple'); }
-  else { showAuthModal('signin'); }
-});
-$('googleSignInBtn').addEventListener('click', function() {
-  if (window.nativeSignIn) { window.nativeSignIn('google'); }
-  else { showAuthModal('signin'); }
-});
 
 // ============================================================
 // TOURNAMENT
 // ============================================================
-// Sub-tabs
-document.querySelectorAll('.tourn-tab').forEach(function(t) {
-  t.addEventListener('click', function() {
-    document.querySelectorAll('.tourn-tab').forEach(function(x) { x.classList.remove('on'); });
-    document.querySelectorAll('.tv').forEach(function(v) { v.classList.remove('on'); });
-    t.classList.add('on');
-    document.getElementById('tv-' + t.dataset.ttab).classList.add('on');
-    if (t.dataset.ttab === 'feed') loadFeed();
-  });
-});
-
-function loadTournaments() {
-  var el = document.getElementById('eventsList');
-  el.innerHTML = '<div class="tourn-empty">Loading...</div>';
-  fetch(WORKER + '/tournament?action=list')
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    tournData = data || [];
-    var valid = tournData.filter(function(t) { return t.name !== '__test__'; });
-    if (!valid.length) {
-      el.innerHTML = '<div class="tourn-empty">No tournaments yet.<br>Check back soon!</div>';
-      return;
-    }
-    el.innerHTML = '';
-    valid.forEach(function(t) { el.appendChild(buildEventCard(t)); });
-  })
-  .catch(function() {
-    el.innerHTML = '<div class="tourn-empty">Could not load tournaments.</div>';
-  });
-}
-
-function buildEventCard(t) {
-  var spots = t.maxPlayers - t.players.length;
-  var spotsClass = spots === 0 ? 'full' : (spots <= 10 ? 'low' : 'open');
-  var spotsText = spots === 0 ? 'FULL' : (spots + ' spots left');
-  var pb = t.prizeBreakdown || {first:400, second:150, third:50};
-  var div = document.createElement('div');
-  div.className = 'ev-card';
-
-  var regBtnHtml;
-  if (t.status === 'active') {
-    regBtnHtml = '<button class="reg-btn" disabled>Tournament In Progress</button>';
-  } else if (spots > 0) {
-    regBtnHtml = '<button class="reg-btn" data-reg-id="' + esc(t.id) + '" data-reg-name="' + esc(t.name) + '" data-reg-fee="' + esc(String(t.entryFee)) + '">Register &mdash; $' + t.entryFee + '</button>';
-  } else {
-    regBtnHtml = '<button class="reg-btn" disabled>Tournament Full</button>';
-  }
-
-  div.innerHTML =
-    '<div class="ev-name">' + esc(t.name) + '</div>' +
-    '<div class="ev-meta">' +
-      '<b>Date:</b> ' + esc(t.date) + '<br>' +
-      '<b>Location:</b> ' + esc(t.location) + '<br>' +
-      '<b>Game:</b> ' + esc(t.game) + '<br>' +
-      '<b>Format:</b> ' + esc(t.format || 'Swiss + Top 8') +
-    '</div>' +
-    '<div class="prize-row">' +
-      '<div class="prize-box g"><div class="prize-place">&#129351;</div><div class="prize-amt">$' + pb.first + '</div></div>' +
-      '<div class="prize-box s"><div class="prize-place">&#129352;</div><div class="prize-amt">$' + pb.second + '</div></div>' +
-      '<div class="prize-box b"><div class="prize-place">&#129353;</div><div class="prize-amt">$' + pb.third + '</div></div>' +
-    '</div>' +
-    '<div class="ev-spots ' + spotsClass + '">' + spotsText + ' &middot; ' + t.players.length + '/' + t.maxPlayers + ' registered</div>' +
-    regBtnHtml +
-    '<div class="ev-sub-btns">' +
-      '<button class="ev-sub-btn" data-view="standings" data-tid="' + esc(t.id) + '">Standings</button>' +
-      '<button class="ev-sub-btn" data-view="bracket" data-tid="' + esc(t.id) + '">Bracket</button>' +
-      '<button class="ev-sub-btn" data-view="tables" data-tid="' + esc(t.id) + '">Tables</button>' +
-    '</div>';
-
-  div.addEventListener('click', function(e) {
-    // Register button
-    var regBtn = e.target.closest('[data-reg-id]');
-    if (regBtn) {
-      openRegModal(regBtn.dataset.regId, regBtn.dataset.regName, regBtn.dataset.regFee);
-      return;
-    }
-    // View buttons
-    var viewBtn = e.target.closest('[data-view]');
-    if (viewBtn) {
-      var view = viewBtn.dataset.view;
-      var tid = viewBtn.dataset.tid;
-      showTournView(view, tid);
-      return;
-    }
-  });
-
-  return div;
-}
-
-function showTournView(view, tid) {
-  // Switch tab
-  document.querySelectorAll('.tourn-tab').forEach(function(x) { x.classList.remove('on'); });
-  document.querySelectorAll('.tv').forEach(function(v) { v.classList.remove('on'); });
-  var tab = document.querySelector('[data-ttab="' + view + '"]');
-  if (tab) tab.classList.add('on');
-  var tv = document.getElementById('tv-' + view);
-  if (tv) tv.classList.add('on');
-
-  var t = tournData.find(function(x) { return x.id === tid; });
-  if (!t) return;
-
-  if (view === 'standings') renderStandings(t);
-  else if (view === 'bracket') renderBracket(t);
-  else if (view === 'tables') renderTables(t);
-}
-
-function renderStandings(t) {
-  var el = document.getElementById('standingsList');
-  if (!t.players.length) { el.innerHTML = '<div class="tourn-empty">No players registered yet.</div>'; return; }
-  var sorted = t.players.slice().sort(function(a,b) {
-    return ((b.wins||0)*3+(b.byes||0)) - ((a.wins||0)*3+(a.byes||0));
-  });
-  var html = '<div style="font-size:14px;font-weight:700;margin-bottom:10px;">' + esc(t.name) + '</div>';
-  sorted.forEach(function(p, i) {
-    var pts = (p.wins||0)*3 + (p.byes||0);
-    var rClass = i === 0 ? 'g' : (i === 1 ? 's' : (i === 2 ? 'b' : ''));
-    html += '<div class="stand-row">' +
-      '<div class="stand-rank ' + rClass + '">' + (i+1) + '</div>' +
-      '<div class="stand-name">' + esc(p.name) + '<br><span class="stand-rec">' + (p.wins||0) + 'W-' + (p.losses||0) + 'L</span></div>' +
-      '<div class="stand-pts">' + pts + '</div>' +
-    '</div>';
-  });
-  el.innerHTML = html;
-}
-
-function renderBracket(t) {
-  var el = document.getElementById('bracketList');
-  if (t.players.length < 2) { el.innerHTML = '<div class="tourn-empty">Need at least 2 players.</div>'; return; }
-  var players = t.rounds && t.rounds[0] ? t.rounds[0].pairings : null;
-  var html = '<div class="bracket-label">' + esc(t.name) + ' &mdash; Round ' + (t.currentRound||1) + '</div>';
-  if (players) {
-    players.forEach(function(pair) {
-      html += '<div class="bracket-match">' +
-        '<div class="bracket-p">' + esc(pair.p1) + '</div>' +
-        '<div class="bracket-p ' + (pair.p2 === 'BYE' ? 'bye' : '') + '">' + esc(pair.p2) + '</div>' +
-      '</div>';
-    });
-  } else {
-    var ps = t.players.slice();
-    if (ps.length % 2 !== 0) ps.push({name:'BYE'});
-    for (var i = 0; i < ps.length; i += 2) {
-      html += '<div class="bracket-match">' +
-        '<div class="bracket-p">' + esc(ps[i].name) + '</div>' +
-        '<div class="bracket-p ' + (ps[i+1].name === 'BYE' ? 'bye' : '') + '">' + esc(ps[i+1].name) + '</div>' +
-      '</div>';
-    }
-  }
-  el.innerHTML = html;
-}
-
-function renderTables(t) {
-  var el = document.getElementById('tablesList');
-  if (t.players.length < 2) { el.innerHTML = '<div class="tourn-empty">No pairings yet.</div>'; return; }
-  var ps = t.rounds && t.rounds[0] ? t.rounds[0].pairings.map(function(p,i) { return {p1:p.p1,p2:p.p2,t:i+1}; }) : null;
-  var html = '<div style="font-size:13px;font-weight:700;margin-bottom:10px;">' + esc(t.name) + '</div>';
-  if (ps) {
-    ps.forEach(function(p) {
-      html += '<div class="table-row"><div class="table-num">' + p.t + '</div><div class="table-vs"><span>' + esc(p.p1) + '</span> vs <span>' + esc(p.p2) + '</span></div></div>';
-    });
-  } else {
-    var players = t.players.slice();
-    if (players.length % 2 !== 0) players.push({name:'BYE'});
-    for (var i = 0; i < players.length; i += 2) {
-      html += '<div class="table-row"><div class="table-num">' + (Math.floor(i/2)+1) + '</div><div class="table-vs"><span>' + esc(players[i].name) + '</span> vs <span>' + esc(players[i+1].name) + '</span></div></div>';
-    }
-  }
-  el.innerHTML = html;
-}
-
-// ============================================================
-// REGISTRATION MODAL
-// ============================================================
-function openRegModal(id, name, fee) {
-  if (!tcgUser) {
-    showToast('Please sign in to register for a tournament.');
-    showAuthModal('signin');
-    return;
-  }
-  activeTournId = id;
-  document.getElementById('regTitle').textContent = 'Register: ' + name;
-  document.getElementById('regName').value = tcgUser.name || '';
-  document.getElementById('regEmail').value = tcgUser.email || '';
-  document.getElementById('regGame').value = curGame ? GCFG[curGame].n : '';
-  document.getElementById('regMsg').innerHTML = '';
-  var btn = document.getElementById('regSubmitBtn');
-  btn.disabled = false;
-  btn.textContent = 'Continue to Payment — $' + (fee || 50);
-  document.getElementById('regModal').classList.remove('hide');
-}
-
-$('regCancelBtn').addEventListener('click', function() {
-  document.getElementById('regModal').classList.add('hide');
-});
-
-$('regSubmitBtn').addEventListener('click', function() {
-  var name = $('regName').value.trim();
-  var email = $('regEmail').value.trim();
-  var game = $('regGame').value.trim();
-  var msg = $('regMsg');
-
-  if (!name || !email) {
-    msg.innerHTML = '<div class="modal-msg err">Please fill in all fields.</div>';
-    return;
-  }
-  if (!email.includes('@')) {
-    msg.innerHTML = '<div class="modal-msg err">Please enter a valid email.</div>';
-    return;
-  }
-
-  var btn = $('regSubmitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Reserving spot...';
-  msg.innerHTML = '';
-
-  fetch(WORKER + '/tournament?action=register', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({tournamentId: activeTournId, name: name, email: email, game: game, paymentMethodId: 'pending'})
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(d) {
-    msg.innerHTML = '<div class="modal-msg ok">&#10003; Spot reserved! Opening payment...</div>';
-    setTimeout(function() {
-      window.open(STRIPE_LINK + '?prefilled_email=' + encodeURIComponent(email), '_blank');
-      document.getElementById('regModal').classList.add('hide');
-      loadTournaments();
-    }, 1200);
-  })
-  .catch(function() {
-    // Still open payment link even if worker fails
-    msg.innerHTML = '<div class="modal-msg ok">Opening payment...</div>';
-    setTimeout(function() {
-      window.open(STRIPE_LINK + '?prefilled_email=' + encodeURIComponent(email), '_blank');
-      document.getElementById('regModal').classList.add('hide');
-    }, 1000);
-  });
-});
-
-// ============================================================
-// FEED
-// ============================================================
-function loadFeed() {
-  var el = document.getElementById('feedList');
-  el.innerHTML = '<div class="tourn-empty">Loading...</div>';
-  fetch(WORKER + '/tournament?action=feed')
-  .then(function(r) { return r.json(); })
-  .then(function(posts) {
-    if (!posts || !posts.length) {
-      el.innerHTML = '<div class="tourn-empty">No posts yet.</div>';
-      return;
-    }
-    el.innerHTML = posts.map(function(p) {
-      return '<div class="feed-post">' +
-        '<span class="feed-badge ' + (p.admin ? 'admin' : 'player') + '">' + (p.admin ? 'ADMIN' : 'PLAYER') + '</span>' +
-        '<div class="feed-header">' +
-          '<div class="feed-avatar">' + esc(p.initials || '?') + '</div>' +
-          '<div class="feed-author">' + esc(p.author || 'Anonymous') + '</div>' +
-          '<div class="feed-time">' + esc((p.date||'') + ' ' + (p.time||'')) + '</div>' +
-        '</div>' +
-        '<div class="feed-body">' + esc(p.text || '') + '</div>' +
-      '</div>';
-    }).join('');
-  })
-  .catch(function() {
-    el.innerHTML = '<div class="tourn-empty">Could not load feed.</div>';
-  });
-}
-
-$('feedPostBtn').addEventListener('click', function() {
-  var input = $('feedInput');
-  var text = input.value.trim();
-  if (!text) return;
-  var name = tcgUser ? tcgUser.name : 'Anonymous';
-  var initials = name.split(' ').map(function(w) { return w[0]||''; }).join('').slice(0,2).toUpperCase() || '?';
-  fetch(WORKER + '/tournament?action=postFeed', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({text: text, author: name, initials: initials})
-  })
-  .then(function() {
-    input.value = '';
-    loadFeed();
-  })
-  .catch(function() {
-    input.value = '';
-    showToast('Posted locally only (offline)');
-  });
-});
 
 // ============================================================
 // SHARE + OFFLINE
