@@ -1207,29 +1207,42 @@ function searchCard() {
 
   // YU-GI-OH
   if (curGame === 'ygo') {
-    fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(q) + '&num=20')
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (!d || d.error || !d.data || !d.data.length) { notFound(); return; }
-        renderResults(d.data.slice(0, 20).map(function(c) {
-          var tags = [];
-          if (c.type) tags.push(c.type);
-          if (c.attribute) tags.push(c.attribute);
-          if (c.level) tags.push('Lv ' + c.level);
-          if (c.race) tags.push(c.race);
-          if (c.atk != null) tags.push('ATK ' + c.atk);
-          if (c.def != null) tags.push('DEF ' + c.def);
-          var prices = [];
-          if (c.card_prices && c.card_prices[0]) {
-            var p = c.card_prices[0];
-            if (fmt(p.tcgplayer_price)) prices.push('TCG: ' + fmt(p.tcgplayer_price));
-            if (fmt(p.ebay_price)) prices.push('eBay: ' + fmt(p.ebay_price));
-            if (fmt(p.cardmarket_price)) prices.push('CM: ' + fmt(p.cardmarket_price));
+    var ygoQ = q.trim();
+    function doYgoSearch(searchQ) {
+      fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(searchQ) + '&num=20&offset=0')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (!d || d.error || !d.data || !d.data.length) {
+            // Try with hyphens replacing spaces
+            var hyphenQ = searchQ.replace(/\s+/g, '-');
+            if (hyphenQ !== searchQ) {
+              doYgoSearch(hyphenQ);
+            } else {
+              notFound();
+            }
+            return;
           }
-          return { name: c.name, img: c.card_images && c.card_images[0] ? c.card_images[0].image_url_small : '', tags: tags, prices: prices, desc: c.desc };
-        }));
-      })
-      .catch(failed);
+          renderResults(d.data.slice(0, 20).map(function(c) {
+            var tags = [];
+            if (c.type) tags.push(c.type);
+            if (c.attribute) tags.push(c.attribute);
+            if (c.level) tags.push('Lv ' + c.level);
+            if (c.race) tags.push(c.race);
+            if (c.atk != null) tags.push('ATK ' + c.atk);
+            if (c.def != null) tags.push('DEF ' + c.def);
+            var prices = [];
+            if (c.card_prices && c.card_prices[0]) {
+              var p = c.card_prices[0];
+              if (fmt(p.tcgplayer_price)) prices.push('TCG: ' + fmt(p.tcgplayer_price));
+              if (fmt(p.ebay_price)) prices.push('eBay: ' + fmt(p.ebay_price));
+              if (fmt(p.cardmarket_price)) prices.push('CM: ' + fmt(p.cardmarket_price));
+            }
+            return { name: c.name, img: c.card_images && c.card_images[0] ? c.card_images[0].image_url_small : '', tags: tags, prices: prices, desc: c.desc };
+          }));
+        })
+        .catch(failed);
+    }
+    doYgoSearch(ygoQ);
     return;
   }
 
