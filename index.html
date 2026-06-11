@@ -1166,7 +1166,9 @@ document.getElementById('cardInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') searchCard();
 });
 
-function toggleCardImg(el) { el.style.width = el.style.width === "200px" ? "80px" : "200px"; }
+function toggleCardImg(el) {
+  el.style.width = el.style.width === '200px' ? '80px' : '200px';
+}
 
 function searchCard() {
   var q = document.getElementById('cardInput').value.trim();
@@ -1174,146 +1176,114 @@ function searchCard() {
   var el = document.getElementById('cardResult');
   el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Searching...</div>';
 
-  function formatPrice(p) {
-    if (!p || p <= 0) return null;
-    return '$' + parseFloat(p).toFixed(2);
+  function fmt(p) {
+    var n = parseFloat(p);
+    return (p && n > 0) ? '$' + n.toFixed(2) : null;
   }
 
   function renderResults(cards) {
-    if (!cards.length) { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">No cards found.</div>'; return; }
+    if (!cards || !cards.length) {
+      el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">No cards found.</div>';
+      return;
+    }
     el.innerHTML = cards.map(function(c) {
-      var imgHtml = c.img ? '<img src="' + c.img + '" loading="lazy" style="width:80px;border-radius:6px;flex-shrink:0;cursor:pointer;" onclick="toggleCardImg(this)">' : '';
-      var tagsHtml = c.tags.map(function(t) { return '<span class="ctag">' + esc(t) + '</span>'; }).join('');
-      var priceHtml = '';
-      if (c.prices && c.prices.length) {
-        priceHtml = '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">' +
-          c.prices.map(function(p) {
-            return '<span style="background:var(--blue);color:#fff;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700;">' + esc(p) + '</span>';
-          }).join('') + '</div>';
-      }
-      return '<div class="crd" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">' +
-        imgHtml +
-        '<div style="flex:1;min-width:0;"><div class="crn">' + esc(c.name) + '</div>' +
-        '<div class="crt">' + tagsHtml + '</div>' +
-        priceHtml +
-        '<div class="crd-desc" style="font-size:12px;margin-top:4px;">' + esc(c.desc || '') + '</div></div></div>';
+      var img = c.img ? '<img src="' + c.img + '" loading="lazy" style="width:80px;border-radius:6px;flex-shrink:0;cursor:pointer;" onclick="toggleCardImg(this)">' : '';
+      var tags = (c.tags||[]).map(function(t) { return '<span class="ctag">' + esc(t) + '</span>'; }).join('');
+      var prices = (c.prices||[]).length ? '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;">' + c.prices.map(function(p) { return '<span style="background:var(--blue);color:#fff;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700;">' + esc(p) + '</span>'; }).join('') + '</div>' : '';
+      var desc = c.desc ? '<div style="font-size:12px;color:var(--text2);margin-top:4px;">' + esc(c.desc) + '</div>' : '';
+      return '<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);">' + img + '<div style="flex:1;min-width:0;"><div class="crn">' + esc(c.name) + '</div><div class="crt">' + tags + '</div>' + prices + desc + '</div></div>';
     }).join('');
   }
 
   function notFound() { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Card not found.</div>'; }
-  function failed() { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Search failed. Check connection.</div>'; }
+  function failed(e) { el.innerHTML = '<div style="color:var(--red,#c0182c);font-size:13px;text-align:center;padding:32px 0;">Search failed. Check connection.</div>'; }
 
+  // YU-GI-OH
   if (curGame === 'ygo') {
-    var qn = q.replace(/blue eyes/gi,'Blue-Eyes').replace(/red eyes/gi,'Red-Eyes');
-    fetch(WORKER + '/card?game=ygo&q=' + encodeURIComponent(q))
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (!d.data || !d.data.length) { notFound(); return; }
-      var cards = d.data.slice(0, 20).map(function(c) {
-        var tags = [];
-        if (c.type) tags.push(c.type);
-        if (c.attribute) tags.push(c.attribute);
-        if (c.level) tags.push('Level ' + c.level);
-        if (c.race) tags.push(c.race);
-        if (c.atk !== undefined && c.atk !== null) tags.push('ATK ' + c.atk);
-        if (c.def !== undefined && c.def !== null) tags.push('DEF ' + c.def);
-        var prices = [];
-        if (c.card_prices && c.card_prices[0]) {
-          var p = c.card_prices[0];
-          var tcp = formatPrice(p.tcgplayer_price);
-          var ebay = formatPrice(p.ebay_price);
-          var cm = formatPrice(p.cardmarket_price);
-          if (tcp) prices.push('TCG: ' + tcp);
-          if (ebay) prices.push('eBay: ' + ebay);
-          if (cm) prices.push('CM: ' + cm);
-        }
-        return {
-          name: c.name,
-          img: c.card_images && c.card_images[0] ? c.card_images[0].image_url_small : '',
-          tags: tags,
-          prices: prices,
-          desc: c.desc
-        };
-      });
-      renderResults(cards);
-    }).catch(failed);
-    return;
-  }
-
-  if (curGame === 'pkm') {
-    fetch(WORKER + '/card?game=pkm&q=' + encodeURIComponent(q))
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (!d.data || !d.data.length) { notFound(); return; }
-      var cards = d.data.map(function(c) {
-        var tags = [];
-        if (c.supertype) tags.push(c.supertype);
-        if (c.subtypes) tags = tags.concat(c.subtypes);
-        if (c.hp) tags.push('HP ' + c.hp);
-        if (c.set && c.set.name) tags.push(c.set.name);
-        var prices = [];
-        if (c.tcgplayer && c.tcgplayer.prices) {
-          var pp = c.tcgplayer.prices;
-          var norm = pp.normal || pp.holofoil || pp['1stEditionHolofoil'] || pp.unlimited || pp.reverseHolofoil;
-          if (norm) {
-            var mid = formatPrice(norm.mid || norm.market);
-            var low = formatPrice(norm.low);
-            var high = formatPrice(norm.high);
-            if (mid) prices.push('Mid: ' + mid);
-            if (low) prices.push('Low: ' + low);
-            if (high) prices.push('High: ' + high);
+    fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(q) + '&num=20&offset=0')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (!d || !d.data || !d.data.length) { notFound(); return; }
+        renderResults(d.data.slice(0, 20).map(function(c) {
+          var tags = [];
+          if (c.type) tags.push(c.type);
+          if (c.attribute) tags.push(c.attribute);
+          if (c.level) tags.push('Lv ' + c.level);
+          if (c.race) tags.push(c.race);
+          if (c.atk != null) tags.push('ATK ' + c.atk);
+          if (c.def != null) tags.push('DEF ' + c.def);
+          var prices = [];
+          if (c.card_prices && c.card_prices[0]) {
+            var p = c.card_prices[0];
+            if (fmt(p.tcgplayer_price)) prices.push('TCG: ' + fmt(p.tcgplayer_price));
+            if (fmt(p.ebay_price)) prices.push('eBay: ' + fmt(p.ebay_price));
+            if (fmt(p.cardmarket_price)) prices.push('CM: ' + fmt(p.cardmarket_price));
           }
-        }
-        return {
-          name: c.name,
-          img: c.images ? c.images.small : '',
-          tags: tags,
-          prices: prices,
-          desc: c.flavorText || (c.attacks ? c.attacks.map(function(a){return a.name+': '+a.text;}).join(' | ') : '')
-        };
-      });
-      renderResults(cards);
-    }).catch(failed);
+          return { name: c.name, img: c.card_images && c.card_images[0] ? c.card_images[0].image_url_small : '', tags: tags, prices: prices, desc: c.desc };
+        }));
+      })
+      .catch(failed);
     return;
   }
 
+  // POKEMON
+  if (curGame === 'pkm') {
+    fetch('https://api.pokemontcg.io/v2/cards?q=name:' + encodeURIComponent(q) + '*&pageSize=20&orderBy=-set.releaseDate')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (!d || !d.data || !d.data.length) { notFound(); return; }
+        renderResults(d.data.map(function(c) {
+          var tags = [];
+          if (c.supertype) tags.push(c.supertype);
+          if (c.subtypes) tags = tags.concat(c.subtypes);
+          if (c.hp) tags.push('HP ' + c.hp);
+          if (c.set && c.set.name) tags.push(c.set.name);
+          var prices = [];
+          if (c.tcgplayer && c.tcgplayer.prices) {
+            var pp = c.tcgplayer.prices;
+            var norm = pp.holofoil || pp.normal || pp['1stEditionHolofoil'] || pp.unlimited || pp.reverseHolofoil;
+            if (norm) {
+              if (fmt(norm.market || norm.mid)) prices.push('Mid: ' + fmt(norm.market || norm.mid));
+              if (fmt(norm.low)) prices.push('Low: ' + fmt(norm.low));
+              if (fmt(norm.high)) prices.push('High: ' + fmt(norm.high));
+            }
+          }
+          return { name: c.name, img: c.images ? c.images.small : '', tags: tags, prices: prices, desc: c.flavorText || (c.attacks ? c.attacks.map(function(a){ return a.name + ': ' + (a.text||''); }).join(' | ') : '') };
+        }));
+      })
+      .catch(failed);
+    return;
+  }
+
+  // MAGIC: THE GATHERING
   if (curGame.indexOf('mtg') === 0) {
-    fetch(WORKER + '/card?game=mtg&q=' + encodeURIComponent(q))
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (!d.data || !d.data.length) {
-        return fetch(WORKER + '/card?game=mtg&q=' + encodeURIComponent(q))
-          .then(function(r2) { return r2.json(); });
-      }
-      return d;
-    })
-    .then(function(d) {
-      if (!d.data || !d.data.length) { notFound(); return; }
-      var cards = d.data.slice(0,20).map(function(c) {
-        var tags = [];
-        if (c.type_line) tags.push(c.type_line);
-        if (c.mana_cost) tags.push(c.mana_cost);
-        if (c.power) tags.push(c.power + '/' + c.toughness);
-        if (c.set_name) tags.push(c.set_name);
-        var prices = [];
-        if (c.prices) {
-          var tcp = formatPrice(c.prices.usd);
-          var tcpF = formatPrice(c.prices.usd_foil);
-          var cm = formatPrice(c.prices.eur);
-          if (tcp) prices.push('TCG: $' + parseFloat(c.prices.usd).toFixed(2));
-          if (tcpF) prices.push('Foil: $' + parseFloat(c.prices.usd_foil).toFixed(2));
-          if (cm) prices.push('EUR: €' + parseFloat(c.prices.eur).toFixed(2));
+    fetch('https://api.scryfall.com/cards/search?q=' + encodeURIComponent(q) + '&order=released&unique=prints')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (!d || !d.data || !d.data.length) {
+          return fetch('https://api.scryfall.com/cards/search?q=name:' + encodeURIComponent(q) + '&order=edhrec&unique=cards')
+            .then(function(r2) { return r2.json(); });
         }
-        return {
-          name: c.name,
-          img: c.image_uris ? c.image_uris.small : (c.card_faces && c.card_faces[0].image_uris ? c.card_faces[0].image_uris.small : ''),
-          tags: tags,
-          prices: prices,
-          desc: c.oracle_text || ''
-        };
-      });
-      renderResults(cards);
-    }).catch(failed);
+        return d;
+      })
+      .then(function(d) {
+        if (!d || !d.data || !d.data.length) { notFound(); return; }
+        renderResults(d.data.slice(0, 20).map(function(c) {
+          var tags = [];
+          if (c.type_line) tags.push(c.type_line);
+          if (c.mana_cost) tags.push(c.mana_cost);
+          if (c.power) tags.push(c.power + '/' + c.toughness);
+          if (c.set_name) tags.push(c.set_name);
+          var prices = [];
+          if (c.prices) {
+            if (fmt(c.prices.usd)) prices.push('TCG: ' + fmt(c.prices.usd));
+            if (fmt(c.prices.usd_foil)) prices.push('Foil: ' + fmt(c.prices.usd_foil));
+            if (fmt(c.prices.eur)) prices.push('EUR: \u20ac' + parseFloat(c.prices.eur).toFixed(2));
+          }
+          return { name: c.name, img: c.image_uris ? c.image_uris.small : (c.card_faces && c.card_faces[0] && c.card_faces[0].image_uris ? c.card_faces[0].image_uris.small : ''), tags: tags, prices: prices, desc: c.oracle_text || '' };
+        }));
+      })
+      .catch(failed);
     return;
   }
 
