@@ -1196,11 +1196,13 @@ function searchCard() {
   }
 
   function notFound() { el.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:32px 0;">Card not found.</div>'; }
-  function failed(e) { el.innerHTML = '<div style="color:var(--red,#c0182c);font-size:13px;text-align:center;padding:32px 0;">Search failed. Check connection.</div>'; }
+  function failed(e) { el.innerHTML = '<div style="color:var(--red,#c0182c);font-size:13px;text-align:center;padding:32px 0;">Search failed: ' + (e && e.message ? esc(e.message) : 'network error') + '</div>'; console.error('Card search error:', e); }
 
   // YU-GI-OH
   if (curGame === 'ygo') {
-    fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(q) + '&num=20&offset=0')
+    var ygoUrl = 'https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=' + encodeURIComponent(q) + '&num=20&offset=0';
+    console.log('YGO search:', ygoUrl);
+    fetch(ygoUrl)
       .then(function(r) { return r.json(); })
       .then(function(d) {
         if (!d || !d.data || !d.data.length) { notFound(); return; }
@@ -1228,7 +1230,9 @@ function searchCard() {
 
   // POKEMON
   if (curGame === 'pkm') {
-    fetch('https://api.pokemontcg.io/v2/cards?q=name:' + encodeURIComponent(q) + '*&pageSize=20&orderBy=-set.releaseDate')
+    var pkmUrl = 'https://api.pokemontcg.io/v2/cards?q=name:' + encodeURIComponent(q) + '*&pageSize=20&orderBy=-set.releaseDate';
+    console.log('PKM search:', pkmUrl);
+    fetch(pkmUrl)
       .then(function(r) { return r.json(); })
       .then(function(d) {
         if (!d || !d.data || !d.data.length) { notFound(); return; }
